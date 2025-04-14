@@ -43,7 +43,7 @@ jobs:
           mkdir -p media
           cp -r .primer-and-samples/media/* ./media/
           cp .primer-and-samples/json-structure-primer.md ./
-          cp -r .meta/*.json ./meta/
+          cp -r .meta/* ./meta/
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
