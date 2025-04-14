@@ -8,7 +8,12 @@
 [Validation](https://json-structure.github.io/validation) |
 [Conditional Composition](https://json-structure.github.io/conditional-composition)
 
-<div style="font-size: x-small;">
+<style>
+    .language-json {
+        font-size: x-small;
+    }
+</style>
+
 ```json
 {
     "$schema": "https://json-structure.github.io/meta/extended/v0/#",
@@ -55,7 +60,6 @@
     "required": ["id", "name", "price", "created" ]
 }
 ```
-</div>
 
 JSON Structure is a schema language that can describe data types and structures
 and whose definitions map cleanly to programming language types and database
