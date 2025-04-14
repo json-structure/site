@@ -1,4 +1,5 @@
 title: JSON Structure
+logo: /logo/logo.svg
 description:  JSON Structure is a data structure definition language that enforces strict typing, modularity, and determinism.
 author:
   name: "Clemens Vasters"
