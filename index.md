@@ -1,9 +1,56 @@
 # JSON Structure
 
+```json
+{
+    "$schema": "https://json-structure.github.io/meta/extended/v0/#",
+    "$id": "https://example.com/schemas/product",
+    "$uses": ["JSONStructureAlternateNames", "JSONStructureUnits"],
+    "type": "object",
+    "name": "Product",
+    "properties": {
+        "id": {
+            "type": "uuid",
+            "description": "Unique identifier for the product"
+        },
+        "name": {
+            "type": "string",
+            "maxLength": 100,
+            "altnames": {
+                "json": "product_name",
+                "lang:en": "Product Name",
+                "lang:de": "Produktname"
+            }
+        },
+        "price": {
+            "type": "decimal",
+            "precision": 10,
+            "scale": 2,
+            "currency": "USD"
+        },
+        "weight": {
+            "type": "double",
+            "unit": "kg"
+        },
+        "created": {
+            "type": "datetime"
+        },
+        "tags": {
+            "type": "set",
+            "items": { "type": "string" }
+        },
+        "attributes": {
+            "type": "map",
+            "values": { "type": "string" }
+        }
+    },
+    "required": ["id", "name", "price", "created" ]
+}
+```
+
 JSON Structure is a schema language that can describe data types and structures
 and whose definitions map cleanly to programming language types and database
 constructs as well as into the popular JSON data encoding. The type reflect the
-needss of modern applications and allows for rich annotations with semantic
+needs of modern applications and allows for rich annotations with semantic
 information that can be evaluated and understood by developers and by large
 language models (LLMs).
 
@@ -18,20 +65,6 @@ definition language.
 - Straightforward reuse patterns for types
 - Support for multilingual descriptions and alternate names
 - Support for symbols, scientific units, and currency codes
-
-```json
-{
-    "$schema": "https://json-structure.github.io/meta/core/v0/#",
-    "type": "object",
-    "name": "Person",
-    "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "dateOfBirth": { "type": "date" }
-    },
-    "required": ["firstName", "lastName"]
-}
-```
 
 ## Primer and Core Specification
 
