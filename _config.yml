@@ -6,6 +6,9 @@ author:
   email: "clemensv@microsoft.com"
 github:
   repository_url: https://github.com/json-structure
+  repository_nwo: json-structure
+  owner_name: clemensv
+  owner_url: https://github.com/clemensv
 
 remote_theme: pages-themes/minimal@v0.2.0
 plugins:
