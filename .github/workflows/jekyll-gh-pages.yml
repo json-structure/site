@@ -28,6 +28,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Checkout primer-and-samples repo
+        uses: actions/checkout@v4
+        with:
+          repository: json-structure/primer-and-samples
+          path: .primer-and-samples
+      - name: Copy media and markdown files
+        run: |
+          mkdir -p media
+          cp -r .primer-and-samples/media/* ./media/
+          cp .primer-and-samples/json-structure-primer.md ./
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
