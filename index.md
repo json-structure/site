@@ -1,11 +1,18 @@
 
 # JSON Structure
 
-Specification shortcuts: [Core](https://json-structure.github.io/core/draft-vasters-json-structure-core.html) |
-[Import](https://json-structure.github.io/import/draft-vasters-json-structure-import.html) | [Alternate Names](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html) |
-[Symbols, Units, Currencies](https://json-structure.github.io/units/draft-vasters-json-structure-units.html) |
-[Validation](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html) |
-[Conditional Composition](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-conditional-composition.html)
+Specification shortcuts:
+[Core](https://json-structure.github.io/core/draft-vasters-json-structure-core.html)
+|
+[Import](https://json-structure.github.io/import/draft-vasters-json-structure-import.html)
+| [Alternate
+Names](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html)
+| [Symbols, Units,
+Currencies](https://json-structure.github.io/units/draft-vasters-json-structure-units.html)
+|
+[Validation](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html)
+| [Conditional
+Composition](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-conditional-composition.html)
 
 JSON Structure is a schema language that can describe data types and structures
 whose definitions map cleanly to programming language types and database
@@ -81,15 +88,32 @@ definition language that also supports validation.
 
 ## Primer and Core Specification
 
-The [Primer](json-structure-primer.html) is a high-level overview of the JSON Structure language and its features. It is intended for developers and users who want to understand the language's capabilities and how to use it effectively.
+The [Primer](json-structure-primer.html) is a high-level overview of the JSON
+Structure language and its features. It is intended for developers and users who
+want to understand the language's capabilities and how to use it effectively.
 
-The [JSON Structure Core Specification](https://json-structure.github.io/core) provides a detailed description of the JSON Structure language, including its syntax, semantics, and data types. It is intended for implementers and developers who want to create tools and libraries that work with JSON Structure.
+The [JSON Structure Core Specification](https://json-structure.github.io/core)
+provides a detailed description of the JSON Structure language, including its
+syntax, semantics, and data types. It is intended for implementers and
+developers who want to create tools and libraries that work with JSON Structure.
 
 ## Extensions
 
-- [JSON Structure: Import](https://json-structure.github.io/import): Defines a mechanism for importing external schemas and definitions into a schema document.
-- [JSON Structure: Alternate Names and Descriptions](https://json-structure.github.io/alternate-names): Provides a mechanism for declaring multilingual descriptions, and alternate names and symbols for types and properties.
-- [JSON Structure: Symbols, Scientific Units, and Currencies](https://json-structure.github.io/units): Defines annotation keywords for specifying symbols, scientific units, and currency codes complementing type information.
-- [JSON Structure: Validation](https://json-structure.github.io/validation): Specifies extensions to the core schema language for declaring validation rules for JSON data that have no structural impact on the schema.
-- [JSON Structure: Composition](https://json-structure.github.io/conditional-composition): Defines a set of conditional composition rules for evaluating schemas.
+- [JSON Structure: Import](https://json-structure.github.io/import): Defines a
+  mechanism for importing external schemas and definitions into a schema
+  document.
+- [JSON Structure: Alternate Names and
+  Descriptions](https://json-structure.github.io/alternate-names): Provides a
+  mechanism for declaring multilingual descriptions, and alternate names and
+  symbols for types and properties.
+- [JSON Structure: Symbols, Scientific Units, and
+  Currencies](https://json-structure.github.io/units): Defines annotation
+  keywords for specifying symbols, scientific units, and currency codes
+  complementing type information.
+- [JSON Structure: Validation](https://json-structure.github.io/validation):
+  Specifies extensions to the core schema language for declaring validation
+  rules for JSON data that have no structural impact on the schema.
+- [JSON Structure:
+  Composition](https://json-structure.github.io/conditional-composition):
+  Defines a set of conditional composition rules for evaluating schemas.
 
