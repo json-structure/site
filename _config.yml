@@ -4,6 +4,8 @@ description:  JSON Structure is a data structure definition language that enforc
 author:
   name: "Clemens Vasters"
   email: "clemensv@microsoft.com"
+github:
+  repository_url: https://github.com/json-structure
 
 remote_theme: pages-themes/minimal@v0.2.0
 plugins:
