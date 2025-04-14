@@ -81,7 +81,7 @@ definition language that also supports validation.
 
 ## Primer and Core Specification
 
-The [Primer](https://github.com/json-structure/primer-and-samples/blob/main/json-structure-primer.md) is a high-level overview of the JSON Structure language and its features. It is intended for developers and users who want to understand the language's capabilities and how to use it effectively.
+The [Primer](json-structure-primer.html) is a high-level overview of the JSON Structure language and its features. It is intended for developers and users who want to understand the language's capabilities and how to use it effectively.
 
 The [JSON Structure Core Specification](https://json-structure.github.io/core) provides a detailed description of the JSON Structure language, including its syntax, semantics, and data types. It is intended for implementers and developers who want to create tools and libraries that work with JSON Structure.
 
