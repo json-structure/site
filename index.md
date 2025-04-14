@@ -1,12 +1,18 @@
 
 # JSON Structure
 
-[Core](https://json-structure.github.io/core) |
-[Import](https://json-structure.github.io/import) |
-[Alternate Names](https://json-structure.github.io/alternate-names) |
-[Symbols, Units, Currencies](https://json-structure.github.io/units) |
-[Validation](https://json-structure.github.io/validation) |
-[Conditional Composition](https://json-structure.github.io/conditional-composition)
+Specification shortcuts: [Core](https://json-structure.github.io/core/draft-vasters-json-structure-core.html) |
+[Import](https://json-structure.github.io/import/draft-vasters-json-structure-import.html) | [Alternate Names](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html) |
+[Symbols, Units, Currencies](https://json-structure.github.io/units/draft-vasters-json-structure-units.html) |
+[Validation](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html) |
+[Conditional Composition](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-conditional-composition.html)
+
+JSON Structure is a schema language that can describe data types and structures
+whose definitions map cleanly to programming language types and database
+constructs as well as to the popular JSON data encoding. The type model reflects
+the needs of modern applications and allows for rich annotations with semantic
+information that can be evaluated and understood by developers and by large
+language models (LLMs).
 
 <style>
     .language-json {
@@ -61,16 +67,9 @@
 }
 ```
 
-JSON Structure is a schema language that can describe data types and structures
-and whose definitions map cleanly to programming language types and database
-constructs as well as into the popular JSON data encoding. The type reflect the
-needs of modern applications and allows for rich annotations with semantic
-information that can be evaluated and understood by developers and by large
-language models (LLMs).
-
 JSON Structure's syntax is similar to that of JSON Schema, but while JSON Schema
 focuses on document validation, JSON Structure focuses on being a strong data
-definition language.
+definition language that also supports validation.
 
 - Clear mapping to programming language types
 - Support for more precise numeric types and date/time representations
