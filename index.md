@@ -29,7 +29,7 @@ language models (LLMs).
 
 ```json
 {
-    "$schema": "https://json-structure.github.io/meta/extended/v0/#",
+    "$schema": "https://json-structure.org/meta/extended/v0/#",
     "$id": "https://example.com/schemas/product",
     "$uses": ["JSONStructureAlternateNames", "JSONStructureUnits"],
     "type": "object",
