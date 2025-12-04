@@ -43,9 +43,10 @@
   margin: 0 5px;
 }
 
-/* Offset body for fixed header */
+/* Offset body for fixed header and footer space */
 body {
   padding-top: 45px;
+  padding-bottom: 70px;
 }
 
 /* Sidebar navigation styling */
@@ -241,7 +242,7 @@ body {
   background: #f5f5f5;
   color: #666;
   font-size: 12px;
-  z-index: 1000;
+  z-index: 999;
 }
 
 .page-footer p {
@@ -255,9 +256,4 @@ body {
 
 .page-footer a:hover {
   text-decoration: underline;
-}
-
-/* Add padding at bottom to prevent content being hidden behind fixed footer */
-body {
-  padding-bottom: 60px;
 }
