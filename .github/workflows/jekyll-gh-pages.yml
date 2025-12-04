@@ -8,6 +8,10 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  
+  # Trigger when SDK repo is updated
+  repository_dispatch:
+    types: [sdk-updated]
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -38,6 +42,11 @@ jobs:
         with:
           repository: json-structure/meta
           path: .meta
+      - name: Checkout SDK repo
+        uses: actions/checkout@v4
+        with:
+          repository: json-structure/sdk
+          path: .sdk
       - name: Copy media and markdown files
         run: |
           mkdir -p media
@@ -45,6 +54,49 @@ jobs:
           cp .primer-and-samples/json-structure-primer.md ./
           mkdir ./meta
           cp -r .meta/* ./meta/
+      - name: Generate SDK pages from READMEs
+        run: |
+          mkdir -p sdks
+          
+          # Function to create SDK page with front matter and README content
+          create_sdk_page() {
+            local sdk_name="$1"
+            local sdk_path="$2"
+            local title="$3"
+            local output_file="sdks/${sdk_name}.md"
+            
+            if [ -f ".sdk/${sdk_path}/README.md" ]; then
+              echo "---" > "$output_file"
+              echo "layout: sdk" >> "$output_file"
+              echo "title: ${title} - JSON Structure" >> "$output_file"
+              echo "sdk_name: ${sdk_name}" >> "$output_file"
+              echo "---" >> "$output_file"
+              echo "" >> "$output_file"
+              # Skip any existing front matter in README and append content
+              sed '/^---$/,/^---$/d' ".sdk/${sdk_path}/README.md" >> "$output_file"
+              echo "Created ${output_file}"
+            else
+              echo "Warning: .sdk/${sdk_path}/README.md not found"
+            fi
+          }
+          
+          # Create SDK pages
+          create_sdk_page "python" "python" "Python SDK"
+          create_sdk_page "dotnet" "dotnet" ".NET SDK"
+          create_sdk_page "java" "java" "Java SDK"
+          create_sdk_page "typescript" "typescript" "TypeScript SDK"
+          create_sdk_page "go" "go" "Go SDK"
+          create_sdk_page "rust" "rust" "Rust SDK"
+          create_sdk_page "c" "c" "C SDK"
+          
+          # Create SDKs index page
+          cat > sdks/index.md << 'EOF'
+          ---
+          layout: sdk-index
+          title: SDKs - JSON Structure
+          ---
+          EOF
+          
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
