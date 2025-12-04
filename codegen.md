@@ -33,58 +33,94 @@ pip install structurize
 Convert a JSON Structure schema to other formats:
 
 ```bash
-# Convert JSON Structure to Avro Schema
-structurize jsons2a --input schema.json --output schema.avsc
-
-# Convert JSON Structure to JSON Schema
-structurize jsons2js --input schema.json --output schema.jsonschema
-
 # Convert JSON Structure to Protocol Buffers
-structurize jsons2p --input schema.json --output schema.proto
+structurize s2p schema.struct.json --out ./proto/
+
+# Convert JSON Structure to XML Schema (XSD)
+structurize s2x schema.struct.json --out schema.xsd
+
+# Convert JSON Structure to GraphQL
+structurize struct2gql schema.struct.json --out schema.graphql
+
+# Convert JSON Structure to Kusto table definition
+structurize s2k schema.struct.json --out schema.kql
+
+# Convert JSON Structure to SQL table definition
+structurize struct2sql schema.struct.json --out schema.sql --dialect postgres
+
+# Convert JSON Structure to Iceberg schema
+structurize s2ib schema.struct.json --out schema.iceberg.json
 ```
 
-Convert from other formats to JSON Structure:
+## Code Generation
+
+Structurize/Avrotize can generate code in multiple languages directly from JSON Structure schemas:
 
 ```bash
-# Convert Avro Schema to JSON Structure
-structurize a2jsons --input schema.avsc --output schema.json
+# Generate C# classes
+structurize s2cs schema.struct.json --out ./generated/
 
-# Convert JSON Schema to JSON Structure
-structurize js2jsons --input schema.jsonschema --output schema.json
+# Generate Java classes
+structurize s2java schema.struct.json --out ./generated/
 
-# Convert Protocol Buffers to JSON Structure
-structurize p2jsons --input schema.proto --output schema.json
+# Generate Python dataclasses
+structurize s2py schema.struct.json --out ./generated/
+
+# Generate TypeScript classes
+structurize s2ts schema.struct.json --out ./generated/
+
+# Generate Go structs
+structurize s2go schema.struct.json --out ./generated/
+
+# Generate Rust structs
+structurize s2rust schema.struct.json --out ./generated/
+
+# Generate C++ classes
+structurize s2cpp schema.struct.json --out ./generated/
+```
+
+## Additional Conversions
+
+```bash
+# Convert JSON Structure to Markdown documentation
+structurize struct2md schema.struct.json --out schema.md
+
+# Convert JSON Structure to CSV schema
+structurize s2csv schema.struct.json --out schema.csv
+
+# Convert JSON Structure to Datapackage schema
+structurize s2dp schema.struct.json --out datapackage.json
+
+# Convert JSON Structure to Cassandra schema
+structurize struct2cassandra schema.struct.json --out schema.cql
 ```
 
 ## Supported Conversions
 
 | Source Format | Target Format | Command |
 |--------------|---------------|---------|
-| JSON Structure | Avro | `jsons2a` |
-| JSON Structure | JSON Schema | `jsons2js` |
-| JSON Structure | Protocol Buffers | `jsons2p` |
-| JSON Structure | Parquet | `jsons2pq` |
-| Avro | JSON Structure | `a2jsons` |
-| JSON Schema | JSON Structure | `js2jsons` |
-| Protocol Buffers | JSON Structure | `p2jsons` |
+| JSON Structure | Protocol Buffers | `s2p` |
+| JSON Structure | XML Schema (XSD) | `s2x` |
+| JSON Structure | GraphQL | `struct2gql` |
+| JSON Structure | Kusto (KQL) | `s2k` |
+| JSON Structure | SQL | `struct2sql` |
+| JSON Structure | Iceberg | `s2ib` |
+| JSON Structure | Cassandra | `struct2cassandra` |
+| JSON Structure | Markdown | `struct2md` |
+| JSON Structure | CSV Schema | `s2csv` |
+| JSON Structure | Datapackage | `s2dp` |
 
-## Code Generation
+## Code Generation Commands
 
-Avrotize/Structurize can generate code in multiple languages from JSON Structure schemas:
-
-```bash
-# Generate Python dataclasses
-structurize jsons2py --input schema.json --output ./generated
-
-# Generate C# classes
-structurize jsons2cs --input schema.json --output ./generated
-
-# Generate Java classes
-structurize jsons2java --input schema.json --output ./generated
-
-# Generate TypeScript interfaces
-structurize jsons2ts --input schema.json --output ./generated
-```
+| Target Language | Command |
+|-----------------|---------|
+| C# | `s2cs` |
+| Java | `s2java` |
+| Python | `s2py` |
+| TypeScript | `s2ts` |
+| Go | `s2go` |
+| Rust | `s2rust` |
+| C++ | `s2cpp` |
 
 ## Schema Gallery
 
