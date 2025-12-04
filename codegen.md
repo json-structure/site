@@ -1,9 +1,8 @@
 ---
-layout: default
+layout: sdk
 title: Code Generation & Schema Conversions - JSON Structure
+sdk_name: codegen
 ---
-
-<div class="sdk-content">
 
 # Code Generation & Schema Conversions
 
@@ -33,8 +32,8 @@ pip install structurize
 
 Convert a JSON Structure schema to other formats:
 
-<div class="command-example">
-<code># Convert JSON Structure to Avro Schema
+```bash
+# Convert JSON Structure to Avro Schema
 structurize jsons2a --input schema.json --output schema.avsc
 
 # Convert JSON Structure to JSON Schema
@@ -42,13 +41,12 @@ structurize jsons2js --input schema.json --output schema.jsonschema
 
 # Convert JSON Structure to Protocol Buffers
 structurize jsons2p --input schema.json --output schema.proto
-</code>
-</div>
+```
 
 Convert from other formats to JSON Structure:
 
-<div class="command-example">
-<code># Convert Avro Schema to JSON Structure
+```bash
+# Convert Avro Schema to JSON Structure
 structurize a2jsons --input schema.avsc --output schema.json
 
 # Convert JSON Schema to JSON Structure
@@ -56,8 +54,7 @@ structurize js2jsons --input schema.jsonschema --output schema.json
 
 # Convert Protocol Buffers to JSON Structure
 structurize p2jsons --input schema.proto --output schema.json
-</code>
-</div>
+```
 
 ## Supported Conversions
 
@@ -75,8 +72,8 @@ structurize p2jsons --input schema.proto --output schema.json
 
 Avrotize/Structurize can generate code in multiple languages from JSON Structure schemas:
 
-<div class="command-example">
-<code># Generate Python dataclasses
+```bash
+# Generate Python dataclasses
 structurize jsons2py --input schema.json --output ./generated
 
 # Generate C# classes
@@ -87,14 +84,14 @@ structurize jsons2java --input schema.json --output ./generated
 
 # Generate TypeScript interfaces
 structurize jsons2ts --input schema.json --output ./generated
-</code>
-</div>
+```
 
 ## Schema Gallery
 
 Browse example schemas and see conversions in action at the **[Avrotize Schema Gallery](https://clemensv.github.io/avrotize/gallery/)**.
 
 The gallery showcases:
+
 - Real-world schema examples
 - Side-by-side format comparisons
 - Generated code samples
@@ -106,5 +103,3 @@ The gallery showcases:
 - [Structurize Package](https://github.com/clemensv/avrotize/tree/master/structurize)
 - [Schema Gallery](https://clemensv.github.io/avrotize/gallery/)
 - [PyPI Package](https://pypi.org/project/avrotize/)
-
-</div>
