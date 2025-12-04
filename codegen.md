@@ -97,30 +97,30 @@ structurize struct2cassandra schema.struct.json --out schema.cql
 
 ## Supported Conversions
 
-| Source Format | Target Format | Command |
-|--------------|---------------|---------|
-| JSON Structure | Protocol Buffers | `s2p` |
-| JSON Structure | XML Schema (XSD) | `s2x` |
-| JSON Structure | GraphQL | `struct2gql` |
-| JSON Structure | Kusto (KQL) | `s2k` |
-| JSON Structure | SQL | `struct2sql` |
-| JSON Structure | Iceberg | `s2ib` |
-| JSON Structure | Cassandra | `struct2cassandra` |
-| JSON Structure | Markdown | `struct2md` |
-| JSON Structure | CSV Schema | `s2csv` |
-| JSON Structure | Datapackage | `s2dp` |
+| Source Format | Target Format | Command | Example |
+|--------------|---------------|---------|---------|
+| JSON Structure | Protocol Buffers | `s2p` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-proto/) |
+| JSON Structure | XML Schema (XSD) | `s2x` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-xsd/) |
+| JSON Structure | JSON Schema | `s2j` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-jsonschema/) |
+| JSON Structure | GraphQL | `struct2gql` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-graphql/) |
+| JSON Structure | SQL (PostgreSQL) | `struct2sql` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-sql/) |
+| JSON Structure | Iceberg | `s2ib` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-iceberg/) |
+| JSON Structure | Cassandra | `struct2cassandra` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-cassandra/) |
+| JSON Structure | Markdown | `struct2md` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-markdown/) |
+| JSON Structure | CSV Schema | `s2csv` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-csv/) |
+| JSON Structure | Datapackage | `s2dp` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-datapackage/) |
 
 ## Code Generation Commands
 
-| Target Language | Command |
-|-----------------|---------|
-| C# | `s2cs` |
-| Java | `s2java` |
-| Python | `s2py` |
-| TypeScript | `s2ts` |
-| Go | `s2go` |
-| Rust | `s2rust` |
-| C++ | `s2cpp` |
+| Target Language | Command | Example |
+|-----------------|---------|---------|
+| C# | `s2cs` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-csharp/) |
+| Java | `s2java` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-java/) |
+| Python | `s2py` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-python/) |
+| TypeScript | `s2ts` | — |
+| Go | `s2go` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-go/) |
+| Rust | `s2rust` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-rust/) |
+| C++ | `s2cpp` | [View →](https://clemensv.github.io/avrotize/gallery/struct-to-cpp/) |
 
 ## Schema Gallery
 
