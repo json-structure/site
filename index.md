@@ -1,19 +1,6 @@
 
 # JSON Structure
 
-Specification shortcuts:
-[Core](https://json-structure.github.io/core/draft-vasters-json-structure-core.html)
-|
-[Import](https://json-structure.github.io/import/draft-vasters-json-structure-import.html)
-| [Alternate
-Names](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html)
-| [Symbols, Units,
-Currencies](https://json-structure.github.io/units/draft-vasters-json-structure-units.html)
-|
-[Validation](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html)
-| [Conditional
-Composition](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-conditional-composition.html)
-
 JSON Structure is a schema language that can describe data types and structures
 whose definitions map cleanly to programming language types and database
 constructs as well as to the popular JSON data encoding. The type model reflects
