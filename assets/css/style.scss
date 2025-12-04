@@ -230,11 +230,11 @@ body {
   background: transparent;
 }
 
-/* Make sidebar scroll with content (override theme's fixed positioning) */
-.wrapper header {
-  position: static !important;
-  width: auto !important;
-  float: left;
+/* Make sidebar scroll with content instead of being fixed */
+@media screen and (min-width: 768px) {
+  .wrapper header {
+    position: absolute !important;
+  }
 }
 
 /* Page footer at bottom - full width */
