@@ -81,12 +81,16 @@ jobs:
           }
           
           # Create SDK pages
+          create_sdk_page "typescript" "typescript" "TypeScript SDK"
           create_sdk_page "python" "python" "Python SDK"
           create_sdk_page "dotnet" "dotnet" ".NET SDK"
           create_sdk_page "java" "java" "Java SDK"
-          create_sdk_page "typescript" "typescript" "TypeScript SDK"
           create_sdk_page "go" "go" "Go SDK"
           create_sdk_page "rust" "rust" "Rust SDK"
+          create_sdk_page "ruby" "ruby" "Ruby SDK"
+          create_sdk_page "perl" "perl" "Perl SDK"
+          create_sdk_page "php" "php" "PHP SDK"
+          create_sdk_page "swift" "swift" "Swift SDK"
           create_sdk_page "c" "c" "C SDK"
           
           # Create SDKs index page

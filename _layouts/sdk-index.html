@@ -46,13 +46,17 @@
         <nav class="sidebar-nav">
           <h3>SDKs</h3>
           <ul>
+            <li><a href="{{ "/sdks/typescript.html" | relative_url }}">TypeScript/JavaScript</a></li>
             <li><a href="{{ "/sdks/python.html" | relative_url }}">Python</a></li>
             <li><a href="{{ "/sdks/dotnet.html" | relative_url }}">.NET (C#)</a></li>
             <li><a href="{{ "/sdks/java.html" | relative_url }}">Java</a></li>
-            <li><a href="{{ "/sdks/typescript.html" | relative_url }}">TypeScript/JavaScript</a></li>
             <li><a href="{{ "/sdks/go.html" | relative_url }}">Go</a></li>
             <li><a href="{{ "/sdks/rust.html" | relative_url }}">Rust</a></li>
-            <li><a href="{{ "/sdks/c.html" | relative_url }}">C/C++</a></li>
+            <li><a href="{{ "/sdks/ruby.html" | relative_url }}">Ruby</a></li>
+            <li><a href="{{ "/sdks/perl.html" | relative_url }}">Perl</a></li>
+            <li><a href="{{ "/sdks/php.html" | relative_url }}">PHP</a></li>
+            <li><a href="{{ "/sdks/swift.html" | relative_url }}">Swift</a></li>
+            <li><a href="{{ "/sdks/c.html" | relative_url }}">C</a></li>
           </ul>
           
           <h3>Tools</h3>
@@ -113,9 +117,33 @@
         </div>
         
         <div class="sdk-card">
-          <h3><a href="{{ "/sdks/c.html" | relative_url }}">C/C++</a></h3>
+          <h3><a href="{{ "/sdks/c.html" | relative_url }}">C</a></h3>
           <p>C SDK with cJSON for embedded and systems programming.</p>
           <code>CMake-based build</code>
+        </div>
+        
+        <div class="sdk-card">
+          <h3><a href="{{ "/sdks/ruby.html" | relative_url }}">Ruby</a></h3>
+          <p>Ruby gem with idiomatic API for schema validation.</p>
+          <code>gem install json_structure</code>
+        </div>
+        
+        <div class="sdk-card">
+          <h3><a href="{{ "/sdks/perl.html" | relative_url }}">Perl</a></h3>
+          <p>Perl module for JSON Structure validation.</p>
+          <code>cpanm JSON::Structure</code>
+        </div>
+        
+        <div class="sdk-card">
+          <h3><a href="{{ "/sdks/php.html" | relative_url }}">PHP</a></h3>
+          <p>PHP library with Composer support.</p>
+          <code>composer require json-structure/sdk</code>
+        </div>
+        
+        <div class="sdk-card">
+          <h3><a href="{{ "/sdks/swift.html" | relative_url }}">Swift</a></h3>
+          <p>Swift package for iOS, macOS, and server-side Swift.</p>
+          <code>Swift Package Manager</code>
         </div>
       </div>
 
