@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-structure.org/meta/extended/v0/#",
+    "$id": "https://example.com/schemas/PostalAddress.json",
+    "name": "PostalAddress",
+    "description": "A postal address for shipping or billing",
+    "type": "object",
+    "properties": {
+        "id": { 
+            "type": "uuid",
+            "description": "Unique identifier for the address"
+        },
+        "street": { 
+            "type": "string", 
+            "maxLength": 200,
+            "description": "Street address with house number"
+        },
+        "city": { 
+            "type": "string", 
+            "maxLength": 100,
+            "description": "City or municipality"
+        },
+        "state": { 
+            "type": "string", 
+            "maxLength": 50,
+            "description": "State, province, or region"
+        },
+        "postalCode": { 
+            "type": "string", 
+            "maxLength": 20,
+            "description": "ZIP or postal code"
+        },
+        "country": { 
+            "type": "string", 
+            "maxLength": 2,
+            "description": "ISO 3166-1 alpha-2 country code"
+        },
+        "createdAt": {
+            "type": "datetime",
+            "description": "When the address was created"
+        }
+    },
+    "required": ["id", "street", "city", "postalCode", "country"]
+}

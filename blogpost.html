@@ -1,0 +1,196 @@
+<p>We talk to many customers moving structured data through queues and event streams and topics, and we see a strong desire to create more efficient and less brittle communication paths governed by rich data definitions well understood by all parties. The way those definitions are often shared are schema documents. While there is great need, the available schema options and related tool chains are often not great.</p>
+<p>JSON Schema is popular for its relative simplicity in trivial cases, but quickly becomes unmanageable as users employ more complex constructs. The industry has largely settled on "Draft 7," with subsequent releases seeing weak adoption. There's substantial frustration among developers who try to use JSON Schema for code generation or database mapping—scenarios it was never designed for. JSON Schema is a powerful document validation tool, but it is not a data definition language. We believe it's effectively un-toolable for anything beyond pure validation; practically all available code-generation tools agree by failing at various degrees of complexity.</p>
+<p>Avro and Protobuf schemas are better for code generation, but tightly coupled to their respective serialization frameworks. For our own work in Microsoft Fabric, we're initially leaning on Avro schema with a small set of modifications, but we ultimately need a richer type definition language that ideally builds on people's familiarity with JSON Schema.</p>
+<p>This isn't just a Microsoft problem. It's an industry-wide gap. That's why we've submitted <a href="https://json-structure.org" target="_blank" rel="noopener">JSON Structure</a> as a set of Internet Drafts to the IETF, aiming for formal standardization as an RFC. We want a vendor-neutral, standards-track schema language that the entire industry can adopt.</p>
+<h2>What Is JSON Structure?</h2>
+<p>JSON Structure is a modern, strictly typed data definition language that describes JSON-encoded data such that mapping to and from programming languages and databases becomes straightforward. It looks familiar—if you've written <code>"type": "object", "properties": {...}</code> before, you'll feel right at home. But there's a key difference: JSON Structure is designed for code generation and data interchange first, with validation as an optional layer rather than the core concern.</p>
+<p>This means you get:</p>
+<ul>
+<li><strong>Precise numeric types</strong>: <code>int32</code>, <code>int64</code>, <code>decimal</code> with precision and scale, <code>float</code>, <code>double</code></li>
+<li><strong>Rich date/time support</strong>: <code>date</code>, <code>time</code>, <code>datetime</code>, <code>duration</code>—all with clear semantics</li>
+<li><strong>Extended compound types</strong>: Beyond objects and arrays, you get <code>set</code>, <code>map</code>, <code>tuple</code>, and <code>choice</code> (discriminated unions)</li>
+<li><strong>Namespaces and modular imports</strong>: Organize your schemas like code</li>
+<li><strong>Currency and unit annotations</strong>: Mark a <code>decimal</code> as USD or a <code>double</code> as kilograms</li>
+</ul>
+<p>Here's a compact example that showcases these features. We start with the schema header and the object definition:</p>
+<li-code lang="json">{
+    "$schema": "https://json-structure.org/meta/extended/v0/#",
+    "$id": "https://example.com/schemas/OrderEvent.json",
+    "name": "OrderEvent",
+    "type": "object",
+    "properties": {</li-code>
+<p>Objects require a <code>name</code> for clean code generation. The <code>$schema</code> points to the JSON Structure meta-schema, and the <code>$id</code> provides a unique identifier for the schema itself.</p>
+<p>Now let's define the first few properties—identifiers and a timestamp:</p>
+<li-code lang="json">        "orderId": { "type": "uuid" },
+        "customerId": { "type": "uuid" },
+        "timestamp": { "type": "datetime" },</li-code>
+<p>The native <code>uuid</code> type maps directly to <code>Guid</code> in .NET, <code>UUID</code> in Java, and <code>uuid</code> in Python. The <code>datetime</code> type uses RFC3339 encoding and becomes <code>DateTimeOffset</code> in .NET, <code>datetime</code> in Python, or <code>Date</code> in JavaScript. No format strings, no guessing.</p>
+<p>Next comes the order status, modeled as a discriminated union:</p>
+<li-code lang="json">        "status": { 
+            "type": "choice",
+            "choices": {
+                "pending": { "type": "null" },
+                "shipped": { 
+                    "type": "object", 
+                    "name": "ShippedInfo",
+                    "properties": {
+                        "carrier": { "type": "string" },
+                        "trackingId": { "type": "string" }
+                    }
+                },
+                "delivered": { 
+                    "type": "object",
+                    "name": "DeliveredInfo", 
+                    "properties": { 
+                        "signedBy": { "type": "string" } 
+                    }
+                }
+            }
+        },</li-code>
+<p>The <code>choice</code> type is a discriminated union with typed payloads per case. Each variant can carry its own structured data—<code>shipped</code> includes carrier and tracking information, <code>delivered</code> captures who signed for the package, and <code>pending</code> carries no payload at all. This maps to enums with associated values in Swift, sealed classes in Kotlin, or tagged unions in Rust.</p>
+<p>For monetary values, we use precise decimals:</p>
+<li-code lang="json">        "total": { "type": "decimal", "precision": 12, "scale": 2 },
+        "currency": { "type": "string", "maxLength": 3 },</li-code>
+<p>The <code>decimal</code> type with explicit precision and scale ensures exact monetary math—no floating-point surprises. A precision of 12 with scale 2 gives you up to 10 digits before the decimal point and exactly 2 after.</p>
+<p>Line items use an array of tuples for compact, positional data:</p>
+<li-code lang="json">        "items": {
+            "type": "array",
+            "items": {
+                "type": "tuple",
+                "properties": {
+                    "sku": { "type": "string" },
+                    "quantity": { "type": "int32" },
+                    "unitPrice": { "type": "decimal", "precision": 10, "scale": 2 }
+                },
+                "tuple": ["sku", "quantity", "unitPrice"],
+                "required": ["sku", "quantity", "unitPrice"]
+            }
+        },</li-code>
+<p>Tuples are fixed-length typed sequences—ideal for time-series data or line items where position matters. The <code>tuple</code> array specifies the exact order: SKU at position 0, quantity at 1, unit price at 2. The <code>int32</code> type maps to <code>int</code> in all mainstream languages.</p>
+<p>Finally, we add extensible metadata using set and map types:</p>
+<li-code lang="json">        "tags": { "type": "set", "items": { "type": "string" } },
+        "metadata": { "type": "map", "values": { "type": "string" } }
+    },
+    "required": ["orderId", "customerId", "timestamp", "status", "total", "currency", "items"]
+}</li-code>
+<p>The <code>set</code> type represents unordered, unique elements—perfect for tags. The <code>map</code> type provides string keys with typed values, ideal for extensible key-value metadata without polluting the main schema.</p>
+<p>Here's what a valid instance of this schema looks like:</p>
+<li-code lang="json">{
+    "orderId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "customerId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+    "timestamp": "2025-01-15T14:30:00Z",
+    "status": { "shipped": { "carrier": "FedEx", "trackingId": "794644790323" } },
+    "total": "129.97",
+    "currency": "USD",
+    "items": [
+        ["SKU-1234", 2, "49.99"],
+        ["SKU-5678", 1, "29.99"]
+    ],
+    "tags": ["priority", "gift-wrap"],
+    "metadata": { "source": "web", "campaign": "summer-sale" }
+}</li-code>
+<p>Notice how the <code>choice</code> is encoded as an object with a single key indicating the active case—<code>{"shipped": {...}}</code>—making it easy to parse and route. Tuples serialize as JSON arrays in the declared order. Decimals are encoded as strings to preserve precision across all platforms.</p>
+<h2>Why Does This Matter for Messaging?</h2>
+<p>When you're pushing events through Service Bus, Event Hubs, or Event Grid, schema clarity is everything. Your producers and consumers often live in different codebases, different languages, different teams. A schema that generates clean C# classes, clean Python dataclasses, and clean TypeScript interfaces—from the same source—is not a luxury. It's a requirement.</p>
+<p>JSON Structure's type system was designed with this polyglot reality in mind. The extended primitive types map directly to what languages actually have. A <code>datetime</code> is a <code>DateTimeOffset</code> in .NET, a <code>datetime</code> in Python, a <code>Date</code> in JavaScript. No more guessing whether that "string with format date-time" will parse correctly on the other side.</p>
+<h2>SDKs Available Now</h2>
+<p>We've built SDKs for the languages you're using today: <a href="https://json-structure.org/sdks/typescript" target="_blank" rel="noopener">TypeScript</a>, <a href="https://json-structure.org/sdks/python" target="_blank" rel="noopener">Python</a>, <a href="https://json-structure.org/sdks/dotnet" target="_blank" rel="noopener">.NET</a>, <a href="https://json-structure.org/sdks/java" target="_blank" rel="noopener">Java</a>, <a href="https://json-structure.org/sdks/go" target="_blank" rel="noopener">Go</a>, <a href="https://json-structure.org/sdks/rust" target="_blank" rel="noopener">Rust</a>, <a href="https://json-structure.org/sdks/ruby" target="_blank" rel="noopener">Ruby</a>, <a href="https://json-structure.org/sdks/perl" target="_blank" rel="noopener">Perl</a>, <a href="https://json-structure.org/sdks/php" target="_blank" rel="noopener">PHP</a>, <a href="https://json-structure.org/sdks/swift" target="_blank" rel="noopener">Swift</a>, and <a href="https://json-structure.org/sdks/c" target="_blank" rel="noopener">C</a>. All SDKs validate both schemas and instances against schemas. A <a href="https://marketplace.visualstudio.com/items?itemName=json-structure.json-structure-sdk" target="_blank" rel="noopener">VS Code extension</a> provides IntelliSense and inline diagnostics.</p>
+<h3>Code and Schema Generation with Structurize</h3>
+<p>Beyond validation, you often need to generate code or database schemas from your type definitions. The <a href="https://clemensv.github.io/avrotize/" target="_blank" rel="noopener">Structurize</a> tool converts JSON Structure schemas into SQL DDL for various database dialects, as well as self-serializing classes for multiple programming languages. It can also convert between JSON Structure and other schema formats like Avro, Protobuf, and JSON Schema.</p>
+<p>Here's a simple example: a postal address schema on the left, and the SQL Server table definition generated by running <code>structurize struct2sql postaladdress.json --dialect sqlserver</code> on the right:</p>
+<table style="width:100%; border-collapse: collapse;">
+<tr>
+<th style="text-align:left; padding:8px; border:1px solid #ddd; width:50%;">JSON Structure Schema</th>
+<th style="text-align:left; padding:8px; border:1px solid #ddd; width:50%;">Generated SQL Server DDL</th>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:8px; border:1px solid #ddd;">
+<li-code lang="json">{
+  "$schema": "https://json-structure.org/meta/extended/v0/#",
+  "$id": "https://example.com/schemas/PostalAddress.json",
+  "name": "PostalAddress",
+  "description": "A postal address for shipping or billing",
+  "type": "object",
+  "properties": {
+    "id": { 
+      "type": "uuid",
+      "description": "Unique identifier for the address"
+    },
+    "street": { 
+      "type": "string", 
+      "description": "Street address with house number"
+    },
+    "city": { 
+      "type": "string", 
+      "description": "City or municipality"
+    },
+    "state": { 
+      "type": "string", 
+      "description": "State, province, or region"
+    },
+    "postalCode": { 
+      "type": "string", 
+      "description": "ZIP or postal code"
+    },
+    "country": { 
+      "type": "string", 
+      "description": "ISO 3166-1 alpha-2 country code"
+    },
+    "createdAt": {
+      "type": "datetime",
+      "description": "When the address was created"
+    }
+  },
+  "required": ["id", "street", "city", "postalCode", "country"]
+}</li-code>
+</td>
+<td style="vertical-align:top; padding:8px; border:1px solid #ddd;">
+<li-code lang="sql">CREATE TABLE [PostalAddress] (
+    [id] UNIQUEIDENTIFIER,
+    [street] NVARCHAR(200),
+    [city] NVARCHAR(100),
+    [state] NVARCHAR(50),
+    [postalCode] NVARCHAR(20),
+    [country] NVARCHAR(2),
+    [createdAt] DATETIME2,
+    PRIMARY KEY ([id], [street], [city], 
+                 [postalCode], [country])
+);
+
+EXEC sp_addextendedproperty 
+  'MS_Description', 
+  'A postal address for shipping or billing', 
+  'SCHEMA', 'dbo', 
+  'TABLE', 'PostalAddress';
+
+EXEC sp_addextendedproperty 
+  'MS_Description', 
+  'Unique identifier for the address', 
+  'SCHEMA', 'dbo', 
+  'TABLE', 'PostalAddress', 
+  'COLUMN', 'id';
+
+EXEC sp_addextendedproperty 
+  'MS_Description', 
+  'Street address with house number', 
+  'SCHEMA', 'dbo', 
+  'TABLE', 'PostalAddress', 
+  'COLUMN', 'street';
+
+-- ... additional column descriptions</li-code>
+</td>
+</tr>
+</table>
+<p>The <code>uuid</code> type maps to <code>UNIQUEIDENTIFIER</code>, <code>datetime</code> becomes <code>DATETIME2</code>, and the schema's <code>description</code> fields are preserved as SQL Server extended properties. The tool supports PostgreSQL, MySQL, SQLite, and other dialects as well.</p>
+<p>Complementing this, there is a schema converter and code generator named <a class="lia-external-url" href="https://clemensv.github.io/avrotize/" target="_blank" rel="noopener">"Avrotize & Structurize"</a> that can generate various other schema formats from JSON Structure and can generate self-serializing classes/types for several programing languages.</p>
+<p>Mind that all this code is provided "as-is" and is in a "draft" state just like the specification set.  Feel encouraged to provide feedback and ideas in the GitHub repos for the specifications and SDKs at <a class="lia-external-url" href="https://github.com/json-structure/" target="_blank" rel="noopener">https://github.com/json-structure/</a> </p>
+<h2>Learn More</h2>
+<p>We've submitted JSON Structure as a set of Internet Drafts to the IETF, aiming for formal standardization as an RFC. This is an industry-wide issue, and we believe the solution needs to be a vendor-neutral standard. You can track the drafts at the <a href="https://datatracker.ietf.org/doc/search?name=draft-vasters-json-structure&rfcs=on&activedrafts=on&olddrafts=on" target="_blank" rel="noopener">IETF Datatracker</a>.</p>
+<ul>
+<li><strong>Main site</strong>: <a href="https://json-structure.org" target="_blank" rel="noopener">json-structure.org</a></li>
+<li><strong>Primer</strong>: <a href="https://json-structure.org/json-structure-primer.html" target="_blank" rel="noopener">JSON Structure Primer</a></li>
+<li><strong>Core specification</strong>: <a href="https://json-structure.github.io/core" target="_blank" rel="noopener">JSON Structure Core</a></li>
+<li><strong>Extensions</strong>: <a href="https://json-structure.github.io/import" target="_blank" rel="noopener">Import</a> | <a href="https://json-structure.github.io/validation" target="_blank" rel="noopener">Validation</a> | <a href="https://json-structure.github.io/alternate-names" target="_blank" rel="noopener">Alternate Names</a> | <a href="https://json-structure.github.io/units" target="_blank" rel="noopener">Units</a> | <a href="https://json-structure.github.io/conditional-composition" target="_blank" rel="noopener">Composition</a></li>
+<li><strong>IETF Drafts</strong>: <a href="https://datatracker.ietf.org/doc/search?name=draft-vasters-json-structure&rfcs=on&activedrafts=on&olddrafts=on" target="_blank" rel="noopener">IETF Datatracker</a></li>
+<li><strong>GitHub</strong>: <a href="https://github.com/json-structure" target="_blank" rel="noopener">github.com/json-structure</a></li>
+</ul>

@@ -1,0 +1,78 @@
+{
+    "$schema": "https://json-structure.org/meta/extended/v0/#",
+    "$id": "https://example.com/schemas/OrderEvent.json",
+    "name": "OrderEvent",
+    "description": "Objects require a name for clean code generation",
+    "type": "object",
+    "properties": {
+        "orderId": { 
+            "type": "uuid", 
+            "description": "Native UUID type maps to Guid/.NET, UUID/Java, uuid/Python" 
+        },
+        "customerId": { 
+            "type": "uuid" 
+        },
+        "timestamp": { 
+            "type": "datetime", 
+            "description": "Native datetime type with RFC3339 encoding" 
+        },
+        "status": { 
+            "type": "choice",
+            "description": "Discriminated union with typed payloads per case",
+            "choices": {
+                "pending": { "type": "null" },
+                "shipped": { 
+                    "type": "object", 
+                    "name": "ShippedInfo",
+                    "properties": {
+                        "carrier": { "type": "string" },
+                        "trackingId": { "type": "string" }
+                    }
+                },
+                "delivered": { 
+                    "type": "object",
+                    "name": "DeliveredInfo", 
+                    "properties": { 
+                        "signedBy": { "type": "string" } 
+                    }
+                }
+            }
+        },
+        "total": { 
+            "type": "decimal", 
+            "precision": 12, 
+            "scale": 2, 
+            "description": "Decimal with precision/scale for exact monetary math" 
+        },
+        "currency": { 
+            "type": "string", 
+            "maxLength": 3 
+        },
+        "items": {
+            "type": "array",
+            "description": "Array of tuples for compact, positional data",
+            "items": {
+                "type": "tuple",
+                "description": "Fixed-length typed sequence, ideal for time-series or line items",
+                "properties": {
+                    "sku": { "type": "string", "description": "Position 0: SKU" },
+                    "quantity": { "type": "int32", "description": "Position 1: int32 maps to int in all languages" },
+                    "unitPrice": { "type": "decimal", "precision": 10, "scale": 2, "description": "Position 2: unit price" }
+                },
+                "tuple": ["sku", "quantity", "unitPrice"],
+                "required": ["sku", "quantity", "unitPrice"]
+            }
+        },
+        "tags": { 
+            "type": "set", 
+            "items": { "type": "string" }, 
+            "description": "Set type: unordered, unique elements" 
+        },
+        "metadata": { 
+            "type": "map", 
+            "values": { "type": "string" }, 
+            "description": "Map type: string keys, typed values" 
+        }
+    },
+    "required": ["orderId", "customerId", "timestamp", "status", "total", "currency", "items"]
+}
