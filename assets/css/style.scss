@@ -151,20 +151,24 @@ body {
     display: none !important;
   }
   
-  /* Hide the redundant title in header since we show it in section */
+  /* Make header title smaller */
   .wrapper header h1 {
     font-size: 24px;
     margin-bottom: 10px;
+    display: block;
   }
   
-  .wrapper header p {
+  /* Ensure description is block-level and properly separated */
+  .wrapper header > p {
     font-size: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    display: block;
+    clear: both;
   }
   
-  /* Hide "View on GitHub" link on small screens - it's redundant */
+  /* Hide "View on GitHub" link on small screens */
   .wrapper header p.view {
-    display: none;
+    display: none !important;
   }
   
   .wrapper section {
@@ -174,24 +178,28 @@ body {
     border: none !important;
   }
   
+  /* Sidebar navigation - make it a proper block below description */
   .sidebar-nav {
-    display: block;
+    display: block !important;
+    clear: both;
     border-top: 1px solid #e0e0e0;
     padding-top: 15px;
     margin-top: 15px;
+    width: 100%;
   }
   
   .sidebar-nav h3 {
     width: 100%;
     text-align: center;
-    margin: 10px 0 5px 0;
+    margin: 10px 0 8px 0;
     font-size: 13px;
-    display: block;
+    font-weight: bold;
+    display: block !important;
   }
   
   .sidebar-nav ul {
-    display: flex;
-    flex-wrap: wrap;
+    display: flex !important;
+    flex-wrap: wrap !important;
     justify-content: center;
     gap: 8px 15px;
     width: 100%;
@@ -203,11 +211,13 @@ body {
   .sidebar-nav li {
     margin: 0;
     display: inline-block;
+    flex: 0 0 auto;
   }
   
   .sidebar-nav a {
     font-size: 12px;
     white-space: nowrap;
+    display: inline-block;
   }
 }
 
