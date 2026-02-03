@@ -175,10 +175,7 @@ body {
   }
   
   .sidebar-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
+    display: block;
     border-top: 1px solid #e0e0e0;
     padding-top: 15px;
     margin-top: 15px;
@@ -187,24 +184,30 @@ body {
   .sidebar-nav h3 {
     width: 100%;
     text-align: center;
-    margin: 5px 0;
+    margin: 10px 0 5px 0;
     font-size: 13px;
+    display: block;
   }
   
   .sidebar-nav ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 5px 12px;
+    gap: 8px 15px;
     width: 100%;
+    padding: 0;
+    margin: 0 0 10px 0;
+    list-style: none;
   }
   
   .sidebar-nav li {
     margin: 0;
+    display: inline-block;
   }
   
   .sidebar-nav a {
     font-size: 12px;
+    white-space: nowrap;
   }
 }
 
