@@ -156,35 +156,37 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 15px;
+    gap: 10px 15px;
   }
   
-  /* Show smaller logo on left side of header */
+  /* Show smaller logo on left side of header - use order to put it first */
   .wrapper header img {
     display: block !important;
     width: 60px !important;
     height: auto !important;
     max-width: 60px !important;
     flex-shrink: 0;
+    order: -1;  /* Put image before h1 */
   }
   
-  /* Header text container */
+  /* Header title next to logo */
   .wrapper header h1 {
     font-size: 22px;
-    margin-bottom: 5px;
-    display: block;
-    width: auto;
-    flex: 1;
-    min-width: 200px;
+    margin-bottom: 0;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    order: 0;
   }
   
-  /* Ensure description is block-level and properly separated */
+  /* Ensure description spans full width below logo+title */
   .wrapper header > p {
     font-size: 14px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: block;
-    clear: both;
     width: 100%;
+    order: 1;
   }
   
   /* Hide "View on GitHub" link on small screens */
@@ -214,6 +216,7 @@ body {
     padding-top: 15px;
     margin-top: 15px;
     width: 100%;
+    order: 10;  /* Put nav last */
   }
   
   .sidebar-nav h3 {
