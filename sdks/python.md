@@ -3,7 +3,7 @@ layout: default
 title: Python SDK
 ---
 
-# Python SDK
+# <img src="/media/logo.svg" alt="" class="inline-logo">Python SDK
 
 The official JSON Structure SDK for Python.
 

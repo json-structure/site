@@ -3,7 +3,7 @@ layout: default
 title: .NET SDK
 ---
 
-# .NET SDK
+# <img src="/media/logo.svg" alt="" class="inline-logo">.NET SDK
 
 The official JSON Structure SDK for .NET (C#, F#, VB.NET).
 

@@ -1,5 +1,5 @@
 
-# JSON Structure
+# <img src="/media/logo.svg" alt="" class="inline-logo">JSON Structure
 
 JSON Structure is a schema language that can describe data types and structures
 whose definitions map cleanly to programming language types and database

@@ -4,7 +4,7 @@ title: Code Generation & Schema Conversions - JSON Structure
 sdk_name: codegen
 ---
 
-# Code Generation & Schema Conversions
+# <img src="/media/logo.svg" alt="" class="inline-logo">Code Generation & Schema Conversions
 
 JSON Structure schemas can be used with [Avrotize](https://github.com/clemensv/avrotize) (via its `structurize` alias) to generate code and convert between schema formats.
 

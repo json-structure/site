@@ -3,7 +3,7 @@ layout: default
 title: TypeScript/JavaScript SDK
 ---
 
-# TypeScript/JavaScript SDK
+# <img src="/media/logo.svg" alt="" class="inline-logo">TypeScript/JavaScript SDK
 
 The official JSON Structure SDK for TypeScript and JavaScript.
 

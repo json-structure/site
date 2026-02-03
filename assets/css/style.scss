@@ -51,6 +51,15 @@ body {
   padding-bottom: 70px;
 }
 
+/* Inline logo for responsive views - hidden on desktop */
+.inline-logo {
+  display: none;
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
 /* Sidebar navigation styling */
 .sidebar-nav {
   margin-top: 20px;
@@ -142,21 +151,31 @@ body {
     float: none !important;
     padding-right: 0 !important;  /* Override theme's 320px padding-right */
     padding: 0 !important;
-    text-align: center;
+    text-align: left;
     margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 15px;
   }
   
-  /* Hide the large logo on tablet/mobile - it causes overlap */
+  /* Show smaller logo on left side of header */
   .wrapper header img {
-    display: none !important;
+    display: block !important;
+    width: 60px !important;
+    height: auto !important;
+    max-width: 60px !important;
+    flex-shrink: 0;
   }
   
-  /* Make header title smaller */
+  /* Header text container */
   .wrapper header h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 22px;
+    margin-bottom: 5px;
     display: block;
-    width: 100%;
+    width: auto;
+    flex: 1;
+    min-width: 200px;
   }
   
   /* Ensure description is block-level and properly separated */
@@ -257,6 +276,16 @@ body {
   
   .wrapper {
     padding: 0 10px !important;
+  }
+  
+  /* Smaller logo on mobile */
+  .wrapper header img {
+    width: 50px !important;
+    max-width: 50px !important;
+  }
+  
+  .wrapper header h1 {
+    font-size: 20px;
   }
 }
 
