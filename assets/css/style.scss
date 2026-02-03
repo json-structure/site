@@ -138,10 +138,11 @@ body {
   }
   
   .wrapper header {
-    position: relative !important;
+    position: static !important;
     width: 100% !important;
     float: none !important;
-    padding-right: 0 !important;
+    padding-right: 0 !important;  /* Override theme's 320px padding-right */
+    padding: 0 !important;
     text-align: center;
     margin-bottom: 20px;
   }
@@ -156,6 +157,7 @@ body {
     font-size: 24px;
     margin-bottom: 10px;
     display: block;
+    width: 100%;
   }
   
   /* Ensure description is block-level and properly separated */
@@ -164,11 +166,19 @@ body {
     margin-bottom: 15px;
     display: block;
     clear: both;
+    width: 100%;
   }
   
   /* Hide "View on GitHub" link on small screens */
   .wrapper header p.view {
     display: none !important;
+  }
+  
+  /* Override theme's absolute positioning of ul */
+  .wrapper header ul {
+    position: static !important;
+    right: auto !important;
+    top: auto !important;
   }
   
   .wrapper section {
@@ -203,9 +213,10 @@ body {
     justify-content: center;
     gap: 8px 15px;
     width: 100%;
-    padding: 0;
-    margin: 0 0 10px 0;
+    padding: 0 !important;
+    margin: 0 0 10px 0 !important;
     list-style: none;
+    position: static !important;  /* Override theme's absolute positioning */
   }
   
   .sidebar-nav li {
