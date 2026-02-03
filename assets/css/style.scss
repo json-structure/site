@@ -14,8 +14,6 @@
   border-bottom: 1px solid #ddd;
   padding: 8px 0;
   font-size: 13px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .spec-header-content {
@@ -23,7 +21,8 @@
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;  /* Allow wrapping at any resolution */
+  line-height: 1.8;     /* Space out wrapped lines */
 }
 
 .spec-header-title {
@@ -48,7 +47,7 @@
 
 /* Offset body for fixed header and footer space */
 body {
-  padding-top: 45px;
+  padding-top: 65px;   /* Extra space for potentially wrapped header */
   padding-bottom: 70px;
 }
 
@@ -236,15 +235,10 @@ body {
 @media screen and (max-width: 480px) {
   .spec-header {
     font-size: 11px;
-    padding: 8px 0;
-    overflow-x: visible;  /* Don't scroll, allow wrap */
   }
   
   .spec-header-content {
     padding: 0 10px;
-    text-align: center;
-    white-space: normal;  /* Allow wrapping */
-    line-height: 1.8;     /* Space out wrapped lines */
   }
   
   .spec-sep {
@@ -258,7 +252,7 @@ body {
   }
   
   body {
-    padding-top: 80px;    /* More space for wrapped header */
+    padding-top: 90px;    /* More space for multi-line wrapped header */
   }
   
   .wrapper {
