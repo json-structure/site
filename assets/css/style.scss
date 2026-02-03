@@ -236,20 +236,29 @@ body {
 @media screen and (max-width: 480px) {
   .spec-header {
     font-size: 11px;
-    padding: 5px 0;
+    padding: 8px 0;
+    overflow-x: visible;  /* Don't scroll, allow wrap */
   }
   
   .spec-header-content {
     padding: 0 10px;
-    text-align: left;
+    text-align: center;
+    white-space: normal;  /* Allow wrapping */
+    line-height: 1.8;     /* Space out wrapped lines */
   }
   
   .spec-sep {
-    margin: 0 2px;
+    margin: 0 3px;
+  }
+  
+  .spec-header-title {
+    display: block;       /* Put "Specification:" on its own line */
+    margin-bottom: 5px;
+    margin-right: 0;
   }
   
   body {
-    padding-top: 50px;
+    padding-top: 80px;    /* More space for wrapped header */
   }
   
   .wrapper {
