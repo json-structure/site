@@ -14,6 +14,8 @@
   border-bottom: 1px solid #ddd;
   padding: 8px 0;
   font-size: 13px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .spec-header-content {
@@ -21,6 +23,7 @@
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .spec-header-title {
@@ -126,7 +129,58 @@ body {
   margin-bottom: 10px;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments - Tablet */
+@media screen and (max-width: 960px) {
+  .wrapper {
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 20px !important;
+  }
+  
+  .wrapper header {
+    position: relative !important;
+    width: 100% !important;
+    float: none !important;
+    padding-right: 0 !important;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .wrapper section {
+    width: 100% !important;
+    float: none !important;
+    margin-left: 0 !important;
+    border: none !important;
+  }
+  
+  .sidebar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    border-top: none;
+    padding-top: 10px;
+  }
+  
+  .sidebar-nav h3 {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0 5px 0;
+  }
+  
+  .sidebar-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 15px;
+  }
+  
+  .sidebar-nav li {
+    margin: 0;
+  }
+}
+
+/* Responsive adjustments - Mobile */
 @media screen and (max-width: 480px) {
   .spec-header {
     font-size: 11px;
@@ -135,6 +189,7 @@ body {
   
   .spec-header-content {
     padding: 0 10px;
+    text-align: left;
   }
   
   .spec-sep {
@@ -142,8 +197,21 @@ body {
   }
   
   body {
-    padding-top: 60px;
+    padding-top: 50px;
   }
+  
+  .wrapper {
+    padding: 0 10px !important;
+  }
+}
+
+/* Table responsiveness */
+.sdk-content table,
+section table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Active navigation state */
@@ -230,8 +298,8 @@ body {
   background: transparent;
 }
 
-/* Make sidebar scroll with content instead of being fixed */
-@media screen and (min-width: 768px) {
+/* Make sidebar scroll with content instead of being fixed - only on large screens */
+@media screen and (min-width: 961px) {
   .wrapper header {
     position: absolute !important;
   }
