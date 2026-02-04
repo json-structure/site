@@ -105,10 +105,19 @@ for post_file in "$POSTS_DIR"/*.md; do
     title_escaped=$(echo "$title" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g')
     
     # Generate SVG
-    output_file="$SOCIAL_CARDS_DIR/${slug}.svg"
-    read_template | sed "s/TITLE_PLACEHOLDER/$title_escaped/g" | sed "s/DATE_PLACEHOLDER/$formatted_date/g" > "$output_file"
+    output_svg="$SOCIAL_CARDS_DIR/${slug}.svg"
+    read_template | sed "s/TITLE_PLACEHOLDER/$title_escaped/g" | sed "s/DATE_PLACEHOLDER/$formatted_date/g" > "$output_svg"
     
-    echo "Generated: $output_file"
+    echo "Generated: $output_svg"
+    
+    # Convert SVG to PNG using rsvg-convert (if available)
+    output_png="$SOCIAL_CARDS_DIR/${slug}.png"
+    if command -v rsvg-convert &> /dev/null; then
+      rsvg-convert -w 1200 -h 630 "$output_svg" -o "$output_png"
+      echo "Generated: $output_png"
+    else
+      echo "Warning: rsvg-convert not found, skipping PNG generation for $slug"
+    fi
   fi
 done
 
