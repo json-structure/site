@@ -188,20 +188,45 @@ body {
 }
 
 /* Blog post page styles */
+.blog-post {
+  position: relative;
+}
+
+.blog-post article {
+  display: block;
+}
+
 .blog-post .post-header {
   margin-bottom: 30px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  display: block;
+  clear: both;
 }
 
 .blog-post .post-title {
   font-size: 2em;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
+  padding: 0;
   color: #333;
+  line-height: 1.2;
+  display: block;
+}
+
+.blog-post .post-meta {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  display: block;
+  clear: both;
 }
 
 .blog-post .post-content {
   line-height: 1.7;
+  display: block;
+  clear: both;
 }
 
 .blog-post .post-content h2 {
