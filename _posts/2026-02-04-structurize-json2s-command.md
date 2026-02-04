@@ -3,6 +3,7 @@ layout: post
 title: "Inferring JSON Structure Schemas from Your Data with Structurize"
 date: 2026-02-04
 author: Clemens Vasters
+social_image: /social-cards/structurize-json2s-command.svg
 ---
 
 # Inferring JSON Structure Schemas from Your Data with Structurize

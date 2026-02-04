@@ -6,6 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {% seo %}
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:title" content="{{ page.title | escape }}">
+    <meta property="og:description" content="{{ page.excerpt | default: page.content | strip_html | truncate: 200 | escape }}">
+    <meta property="og:image" content="{{ page.social_image | default: '/media/social-card-default.svg' | absolute_url }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="{{ site.title }}">
+    <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+    {% if page.author %}<meta property="article:author" content="{{ page.author }}">{% endif %}
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ page.url | absolute_url }}">
+    <meta name="twitter:title" content="{{ page.title | escape }}">
+    <meta name="twitter:description" content="{{ page.excerpt | default: page.content | strip_html | truncate: 200 | escape }}">
+    <meta name="twitter:image" content="{{ page.social_image | default: '/media/social-card-default.svg' | absolute_url }}">
+    
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }} Blog" href="{{ "/rss.xml" | relative_url }}">
     <!--[if lt IE 9]>
