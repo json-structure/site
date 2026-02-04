@@ -3,7 +3,6 @@ layout: post
 title: "Inferring JSON Structure Schemas from Your Data with Structurize"
 date: 2026-02-04
 author: Clemens Vasters
-social_image: /social-cards/structurize-json2s-command.svg
 ---
 
 # Inferring JSON Structure Schemas from Your Data with Structurize
@@ -15,7 +14,7 @@ that you can use for validation, code generation, or documentation.
 
 ## What is Structurize?
 
-[Structurize](https://github.com/clemensv/avrotize) is a schema conversion
+[Structurize](https://avrotize.com) is a schema conversion
 toolkit that transforms between various schema formats: JSON Schema, JSON
 Structure, Avro Schema, Protocol Buffers, XSD, and more. It also generates code
 in multiple languages (C#, Python, TypeScript, Java, Go, Rust, C++) and exports

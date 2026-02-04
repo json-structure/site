@@ -3,7 +3,6 @@ layout: post
 title: "Welcome to JSON Structure"
 date: 2026-02-04
 author: Clemens Vasters
-social_image: /social-cards/welcome-to-json-structure.svg
 ---
 
 JSON Structure is here, and with it comes a fresh perspective on how we define data types and structures for modern applications.
