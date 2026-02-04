@@ -7,6 +7,7 @@
 
     {% seo %}
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title }} Blog" href="{{ "/rss.xml" | relative_url }}">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
@@ -46,17 +47,17 @@
         <nav class="sidebar-nav">
           <h3>SDKs</h3>
           <ul>
-            <li{% if page.sdk_name == "typescript" %} class="active"{% endif %}><a href="{{ "/sdks/typescript.html" | relative_url }}">TypeScript/JavaScript</a></li>
-            <li{% if page.sdk_name == "python" %} class="active"{% endif %}><a href="{{ "/sdks/python.html" | relative_url }}">Python</a></li>
-            <li{% if page.sdk_name == "dotnet" %} class="active"{% endif %}><a href="{{ "/sdks/dotnet.html" | relative_url }}">.NET (C#)</a></li>
-            <li{% if page.sdk_name == "java" %} class="active"{% endif %}><a href="{{ "/sdks/java.html" | relative_url }}">Java</a></li>
-            <li{% if page.sdk_name == "go" %} class="active"{% endif %}><a href="{{ "/sdks/go.html" | relative_url }}">Go</a></li>
-            <li{% if page.sdk_name == "rust" %} class="active"{% endif %}><a href="{{ "/sdks/rust.html" | relative_url }}">Rust</a></li>
-            <li{% if page.sdk_name == "ruby" %} class="active"{% endif %}><a href="{{ "/sdks/ruby.html" | relative_url }}">Ruby</a></li>
-            <li{% if page.sdk_name == "perl" %} class="active"{% endif %}><a href="{{ "/sdks/perl.html" | relative_url }}">Perl</a></li>
-            <li{% if page.sdk_name == "php" %} class="active"{% endif %}><a href="{{ "/sdks/php.html" | relative_url }}">PHP</a></li>
-            <li{% if page.sdk_name == "swift" %} class="active"{% endif %}><a href="{{ "/sdks/swift.html" | relative_url }}">Swift</a></li>
-            <li{% if page.sdk_name == "c" %} class="active"{% endif %}><a href="{{ "/sdks/c.html" | relative_url }}">C</a></li>
+            <li><a href="{{ "/sdks/typescript.html" | relative_url }}">TypeScript/JavaScript</a></li>
+            <li><a href="{{ "/sdks/python.html" | relative_url }}">Python</a></li>
+            <li><a href="{{ "/sdks/dotnet.html" | relative_url }}">.NET (C#)</a></li>
+            <li><a href="{{ "/sdks/java.html" | relative_url }}">Java</a></li>
+            <li><a href="{{ "/sdks/go.html" | relative_url }}">Go</a></li>
+            <li><a href="{{ "/sdks/rust.html" | relative_url }}">Rust</a></li>
+            <li><a href="{{ "/sdks/ruby.html" | relative_url }}">Ruby</a></li>
+            <li><a href="{{ "/sdks/perl.html" | relative_url }}">Perl</a></li>
+            <li><a href="{{ "/sdks/php.html" | relative_url }}">PHP</a></li>
+            <li><a href="{{ "/sdks/swift.html" | relative_url }}">Swift</a></li>
+            <li><a href="{{ "/sdks/c.html" | relative_url }}">C</a></li>
           </ul>
           
           <h3>Resources</h3>
@@ -74,10 +75,24 @@
         </ul>
         {% endif %}
       </header>
-      <section class="sdk-content">
+      <section class="blog-post">
+        <article>
+          <header class="post-header">
+            <h1 class="post-title">{{ page.title }}</h1>
+            <p class="post-meta">
+              <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+              {% if page.author %} • {{ page.author }}{% endif %}
+            </p>
+          </header>
 
-      {{ content }}
+          <div class="post-content">
+            {{ content }}
+          </div>
+        </article>
 
+        <nav class="post-navigation">
+          <a href="{{ "/blog/" | relative_url }}">← Back to Blog</a>
+        </nav>
       </section>
     </div>
     <footer class="page-footer">

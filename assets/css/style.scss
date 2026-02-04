@@ -137,6 +137,138 @@ body {
   margin-bottom: 10px;
 }
 
+/* Blog styles */
+.blog-list {
+  margin-top: 30px;
+}
+
+.blog-entry {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.blog-entry:last-child {
+  border-bottom: none;
+}
+
+.blog-entry h2 {
+  margin-bottom: 5px;
+  font-size: 1.5em;
+}
+
+.blog-entry h2 a {
+  color: #333;
+  text-decoration: none;
+}
+
+.blog-entry h2 a:hover {
+  color: #4078c0;
+}
+
+.post-meta {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.post-excerpt {
+  color: #555;
+  line-height: 1.6;
+}
+
+.rss-link {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.rss-link a {
+  color: #4078c0;
+}
+
+/* Blog post page styles */
+.blog-post .post-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.blog-post .post-title {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.blog-post .post-content {
+  line-height: 1.7;
+}
+
+.blog-post .post-content h2 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.blog-post .post-content p {
+  margin-bottom: 15px;
+}
+
+.blog-post .post-content ul,
+.blog-post .post-content ol {
+  margin-bottom: 15px;
+  padding-left: 25px;
+}
+
+.blog-post .post-content li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.blog-post .post-content code {
+  background: #f6f8fa;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 90%;
+}
+
+.blog-post .post-content pre {
+  background: #f6f8fa;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 15px;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+.blog-post .post-content pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.blog-post .post-content blockquote {
+  border-left: 4px solid #4078c0;
+  margin: 20px 0;
+  padding: 10px 20px;
+  background: #f9f9f9;
+  color: #555;
+}
+
+.post-navigation {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.post-navigation a {
+  color: #4078c0;
+  text-decoration: none;
+}
+
+.post-navigation a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive adjustments - Tablet */
 @media screen and (max-width: 960px) {
   .wrapper {
