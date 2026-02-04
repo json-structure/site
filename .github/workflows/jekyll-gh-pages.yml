@@ -101,6 +101,11 @@ jobs:
           ---
           EOF
           
+      - name: Generate social cards for blog posts
+        run: |
+          chmod +x scripts/generate-social-cards.sh
+          ./scripts/generate-social-cards.sh
+          
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll

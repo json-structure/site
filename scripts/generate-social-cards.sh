@@ -1,6 +1,15 @@
----
-layout: null
----
+#!/bin/bash
+# Generate social card SVG files for each blog post
+
+SOCIAL_CARDS_DIR="social-cards"
+POSTS_DIR="_posts"
+
+# Create social-cards directory
+mkdir -p "$SOCIAL_CARDS_DIR"
+
+# Read the social card template
+read_template() {
+  cat << 'TEMPLATE'
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <!-- Background -->
@@ -32,13 +41,75 @@ layout: null
   <switch>
     <foreignObject x="440" y="100" width="720" height="380" requiredExtensions="http://www.w3.org/1999/xhtml">
       <div xmlns="http://www.w3.org/1999/xhtml" style="height: 100%; display: flex; align-items: center;">
-        <p style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; font-size: 48px; color: #333333; margin: 0; line-height: 1.3; word-wrap: break-word;">{{ page.card_title | default: page.title | xml_escape }}</p>
+        <p style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; font-size: 48px; color: #333333; margin: 0; line-height: 1.3; word-wrap: break-word;">TITLE_PLACEHOLDER</p>
       </div>
     </foreignObject>
     <!-- Fallback for renderers that don't support foreignObject -->
-    <text x="460" y="315" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="600" fill="#333333" font-size="48">{{ page.card_title | default: page.title | xml_escape | truncate: 40 }}</text>
+    <text x="460" y="315" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="600" fill="#333333" font-size="48">TITLE_PLACEHOLDER</text>
   </switch>
   
   <!-- Date -->
-  <text x="460" y="540" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#888888" font-size="24">{{ page.date | date: "%B %d, %Y" }}</text>
+  <text x="460" y="540" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#888888" font-size="24">DATE_PLACEHOLDER</text>
 </svg>
+TEMPLATE
+}
+
+# Process each post
+for post_file in "$POSTS_DIR"/*.md; do
+  if [ -f "$post_file" ]; then
+    filename=$(basename "$post_file")
+    
+    # Extract slug from filename (remove date prefix and .md extension)
+    # Format: YYYY-MM-DD-slug.md
+    slug=$(echo "$filename" | sed 's/^[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}-//' | sed 's/\.md$//')
+    
+    # Extract title from front matter
+    title=$(grep -m1 '^title:' "$post_file" | sed 's/^title:[[:space:]]*//' | sed 's/^["'\'']//' | sed 's/["'\'']$//')
+    
+    # Extract date from front matter or filename
+    date_raw=$(grep -m1 '^date:' "$post_file" | sed 's/^date:[[:space:]]*//')
+    if [ -z "$date_raw" ]; then
+      date_raw=$(echo "$filename" | grep -o '^[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}')
+    fi
+    
+    # Format date nicely
+    if [ -n "$date_raw" ]; then
+      # Parse YYYY-MM-DD format
+      year=$(echo "$date_raw" | cut -d'-' -f1)
+      month=$(echo "$date_raw" | cut -d'-' -f2)
+      day=$(echo "$date_raw" | cut -d'-' -f3 | cut -d' ' -f1)
+      
+      # Convert month number to name
+      case $month in
+        01) month_name="January" ;;
+        02) month_name="February" ;;
+        03) month_name="March" ;;
+        04) month_name="April" ;;
+        05) month_name="May" ;;
+        06) month_name="June" ;;
+        07) month_name="July" ;;
+        08) month_name="August" ;;
+        09) month_name="September" ;;
+        10) month_name="October" ;;
+        11) month_name="November" ;;
+        12) month_name="December" ;;
+        *) month_name="$month" ;;
+      esac
+      
+      formatted_date="$month_name $day, $year"
+    else
+      formatted_date=""
+    fi
+    
+    # Escape special characters for XML
+    title_escaped=$(echo "$title" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g')
+    
+    # Generate SVG
+    output_file="$SOCIAL_CARDS_DIR/${slug}.svg"
+    read_template | sed "s/TITLE_PLACEHOLDER/$title_escaped/g" | sed "s/DATE_PLACEHOLDER/$formatted_date/g" > "$output_file"
+    
+    echo "Generated: $output_file"
+  fi
+done
+
+echo "Social card generation complete!"
