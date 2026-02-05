@@ -5,8 +5,6 @@ date: 2026-02-04
 author: Clemens Vasters
 ---
 
-# Inferring JSON Structure Schemas from Your Data with Structurize
-
 If you have JSON data and need a schema for it, the new `json2s` command in
 **Structurize** can help. It analyzes your JSON files, figures out what types
 you're working with, and produces a valid JSON Structure schema document — one
