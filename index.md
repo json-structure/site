@@ -71,7 +71,7 @@ definition language that also supports validation.
 - Simplified cross-references between schema documents
 - Straightforward reuse patterns for types
 - Support for multilingual descriptions and alternate names
-- Support for symbols, scientific units, and currency codes
+- Support for symbols, scientific units, currency codes, and UCUM notation
 
 ## Primer and Core Specification
 
@@ -95,8 +95,8 @@ developers who want to create tools and libraries that work with JSON Structure.
   symbols for types and properties.
 - [JSON Structure: Symbols, Scientific Units, and
   Currencies](https://json-structure.github.io/units): Defines annotation
-  keywords for specifying symbols, scientific units, and currency codes
-  complementing type information.
+  keywords for specifying symbols, scientific units, currency codes, and UCUM
+  (Unified Code for Units of Measure) notation complementing type information.
 - [JSON Structure: Validation](https://json-structure.github.io/validation):
   Specifies extensions to the core schema language for declaring validation
   rules for JSON data that have no structural impact on the schema.
