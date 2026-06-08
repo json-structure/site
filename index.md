@@ -103,6 +103,9 @@ developers who want to create tools and libraries that work with JSON Structure.
 - [JSON Structure:
   Composition](https://json-structure.github.io/conditional-composition):
   Defines a set of conditional composition rules for evaluating schemas.
+- [JSON Structure:
+  Relations](https://json-structure.github.io/relations): Declares identity
+  constraints and inter-type relationships for objects and tuples.
 
 ## SDKs
 
