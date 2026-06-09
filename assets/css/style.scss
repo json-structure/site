@@ -3,7 +3,32 @@
 
 @import "{{ site.theme }}";
 
-/* Fixed specification header */
+/* ==========================================================================
+   Skip Navigation Link (WCAG 2.4.1)
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  padding: 12px 16px;
+  background: #2e6bb0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 10000;
+  transition: top 0.2s;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==========================================================================
+   Fixed specification header
+   ========================================================================== */
+
 .spec-header {
   position: fixed;
   top: 0;
@@ -12,8 +37,9 @@
   z-index: 1000;
   background: #f5f5f5;
   border-bottom: 1px solid #ddd;
-  padding: 8px 0;
+  padding: 4px 0;
   font-size: 13px;
+  padding-top: env(safe-area-inset-top);
 }
 
 .spec-header-content {
@@ -21,8 +47,8 @@
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
-  white-space: normal;  /* Allow wrapping at any resolution */
-  line-height: 1.8;     /* Space out wrapped lines */
+  white-space: normal;
+  line-height: 1.8;
 }
 
 .spec-header-title {
@@ -32,8 +58,12 @@
 }
 
 .spec-header a {
-  color: #4078c0;
+  color: #2e6bb0;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 4px;
 }
 
 .spec-header a:hover {
@@ -41,14 +71,18 @@
 }
 
 .spec-sep {
-  color: #999;
+  color: #666;
   margin: 0 5px;
 }
 
-/* Offset body for fixed header and footer space */
+/* ==========================================================================
+   Body and Layout
+   ========================================================================== */
+
 body {
-  padding-top: 65px;   /* Extra space for potentially wrapped header */
+  padding-top: 65px;
   padding-bottom: 70px;
+  color: #4a4a4a;
 }
 
 /* Inline logo for responsive views - hidden on desktop */
@@ -60,7 +94,10 @@ body {
   margin-right: 10px;
 }
 
-/* Sidebar navigation styling */
+/* ==========================================================================
+   Sidebar Navigation
+   ========================================================================== */
+
 .sidebar-nav {
   margin-top: 20px;
   padding-top: 15px;
@@ -90,7 +127,7 @@ body {
 }
 
 .sidebar-nav a {
-  color: #4078c0;
+  color: #2e6bb0;
   text-decoration: none;
   font-size: 13px;
 }
@@ -99,7 +136,10 @@ body {
   text-decoration: underline;
 }
 
-/* SDK page styling */
+/* ==========================================================================
+   SDK Page Styling
+   ========================================================================== */
+
 .sdk-content h1 {
   border-bottom: 2px solid #4078c0;
   padding-bottom: 10px;
@@ -111,6 +151,7 @@ body {
   border-radius: 3px;
   padding: 12px;
   overflow-x: auto;
+  position: relative;
 }
 
 .sdk-content code {
@@ -137,7 +178,10 @@ body {
   margin-bottom: 10px;
 }
 
-/* Blog styles */
+/* ==========================================================================
+   Blog Styles
+   ========================================================================== */
+
 .blog-list {
   margin-top: 30px;
 }
@@ -167,13 +211,13 @@ body {
 }
 
 .post-meta {
-  color: #666;
+  color: #555;
   font-size: 14px;
   margin-bottom: 10px;
 }
 
 .post-excerpt {
-  color: #555;
+  color: #4a4a4a;
   line-height: 1.6;
 }
 
@@ -184,7 +228,7 @@ body {
 }
 
 .rss-link a {
-  color: #4078c0;
+  color: #2e6bb0;
 }
 
 /* Blog post page styles */
@@ -223,7 +267,7 @@ body {
 }
 
 .blog-post .post-meta {
-  color: #666 !important;
+  color: #555 !important;
   font-size: 14px !important;
   margin: 0 0 0 0 !important;
   padding: 0 !important;
@@ -287,7 +331,7 @@ body {
   margin: 20px 0;
   padding: 10px 20px;
   background: #f9f9f9;
-  color: #555;
+  color: #4a4a4a;
 }
 
 .post-navigation {
@@ -297,7 +341,7 @@ body {
 }
 
 .post-navigation a {
-  color: #4078c0;
+  color: #2e6bb0;
   text-decoration: none;
 }
 
@@ -305,7 +349,10 @@ body {
   text-decoration: underline;
 }
 
-/* Responsive adjustments - Tablet */
+/* ==========================================================================
+   Responsive: Tablet (max-width: 960px)
+   ========================================================================== */
+
 @media screen and (max-width: 960px) {
   .wrapper {
     width: auto !important;
@@ -317,27 +364,25 @@ body {
     position: static !important;
     width: 100% !important;
     float: none !important;
-    padding-right: 0 !important;  /* Override theme's 320px padding-right */
+    padding-right: 0 !important;
     padding: 0 !important;
     text-align: left;
     margin-bottom: 20px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;  /* Vertically center logo and title */
+    align-items: center;
     gap: 10px 12px;
   }
   
-  /* Show smaller logo matching title height */
   .wrapper header img {
     display: block !important;
     width: auto !important;
-    height: 28px !important;  /* Match the visual height of the title */
+    height: 28px !important;
     max-height: 28px !important;
     flex-shrink: 0;
-    order: -1;  /* Put image before h1 */
+    order: -1;
   }
   
-  /* Header title next to logo */
   .wrapper header h1 {
     font-size: 22px;
     line-height: 1;
@@ -349,7 +394,6 @@ body {
     order: 0;
   }
   
-  /* Ensure description spans full width below logo+title */
   .wrapper header > p {
     font-size: 14px;
     margin-bottom: 10px;
@@ -358,12 +402,10 @@ body {
     order: 1;
   }
   
-  /* Hide "View on GitHub" link on small screens */
   .wrapper header p.view {
     display: none !important;
   }
   
-  /* Override theme's absolute positioning of ul */
   .wrapper header ul {
     position: static !important;
     right: auto !important;
@@ -377,7 +419,6 @@ body {
     border: none !important;
   }
   
-  /* Sidebar navigation - make it a proper block below description */
   .sidebar-nav {
     display: block !important;
     clear: both;
@@ -385,7 +426,7 @@ body {
     padding-top: 15px;
     margin-top: 15px;
     width: 100%;
-    order: 10;  /* Put nav last */
+    order: 10;
   }
   
   .sidebar-nav h3 {
@@ -401,12 +442,12 @@ body {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center;
-    gap: 8px 15px;
+    gap: 4px 8px;
     width: 100%;
     padding: 0 !important;
     margin: 0 0 10px 0 !important;
     list-style: none;
-    position: static !important;  /* Override theme's absolute positioning */
+    position: static !important;
   }
   
   .sidebar-nav li {
@@ -416,43 +457,67 @@ body {
   }
   
   .sidebar-nav a {
-    font-size: 12px;
+    font-size: 13px;
     white-space: nowrap;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 8px;
   }
 }
 
-/* Responsive adjustments - Mobile */
+/* ==========================================================================
+   Responsive: Mobile (max-width: 480px)
+   ========================================================================== */
+
 @media screen and (max-width: 480px) {
+  body {
+    font-size: 16px;
+    padding-top: 90px;
+    padding-bottom: 0;
+  }
+
   .spec-header {
-    font-size: 11px;
+    font-size: 12px;
   }
   
   .spec-header-content {
     padding: 0 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
   }
-  
+
+  .spec-header a {
+    min-height: 44px;
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
   .spec-sep {
-    margin: 0 3px;
+    display: none;
   }
   
   .spec-header-title {
-    display: block;       /* Put "Specification:" on its own line */
-    margin-bottom: 5px;
+    display: block;
+    width: 100%;
+    margin-bottom: 2px;
     margin-right: 0;
+    text-align: center;
   }
-  
-  body {
-    padding-top: 90px;    /* More space for multi-line wrapped header */
+
+  .page-footer {
+    position: static !important;
+    margin-top: 40px;
   }
   
   .wrapper {
-    padding: 0 10px !important;
+    padding: 0 12px !important;
   }
   
-  /* Smaller logo on mobile matching smaller title */
   .wrapper header img {
-    height: 24px !important;  /* Match the smaller title height */
+    height: 24px !important;
     max-height: 24px !important;
     width: auto !important;
   }
@@ -461,9 +526,40 @@ body {
     font-size: 20px;
     line-height: 1;
   }
+
+  .sdk-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .sdk-card {
+    padding: 16px;
+  }
+
+  /* Code block scroll hint */
+  section pre,
+  .sdk-content pre {
+    position: relative;
+  }
+
+  section pre::after,
+  .sdk-content pre::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    background: linear-gradient(to right, transparent, rgba(246, 248, 250, 0.9));
+    pointer-events: none;
+    border-radius: 0 3px 3px 0;
+  }
 }
 
-/* Table responsiveness */
+/* ==========================================================================
+   Table Responsiveness
+   ========================================================================== */
+
 .sdk-content table,
 section table {
   display: block;
@@ -472,13 +568,19 @@ section table {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Active navigation state */
+/* ==========================================================================
+   Active Navigation State
+   ========================================================================== */
+
 .sidebar-nav li.active a {
   font-weight: bold;
   color: #333;
 }
 
-/* SDK grid for index page */
+/* ==========================================================================
+   SDK Grid (Index Page)
+   ========================================================================== */
+
 .sdk-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -504,7 +606,7 @@ section table {
 }
 
 .sdk-card h3 a {
-  color: #4078c0;
+  color: #2e6bb0;
   text-decoration: none;
 }
 
@@ -513,7 +615,7 @@ section table {
 }
 
 .sdk-card p {
-  color: #666;
+  color: #555;
   font-size: 14px;
   margin-bottom: 15px;
 }
@@ -527,7 +629,10 @@ section table {
   color: #333;
 }
 
-/* Codegen page styling */
+/* ==========================================================================
+   Codegen Page
+   ========================================================================== */
+
 .tool-section {
   margin: 30px 0;
   padding: 20px;
@@ -556,14 +661,20 @@ section table {
   background: transparent;
 }
 
-/* Make sidebar scroll with content instead of being fixed - only on large screens */
+/* ==========================================================================
+   Desktop Sidebar (min-width: 961px)
+   ========================================================================== */
+
 @media screen and (min-width: 961px) {
   .wrapper header {
     position: absolute !important;
   }
 }
 
-/* Page footer at bottom - full width */
+/* ==========================================================================
+   Page Footer
+   ========================================================================== */
+
 .page-footer {
   position: fixed !important;
   bottom: 0 !important;
@@ -571,10 +682,11 @@ section table {
   right: 0 !important;
   width: 100% !important;
   padding: 10px 20px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
   text-align: center;
   border-top: 1px solid #e0e0e0;
   background: #f5f5f5;
-  color: #666;
+  color: #555;
   font-size: 12px;
   z-index: 999;
   box-sizing: border-box;
@@ -585,10 +697,21 @@ section table {
 }
 
 .page-footer a {
-  color: #4078c0;
+  color: #2e6bb0;
   text-decoration: none;
 }
 
 .page-footer a:hover {
   text-decoration: underline;
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .sdk-card,
+  .skip-link {
+    transition: none;
+  }
 }
