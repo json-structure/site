@@ -351,19 +351,18 @@ body {
 
 @media screen and (max-width: 960px) {
   .spec-header a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 8px 4px;
-    font-size: 14px;
+    display: inline-block;
+    padding: 6px 6px;
+    font-size: 13px;
   }
 
   .spec-header {
-    font-size: 14px;
+    font-size: 13px;
+    padding: 6px 0;
   }
 
   body {
-    padding-top: 110px;
+    padding-top: 80px;
   }
 
   .wrapper {
@@ -471,10 +470,8 @@ body {
   .sidebar-nav a {
     font-size: 13px;
     white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 10px 8px;
+    display: inline-block;
+    padding: 6px 8px;
   }
 }
 
@@ -485,12 +482,13 @@ body {
 @media screen and (max-width: 480px) {
   body {
     font-size: 16px;
-    padding-top: 130px;
+    padding-top: 100px;
     padding-bottom: 0;
   }
 
   .spec-header {
-    font-size: 13px;
+    font-size: 12px;
+    padding: 4px 0;
   }
   
   .spec-header-content {
@@ -499,12 +497,12 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 0;
+    line-height: 1.4;
   }
 
   .spec-header a {
-    min-height: 44px;
-    padding: 10px 6px;
-    font-size: 13px;
+    padding: 5px 5px;
+    font-size: 12px;
   }
 
   .spec-sep {
