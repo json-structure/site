@@ -60,10 +60,6 @@
 .spec-header a {
   color: #2e6bb0;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 8px 4px;
 }
 
 .spec-header a:hover {
@@ -354,6 +350,22 @@ body {
    ========================================================================== */
 
 @media screen and (max-width: 960px) {
+  .spec-header a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+
+  .spec-header {
+    font-size: 14px;
+  }
+
+  body {
+    padding-top: 110px;
+  }
+
   .wrapper {
     width: auto !important;
     margin: 0 !important;
@@ -473,12 +485,12 @@ body {
 @media screen and (max-width: 480px) {
   body {
     font-size: 16px;
-    padding-top: 90px;
+    padding-top: 130px;
     padding-bottom: 0;
   }
 
   .spec-header {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .spec-header-content {
@@ -492,7 +504,7 @@ body {
   .spec-header a {
     min-height: 44px;
     padding: 10px 6px;
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .spec-sep {
