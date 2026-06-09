@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
     {% seo %}
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
@@ -13,6 +13,7 @@
     {% include head-custom.html %}
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="spec-header">
       <div class="spec-header-content">
         <span class="spec-header-title">Specification:</span>
@@ -47,7 +48,7 @@
         <p class="view"><a href="{{ site.github.owner_url }}">View My GitHub Profile</a></p>
         {% endif %}
 
-        <nav class="sidebar-nav">
+        <nav class="sidebar-nav" aria-label="SDK Navigation">
           <h3>SDKs</h3>
           <ul>
             <li><a href="{{ "/sdks/typescript.html" | relative_url }}">TypeScript/JavaScript</a></li>
@@ -78,7 +79,7 @@
         </ul>
         {% endif %}
       </header>
-      <section>
+      <section id="main-content">
 
       {{ content }}
 
