@@ -120,6 +120,7 @@ Official JSON Structure SDKs are available for multiple languages:
 | **Go** | [github.com/json-structure/sdk/go](https://pkg.go.dev/github.com/json-structure/sdk/go) | `go get github.com/json-structure/sdk/go` |
 | **Rust** | [json-structure](https://crates.io/crates/json-structure) | `cargo add json-structure` |
 | **Ruby** | [jsonstructure](https://rubygems.org/gems/jsonstructure) | `gem install jsonstructure` |
+| **R** | [jsonstructure](https://github.com/json-structure/sdk/tree/master/r) | `remotes::install_github("json-structure/sdk", subdir = "r")` |
 | **Perl** | [JSON::Structure](https://metacpan.org/pod/JSON::Structure) | `cpanm JSON::Structure` |
 | **PHP** | [json-structure/sdk](https://packagist.org/packages/json-structure/sdk) | `composer require json-structure/sdk` |
 | **Swift** | [json-structure-swift](https://github.com/json-structure/sdk/tree/master/swift) | Swift Package Manager |
