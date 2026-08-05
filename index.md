@@ -72,6 +72,7 @@ definition language that also supports validation.
 - Straightforward reuse patterns for types
 - Support for multilingual descriptions and alternate names
 - Support for symbols, scientific units, currency codes, and UCUM notation
+- Support for semantic roles and reference systems on observation data
 
 ## Primer and Core Specification
 
@@ -106,6 +107,11 @@ developers who want to create tools and libraries that work with JSON Structure.
 - [JSON Structure:
   Relations](https://json-structure.github.io/relations): Declares identity
   constraints and inter-type relationships for objects and tuples.
+- [JSON Structure: Semantic and Reference-System
+  Annotations](https://json-structure.github.io/semantic-annotations): Declares
+  what the values in an observation mean — the property observed, the feature it
+  belongs to, the time it refers to — and the temporal, coordinate, and linear
+  reference systems those values are expressed in.
 
 ## SDKs
 
