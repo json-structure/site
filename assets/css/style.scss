@@ -673,11 +673,86 @@ section table {
 
 /* ==========================================================================
    Desktop Sidebar (min-width: 961px)
+
+   The sidebar sticks once it reaches the fixed spec header, so it stays in
+   view alongside the article instead of scrolling away.
+
+   display: flow-root on .wrapper is load-bearing. The wrapper contains only
+   floats, so without it the wrapper collapses to height 0, and a sticky child
+   with a zero-height containing block has no range to stick within and just
+   scrolls off. flow-root is used rather than overflow: hidden because an
+   overflow ancestor would become the scroll container and break sticky too.
+
+   The sidebar is taller than a short laptop viewport, so it is capped to the
+   space between the spec header and the page footer and scrolls internally
+   when it does not fit. Without the cap its lower half is unreachable.
    ========================================================================== */
 
 @media screen and (min-width: 961px) {
-  .wrapper header {
-    position: absolute !important;
+  .wrapper {
+    display: flow-root;
+  }
+
+  .wrapper > header {
+    position: sticky !important;
+    top: 65px;
+    max-height: calc(100vh - 145px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding-right: 8px;
+  }
+
+  /* The logo is 270px square at its natural size, a third of the sidebar's
+     height, which pushed the nav below the fold whenever the sidebar was
+     sticky. At 130px the whole sidebar fits any window taller than 760px. */
+
+  .wrapper > header > img {
+    width: 130px;
+    height: auto;
+    display: block;
+    margin: 4px 0 14px;
+  }
+
+  /* Two columns for the sidebar link lists. The SDK list alone is eleven
+     entries, which made the sidebar taller than the viewport and forced it to
+     scroll internally. Two columns take it from eleven rows to six. */
+
+  .sidebar-nav ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 8px;
+    row-gap: 2px;
+  }
+}
+
+/* ==========================================================================
+   Desktop Content Width (min-width: 1060px)
+
+   The upstream pages-themes/minimal theme hard-codes .wrapper to 860px and
+   section to a 500px column, which is far too narrow on a desktop monitor.
+   Here the wrapper becomes fluid with a cap, and section takes whatever is
+   left after the 270px sidebar and the theme's 90px gutter.
+
+   The breakpoint is 1060px rather than 961px because that is the point above
+   which 94% of the viewport minus the sidebar exceeds the theme's 500px. Below
+   it the original layout is left alone, so no viewport gets a narrower column
+   than it has today, and the max-width: 960px mobile stack is untouched.
+   ========================================================================== */
+
+@media screen and (min-width: 1060px) {
+  .wrapper {
+    width: 94%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .wrapper section {
+    width: calc(100% - 360px);
+  }
+
+  .spec-header-content {
+    max-width: 1400px;
   }
 }
 
