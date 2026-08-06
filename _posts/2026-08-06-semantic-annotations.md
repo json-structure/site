@@ -3,6 +3,7 @@ layout: post
 title: "Semantic and Reference-System Annotations"
 date: 2026-08-06
 author: Clemens Vasters
+image: /social-cards/semantic-annotations.png
 description: >-
   Two schemas can agree that a member is a double in metres, pass every
   validator, and still be describing water level above a tide gauge and height

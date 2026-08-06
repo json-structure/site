@@ -37,21 +37,70 @@ read_template() {
   <!-- "Blog" label -->
   <text x="200" y="510" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#666666" font-size="20">Blog</text>
   
-  <!-- Right panel: Post title with word wrapping using foreignObject -->
-  <switch>
-    <foreignObject x="440" y="100" width="720" height="380" requiredExtensions="http://www.w3.org/1999/xhtml">
-      <div xmlns="http://www.w3.org/1999/xhtml" style="height: 100%; display: flex; align-items: center;">
-        <p style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; font-size: 48px; color: #333333; margin: 0; line-height: 1.3; word-wrap: break-word;">TITLE_PLACEHOLDER</p>
-      </div>
-    </foreignObject>
-    <!-- Fallback for renderers that don't support foreignObject -->
-    <text x="460" y="315" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="600" fill="#333333" font-size="48">TITLE_PLACEHOLDER</text>
-  </switch>
+  <!-- Right panel: post title.
+
+       The title is pre-wrapped into tspans by the shell rather than laid out by
+       the renderer. This used to be a <switch> with a foreignObject holding a
+       wrapping <div> and a plain <text> fallback, but librsvg (rsvg-convert,
+       which produces the PNG) does not implement foreignObject, so it always
+       took the fallback and long titles ran off the right edge of the card. -->
+  <text font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="600" fill="#333333" font-size="48">TITLE_TSPANS_PLACEHOLDER</text>
   
   <!-- Date -->
   <text x="460" y="540" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#888888" font-size="24">DATE_PLACEHOLDER</text>
 </svg>
 TEMPLATE
+}
+
+# Greedily wrap a title to MAX_CHARS-wide lines and emit them as <tspan>
+# elements, vertically centred in the 100..480 band of the right panel.
+# At 48px semibold the 720px panel fits roughly 26 characters per line.
+build_title_tspans() {
+  local title="$1"
+  local max_chars=26
+  local line_height=62
+  local band_centre=290
+  local x=460
+
+  local -a lines=()
+  local current=""
+  local word candidate
+
+  # Splitting on whitespace requires an unquoted expansion, which would also
+  # glob-expand a title containing * or ?, so pathname expansion is disabled
+  # for the duration of the loop.
+  set -f
+  for word in $title; do
+    if [ -z "$current" ]; then
+      candidate="$word"
+    else
+      candidate="$current $word"
+    fi
+    if [ ${#candidate} -le $max_chars ]; then
+      current="$candidate"
+    else
+      if [ -n "$current" ]; then
+        lines+=("$current")
+      fi
+      current="$word"
+    fi
+  done
+  set +f
+  if [ -n "$current" ]; then
+    lines+=("$current")
+  fi
+
+  local count=${#lines[@]}
+  # Baseline of the first line, so the block sits centred on band_centre.
+  # The +16 nudges for cap height, since y is a baseline and not a box top.
+  local first_y=$(( band_centre - ((count - 1) * line_height) / 2 + 16 ))
+
+  local out="" i y
+  for (( i = 0; i < count; i++ )); do
+    y=$(( first_y + i * line_height ))
+    out="$out<tspan x=\"$x\" y=\"$y\">${lines[$i]}</tspan>"
+  done
+  printf '%s' "$out"
 }
 
 # Process each post
@@ -103,10 +152,16 @@ for post_file in "$POSTS_DIR"/*.md; do
     
     # Escape special characters for XML
     title_escaped=$(echo "$title" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g')
+    title_tspans=$(build_title_tspans "$title_escaped")
     
-    # Generate SVG
+    # Generate SVG. Bash parameter expansion is used rather than sed because the
+    # replacement text is literal there; sed would expand an unescaped & in the
+    # replacement to the whole match, corrupting any title containing &amp;.
     output_svg="$SOCIAL_CARDS_DIR/${slug}.svg"
-    read_template | sed "s/TITLE_PLACEHOLDER/$title_escaped/g" | sed "s/DATE_PLACEHOLDER/$formatted_date/g" > "$output_svg"
+    svg=$(read_template)
+    svg=${svg//TITLE_TSPANS_PLACEHOLDER/$title_tspans}
+    svg=${svg//DATE_PLACEHOLDER/$formatted_date}
+    printf '%s\n' "$svg" > "$output_svg"
     
     echo "Generated: $output_svg"
     

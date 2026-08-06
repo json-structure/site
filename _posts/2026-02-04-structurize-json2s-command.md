@@ -3,6 +3,7 @@ layout: post
 title: "Inferring JSON Structure Schemas from Your Data with Structurize"
 date: 2026-02-04
 author: Clemens Vasters
+image: /social-cards/structurize-json2s-command.png
 ---
 
 If you have JSON data and need a schema for it, the new `json2s` command in
