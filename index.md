@@ -9,57 +9,108 @@ information that can be evaluated and understood by developers and by large
 language models (LLMs).
 
 <style>
-    .language-json {
-        font-size: x-small;
-    }
+pre.jsonx {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  background: #fbfbfd;
+  border: 1px solid #e2e2ea;
+  border-radius: 4px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  color: #24292f;
+}
+pre.jsonx .s { color: #032f62; }
+pre.jsonx .n { color: #b31d28; }
+pre.jsonx .p { color: #6a737d; }
+pre.jsonx .k {
+  color: #044289;
+  font-weight: 700;
+  background: #ddf0fb;
+  border-bottom: 2px solid #2188cc;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+pre.jsonx .x {
+  color: #8a4b00;
+  font-weight: 700;
+  background: #fff3d4;
+  border-bottom: 2px solid #e6a817;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+pre.jsonx .lnk {
+  background: #d7f2ef;
+  border-bottom: 2px solid #2ba39a;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.legend {
+  font-size: 0.85rem;
+  color: #57606a;
+  margin: 0 0 1.4rem 0;
+}
+.legend .sw {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2px;
+  vertical-align: -1px;
+  margin-right: 0.2rem;
+}
 </style>
 
-```json
-{
-    "$schema": "https://json-structure.org/meta/extended/v0/#",
-    "$id": "https://example.com/schemas/product",
-    "$uses": ["JSONStructureAlternateNames", "JSONStructureUnits"],
-    "type": "object",
-    "name": "Product",
-    "properties": {
-        "id": {
-            "type": "uuid",
-            "description": "Unique identifier for the product"
-        },
-        "name": {
-            "type": "string",
-            "maxLength": 100,
-            "altnames": {
-                "json": "product_name",
-                "lang:en": "Product Name",
-                "lang:de": "Produktname"
-            }
-        },
-        "price": {
-            "type": "decimal",
-            "precision": 10,
-            "scale": 2,
-            "currency": "USD"
-        },
-        "weight": {
-            "type": "double",
-            "unit": "kg"
-        },
-        "created": {
-            "type": "datetime"
-        },
-        "tags": {
-            "type": "set",
-            "items": { "type": "string" }
-        },
-        "attributes": {
-            "type": "map",
-            "values": { "type": "string" }
-        }
-    },
-    "required": ["id", "name", "price", "created" ]
-}
-```
+<p class="legend">
+<span class="sw" style="background:#ddf0fb;border-bottom:2px solid #2188cc"></span> core keywords &nbsp;·&nbsp;
+<span class="sw" style="background:#fff3d4;border-bottom:2px solid #e6a817"></span> companion-specification keywords &nbsp;·&nbsp;
+<span class="sw" style="background:#d7f2ef;border-bottom:2px solid #2ba39a"></span> the companions this schema opts into
+</p>
+
+<pre class="jsonx"><span class="p">{</span>
+    <span class="k">"$schema"</span><span class="p">:</span> <span class="s">"https://json-structure.org/meta/extended/v0/#"</span><span class="p">,</span>
+    <span class="k">"$id"</span><span class="p">:</span> <span class="s">"https://example.com/schemas/product"</span><span class="p">,</span>
+    <span class="k">"$uses"</span><span class="p">: [</span><span class="lnk">"JSONStructureAlternateNames"</span><span class="p">,</span> <span class="lnk">"JSONStructureUnits"</span><span class="p">],</span>
+    <span class="k">"type"</span><span class="p">:</span> <span class="s">"object"</span><span class="p">,</span>
+    <span class="k">"name"</span><span class="p">:</span> <span class="s">"Product"</span><span class="p">,</span>
+    <span class="k">"properties"</span><span class="p">: {</span>
+        <span class="s">"id"</span><span class="p">: {</span>
+            <span class="k">"type"</span><span class="p">:</span> <span class="s">"uuid"</span><span class="p">,</span>
+            <span class="k">"description"</span><span class="p">:</span> <span class="s">"Unique identifier for the product"</span>
+        <span class="p">},</span>
+        <span class="s">"name"</span><span class="p">: {</span>
+            <span class="k">"type"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+            <span class="x">"maxLength"</span><span class="p">:</span> <span class="n">100</span><span class="p">,</span>
+            <span class="x">"altnames"</span><span class="p">: {</span>
+                <span class="s">"json"</span><span class="p">:</span> <span class="s">"product_name"</span><span class="p">,</span>
+                <span class="s">"lang:en"</span><span class="p">:</span> <span class="s">"Product Name"</span><span class="p">,</span>
+                <span class="s">"lang:de"</span><span class="p">:</span> <span class="s">"Produktname"</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">"price"</span><span class="p">: {</span>
+            <span class="k">"type"</span><span class="p">:</span> <span class="s">"decimal"</span><span class="p">,</span>
+            <span class="x">"precision"</span><span class="p">:</span> <span class="n">10</span><span class="p">,</span>
+            <span class="x">"scale"</span><span class="p">:</span> <span class="n">2</span><span class="p">,</span>
+            <span class="x">"currency"</span><span class="p">:</span> <span class="s">"USD"</span>
+        <span class="p">},</span>
+        <span class="s">"weight"</span><span class="p">: {</span>
+            <span class="k">"type"</span><span class="p">:</span> <span class="s">"double"</span><span class="p">,</span>
+            <span class="x">"unit"</span><span class="p">:</span> <span class="s">"kg"</span>
+        <span class="p">},</span>
+        <span class="s">"created"</span><span class="p">: {</span>
+            <span class="k">"type"</span><span class="p">:</span> <span class="s">"datetime"</span>
+        <span class="p">},</span>
+        <span class="s">"tags"</span><span class="p">: {</span>
+            <span class="k">"type"</span><span class="p">:</span> <span class="s">"set"</span><span class="p">,</span>
+            <span class="k">"items"</span><span class="p">: {</span> <span class="k">"type"</span><span class="p">:</span> <span class="s">"string"</span> <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">"attributes"</span><span class="p">: {</span>
+            <span class="k">"type"</span><span class="p">:</span> <span class="s">"map"</span><span class="p">,</span>
+            <span class="k">"values"</span><span class="p">: {</span> <span class="k">"type"</span><span class="p">:</span> <span class="s">"string"</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="k">"required"</span><span class="p">: [</span><span class="s">"id"</span><span class="p">,</span> <span class="s">"name"</span><span class="p">,</span> <span class="s">"price"</span><span class="p">,</span> <span class="s">"created"</span><span class="p">]</span>
+<span class="p">}</span>
+</pre>
 
 JSON Structure's syntax is similar to that of JSON Schema, but while JSON Schema
 focuses on document validation, JSON Structure focuses on being a strong data
