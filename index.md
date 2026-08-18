@@ -1,4 +1,9 @@
 
+---
+layout: default
+image: /social-cards/home.png
+---
+
 # <img src="/media/logo.svg" alt="" class="inline-logo">JSON Structure
 
 JSON Structure is a schema language that can describe data types and structures

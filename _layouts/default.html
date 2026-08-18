@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
     {% seo %}
+    {% comment %}
+      jekyll-seo-tag turns page.image into og:image and upgrades the Twitter
+      card to summary_large_image; only the dimensions it does not emit are
+      declared here, and only for pages that actually carry a card.
+    {% endcomment %}
+    {% if page.image %}
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    {% endif %}
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>

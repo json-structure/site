@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generate social card SVG files for each blog post
+# Generate social card SVG files for the home page and each blog post
 
 SOCIAL_CARDS_DIR="social-cards"
 POSTS_DIR="_posts"
@@ -34,8 +34,8 @@ read_template() {
   <!-- "JSON Structure" text below logo -->
   <text x="200" y="470" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="700" fill="#333333" font-size="32">JSON Structure</text>
   
-  <!-- "Blog" label -->
-  <text x="200" y="510" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#666666" font-size="20">Blog</text>
+  <!-- Section label -->
+  <text x="200" y="510" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#666666" font-size="20">LABEL_PLACEHOLDER</text>
   
   <!-- Right panel: post title.
 
@@ -46,8 +46,8 @@ read_template() {
        took the fallback and long titles ran off the right edge of the card. -->
   <text font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="600" fill="#333333" font-size="48">TITLE_TSPANS_PLACEHOLDER</text>
   
-  <!-- Date -->
-  <text x="460" y="540" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#888888" font-size="24">DATE_PLACEHOLDER</text>
+  <!-- Subline: post date, or a tagline on the home card -->
+  <text x="460" y="540" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="400" fill="#888888" font-size="24">SUBLINE_PLACEHOLDER</text>
 </svg>
 TEMPLATE
 }
@@ -103,6 +103,49 @@ build_title_tspans() {
   printf '%s' "$out"
 }
 
+# Escape the five XML-significant characters in a piece of card text.
+escape_xml() {
+  printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g'
+}
+
+# render_card <slug> <label> <title> <subline>
+# Writes social-cards/<slug>.svg and, when rsvg-convert is available, the
+# matching 1200x630 PNG that the pages reference as og:image.
+render_card() {
+  local slug="$1" label="$2" title="$3" subline="$4"
+
+  local title_tspans
+  title_tspans=$(build_title_tspans "$(escape_xml "$title")")
+
+  # Bash parameter expansion is used rather than sed because the replacement
+  # text is literal there; sed would expand an unescaped & in the replacement
+  # to the whole match, corrupting any text containing &amp;.
+  local output_svg="$SOCIAL_CARDS_DIR/${slug}.svg"
+  local svg
+  svg=$(read_template)
+  svg=${svg//TITLE_TSPANS_PLACEHOLDER/$title_tspans}
+  svg=${svg//LABEL_PLACEHOLDER/$(escape_xml "$label")}
+  svg=${svg//SUBLINE_PLACEHOLDER/$(escape_xml "$subline")}
+  printf '%s\n' "$svg" > "$output_svg"
+
+  echo "Generated: $output_svg"
+
+  local output_png="$SOCIAL_CARDS_DIR/${slug}.png"
+  if command -v rsvg-convert &> /dev/null; then
+    rsvg-convert -w 1200 -h 630 "$output_svg" -o "$output_png"
+    echo "Generated: $output_png"
+  else
+    echo "Warning: rsvg-convert not found, skipping PNG generation for $slug"
+  fi
+}
+
+# Home page card. Referenced from index.md as the site-wide og:image, so that
+# links to the root do not fall back to a bare "summary" card.
+render_card "home" \
+  "json-structure.org" \
+  "A schema language for modern applications" \
+  "Strict typing · Modularity · Determinism"
+
 # Process each post
 for post_file in "$POSTS_DIR"/*.md; do
   if [ -f "$post_file" ]; then
@@ -150,29 +193,7 @@ for post_file in "$POSTS_DIR"/*.md; do
       formatted_date=""
     fi
     
-    # Escape special characters for XML
-    title_escaped=$(echo "$title" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g')
-    title_tspans=$(build_title_tspans "$title_escaped")
-    
-    # Generate SVG. Bash parameter expansion is used rather than sed because the
-    # replacement text is literal there; sed would expand an unescaped & in the
-    # replacement to the whole match, corrupting any title containing &amp;.
-    output_svg="$SOCIAL_CARDS_DIR/${slug}.svg"
-    svg=$(read_template)
-    svg=${svg//TITLE_TSPANS_PLACEHOLDER/$title_tspans}
-    svg=${svg//DATE_PLACEHOLDER/$formatted_date}
-    printf '%s\n' "$svg" > "$output_svg"
-    
-    echo "Generated: $output_svg"
-    
-    # Convert SVG to PNG using rsvg-convert (if available)
-    output_png="$SOCIAL_CARDS_DIR/${slug}.png"
-    if command -v rsvg-convert &> /dev/null; then
-      rsvg-convert -w 1200 -h 630 "$output_svg" -o "$output_png"
-      echo "Generated: $output_png"
-    else
-      echo "Warning: rsvg-convert not found, skipping PNG generation for $slug"
-    fi
+    render_card "$slug" "Blog" "$title" "$formatted_date"
   fi
 done
 
