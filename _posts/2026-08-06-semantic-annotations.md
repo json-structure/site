@@ -156,7 +156,7 @@ instant, an interval, an accumulation; every minute, or on change.
 **Name the reference system.** `temporalReferenceSystem`,
 `coordinateReferenceSystem`, `linearReferenceSystem`, `vectorReferenceFrames`,
 `tensorReferenceFrames`, and `frameTransforms` say what a position, a direction,
-or an orientation is read against — and, this is the part that earns its keep,
+or an orientation is read against — and, this is the part nothing else does,
 *which of your members supplies which axis*.
 
 **Resolve compound values.** `colorSpaces`, `audioChannels`, and `spectralBands`
@@ -522,8 +522,8 @@ asserts an incompatible reading, `declined` if it raises the matter and
 explicitly refuses to settle it, and `untouched` if it never engages at all.
 Stating the right answer but flagging it as a guess counts as `declined`, not
 `correct` — without that rule a model's prior knowledge of METARs would swamp
-the comparison. **Declining is not failing.** An unannotated schema genuinely
-does not determine the reference frame, and saying so is the correct behaviour.
+the comparison. **Declining is not failing.** An unannotated schema does not
+determine the reference frame, and saying so is the correct behaviour.
 
 **Accuracy is `correct / (correct + wrong)`** — of the matters a reader
 committed on, how often it was right. `coverage` is how much of the rubric it
