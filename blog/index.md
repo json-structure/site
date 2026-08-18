@@ -16,8 +16,8 @@ Welcome to the JSON Structure blog. Here we explore practical applications, dive
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y" }}</time>
       {% if post.author %} • {{ post.author }}{% endif %}
     </p>
-    {% if post.excerpt %}
-    <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
+    {% if post.description %}
+    <p class="post-description">{{ post.description | strip_html }}</p>
     {% endif %}
     <p><a href="{{ post.url | relative_url }}">Read more →</a></p>
   </article>

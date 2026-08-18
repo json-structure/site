@@ -4,6 +4,9 @@ title: "Welcome to JSON Structure"
 date: 2026-02-04
 author: Clemens Vasters
 image: /social-cards/welcome-to-json-structure.png
+description: >-
+  JSON Structure is a strongly typed schema language for data models that map
+  cleanly to programming languages, databases, APIs, and JSON.
 ---
 
 JSON Structure is here, and with it comes a fresh perspective on how we define data types and structures for modern applications.

@@ -4,6 +4,9 @@ title: "Inferring JSON Structure Schemas from Your Data with Structurize"
 date: 2026-02-04
 author: Clemens Vasters
 image: /social-cards/structurize-json2s-command.png
+description: >-
+  Structurize's json2s command infers JSON Structure schemas from JSON and
+  JSONL samples for validation, code generation, and documentation.
 ---
 
 If you have JSON data and need a schema for it, the new `json2s` command in

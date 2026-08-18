@@ -285,7 +285,7 @@ body {
   margin-bottom: 10px;
 }
 
-.post-excerpt {
+.post-description {
   color: #4a4a4a;
   line-height: 1.6;
 }
@@ -344,6 +344,42 @@ body {
   clear: both;
   position: relative !important;
   float: none !important;
+}
+
+.share-links {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.share-links > span {
+  margin-right: 3px;
+  color: #666;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.share-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #4f5963;
+  border: 1px solid #cfd5db;
+  border-radius: 4px;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.share-links a:hover,
+.share-links a:focus-visible {
+  color: #fff;
+  background: #2e6bb0;
+  border-color: #2e6bb0;
 }
 
 .blog-post .post-content {
