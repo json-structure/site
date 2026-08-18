@@ -1,0 +1,140 @@
+---
+layout: post
+title: "Definitions Are a Type Library"
+date: 2026-09-16
+published: false
+author: Clemens Vasters
+image: /social-cards/definitions-are-a-type-library.png
+description: >-
+  Use definitions as a case-sensitive namespace hierarchy for reusable types,
+  including types that share a local name but not a meaning.
+---
+
+How many types called `Address` can one schema contain? As many as the model
+needs, provided they live in different namespaces.
+
+JSON Structure's `definitions` is a case-sensitive type library. An order can
+have both `Billing/Address` and `Shipping/Address`, without inventing flattened
+names merely to satisfy a global registry.
+
+## Namespaces are JSON objects
+
+Every type directly under `definitions` belongs to the root namespace. Any
+object there that does not declare `type` is a namespace, and namespaces may
+contain types or further namespaces.
+
+Here is an order schema with two `Address` definitions:
+
+```json
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://schemas.example.com/order.json",
+  "$root": "#/definitions/Commerce/Order",
+  "definitions": {
+    "Billing": {
+      "Address": {
+        "type": "object",
+        "properties": {
+          "accountName": { "type": "string" },
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "countryCode": { "type": "string" }
+        },
+        "required": ["accountName", "street", "city", "countryCode"]
+      }
+    },
+    "Shipping": {
+      "Address": {
+        "type": "object",
+        "properties": {
+          "recipientName": { "type": "string" },
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "deliveryZone": { "type": "string" }
+        },
+        "required": ["recipientName", "street", "city"]
+      }
+    },
+    "Commerce": {
+      "Order": {
+        "type": "object",
+        "properties": {
+          "orderId": { "type": "uuid" },
+          "billingAddress": {
+            "type": { "$ref": "#/definitions/Billing/Address" }
+          },
+          "shippingAddress": {
+            "type": { "$ref": "#/definitions/Shipping/Address" }
+          }
+        },
+        "required": ["orderId", "billingAddress", "shippingAddress"]
+      }
+    }
+  }
+}
+```
+
+`Billing/Address` and `Shipping/Address` are distinct reusable types. Names such
+as `BillingAddressType` would only flatten information the namespace already
+expresses.
+
+The `$root` pointer also traverses the namespace hierarchy. It designates
+`Commerce/Order` as the type of instances governed by this schema document.
+
+## Referring to a library type
+
+JSON Structure uses `$ref` for reusable types in the same schema document. The
+reference appears as the value of `type`, in an object containing the single
+`$ref` property:
+
+```json
+{
+  "shippingAddress": {
+    "type": { "$ref": "#/definitions/Shipping/Address" }
+  }
+}
+```
+
+The pointer must resolve to an existing type declaration. `$ref` neither
+overlays arbitrary schema keywords nor fetches another document. The import
+extension handles external composition; once processed, imported types also
+appear locally under `definitions`.
+
+This placement differs from JSON Schema habits. Writing `$ref` next to
+`properties`, or using it as the property schema without the surrounding
+`type`, is not JSON Structure syntax.
+
+## Case survives the trip
+
+Each declaration must have a unique, case-sensitive name within its namespace.
+The same name may appear in different namespaces, as the two `Address` types do.
+
+Case sensitivity applies to every path segment. These pointers do not identify
+the same type:
+
+```text
+#/definitions/Shipping/Address
+#/definitions/shipping/Address
+#/definitions/Shipping/address
+```
+
+Only the first exists in the example. A registry, generator, or target language
+that folds case can collapse types the schema keeps distinct. Such a tool needs
+an explicit collision policy; it cannot reinterpret the source names and
+pretend nothing happened.
+
+Identifiers are constrained as well: property and type names begin with a
+letter or underscore and continue with letters, digits, or underscores. A
+namespace is represented by nested JSON objects, not by putting dots or slashes
+inside an identifier.
+
+## What belongs in the library
+
+Reusable types must be declared under `definitions`. An inline object inside a
+property, array, map, or union can describe local structure, but another part of
+the document cannot reference it as a library type.
+
+Stable domain concepts deserve names and pointers. One-off structure can remain
+at its point of use. When a property says
+`#/definitions/Shipping/Address`, nobody has to recover the intended meaning
+from `Address2`, a generator convention, or surrounding prose.

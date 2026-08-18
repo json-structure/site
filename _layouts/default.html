@@ -16,7 +16,7 @@
     <![endif]-->
     {% include head-custom.html %}
   </head>
-  <body>
+  <body{% if page.url == "/" %} class="home-page"{% endif %}>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="spec-header">
       <div class="spec-header-content">
@@ -56,7 +56,18 @@
         <p class="view"><a href="{{ site.github.owner_url }}">View My GitHub Profile</a></p>
         {% endif %}
 
-        <nav class="sidebar-nav" aria-label="SDK Navigation">
+        <nav class="sidebar-nav" aria-label="Site Navigation">
+          {% if page.url == "/" %}
+            {% assign published_posts = site.posts | where_exp: "post", "post.published != false" %}
+            {% assign latest_post = published_posts | first %}
+            {% if latest_post %}
+          <div class="latest-post-link">
+            <span>Latest article</span>
+            <a href="{{ latest_post.url | relative_url }}">{{ latest_post.title }}</a>
+          </div>
+            {% endif %}
+          {% endif %}
+
           <h3>SDKs</h3>
           <ul>
             <li><a href="{{ "/sdks/typescript.html" | relative_url }}">TypeScript/JavaScript</a></li>
@@ -93,6 +104,20 @@
       {{ content }}
 
       </section>
+      {% if page.url == "/" %}
+      <aside class="home-posts" aria-labelledby="home-posts-title">
+        <h2 id="home-posts-title">Articles</h2>
+        <ol>
+          {% for post in published_posts %}
+          <li>
+            <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </li>
+          {% endfor %}
+        </ol>
+        <a class="all-posts-link" href="{{ "/blog/" | relative_url }}">All articles</a>
+      </aside>
+      {% endif %}
     </div>
     <footer class="page-footer">
       {% if site.github.is_project_page %}

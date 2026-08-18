@@ -1,0 +1,121 @@
+---
+layout: post
+title: "`if`/`then`/`else` Without Changing the Type"
+date: 2026-10-21
+published: false
+author: Clemens Vasters
+image: /social-cards/if-then-else-without-changing-the-type.png
+description: >-
+  Keep one stable address type and apply country-specific postal-code rules as
+  conditional validation overlays with if, then, and else.
+---
+
+A German address and a Canadian address need different postal-code checks.
+Both still have the same structural type. The country selects an additional
+validation rule for `postalCode`.
+
+Conditional composition evaluates overlays against the current JSON node. It
+leaves the data's representation alone: no new `choice`, no derived type.
+
+## One address, conditional policy
+
+The object below always has the same four properties. The condition examines
+`country`; the selected branch adds the corresponding pattern constraint to
+`postalCode`.
+
+```json
+{
+  "$schema": "https://json-structure.org/meta/validation/v0/#",
+  "$id": "https://schemas.example.com/postal-address-policy",
+  "name": "PostalAddress",
+  "type": "object",
+  "properties": {
+    "street": { "type": "string" },
+    "city": { "type": "string" },
+    "country": { "type": "string" },
+    "postalCode": { "type": "string" }
+  },
+  "required": ["street", "city", "country", "postalCode"],
+  "additionalProperties": false,
+  "if": {
+    "properties": {
+      "country": { "type": "string", "const": "DE" }
+    },
+    "required": ["country"]
+  },
+  "then": {
+    "properties": {
+      "postalCode": { "type": "string", "pattern": "^[0-9]{5}$" }
+    }
+  },
+  "else": {
+    "if": {
+      "properties": {
+        "country": { "type": "string", "const": "CA" }
+      },
+      "required": ["country"]
+    },
+    "then": {
+      "properties": {
+        "postalCode": {
+          "type": "string",
+          "pattern": "^[A-Z][0-9][A-Z] [0-9][A-Z][0-9]$"
+        }
+      }
+    }
+  }
+}
+```
+
+This Canadian instance keeps the ordinary address shape:
+
+```json
+{
+  "street": "111 Wellington Street",
+  "city": "Ottawa",
+  "country": "CA",
+  "postalCode": "K1A 0A9"
+}
+```
+
+The engine first evaluates the complete object against the base schema. It then
+evaluates the `if` schema against that same object. Since `country` is not `DE`,
+the outer `else` applies. Its nested condition matches `CA`, so the Canadian
+postal-code overlay must also match.
+
+For another country, neither `then` branch applies. `postalCode` remains a
+required string, but this schema imposes no country-specific pattern.
+
+## A branch adds constraints
+
+The base `properties` and `required` constraints remain in force after a branch
+is selected. The branch adds constraints to the current node, and all of them
+must hold.
+
+That is why the branches mention only the policy delta. Repeating the full
+address schema in each branch would invite drift and suggest separate types
+where none exist.
+
+The `required` inside each `if` is deliberate. Without it, a condition that
+only constrains `country` may succeed vacuously when the property is absent.
+The base schema already requires `country`, but keeping the condition complete
+makes its matching rule explicit and reusable.
+
+Use a core `choice` when alternatives have different representations or
+structures selected by a discriminator. Use conditional composition when one
+stable type carries policies that depend on its values or property presence.
+
+## Which vocabulary the example uses
+
+The conditional-composition draft calls its feature
+`JSONSchemaConditionalComposition`; the extended meta-schema offers
+`JSONStructureConditionalComposition`. The validation meta-schema enables the
+repository spelling by default, so the example needs no explicit `$uses`
+entry.
+
+Core defines `const`, and the validation add-in defines `pattern`. The remaining
+problem sits in the composition add-in, whose member shapes differ from the
+draft's array-versus-single-schema requirements. The JSON is syntactically
+valid and follows the draft's evaluation model. Validation against the current
+meta-schema may nevertheless fail on those shapes before it ever examines an
+address instance.
