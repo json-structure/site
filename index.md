@@ -1,4 +1,3 @@
-
 ---
 layout: default
 image: /social-cards/home.png
