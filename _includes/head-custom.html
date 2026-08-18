@@ -1,2 +1,28 @@
 <!-- Custom head content -->
 <link rel="icon" type="image/svg+xml" href="{{ "/media/logo.svg" | relative_url }}">
+{% if page.image %}
+{%- assign card_image = page.image | absolute_url -%}
+{%- assign card_title = page.title | default: site.title -%}
+{%- assign card_description = page.description | default: site.description | strip_newlines -%}
+{% comment %}
+  jekyll-seo-tag emits og:image and twitter:card, but it writes twitter:image
+  and twitter:title with a "property" attribute. The Twitter card spec calls
+  for "name", and strict third-party validators look the tags up that way, so
+  they see a large-image card with no image and reject it. The name-attribute
+  tags below are what those validators read; the ones seo-tag emits are left
+  alone because they carry identical content under the other attribute.
+
+  seo-tag also has no twitter:description at all, and never emits the image
+  dimensions, which is what lets a scraper lay the card out before it has
+  finished fetching the PNG. Every card is 1200x630 by construction, since
+  scripts/generate-social-cards.sh renders them at that size.
+{% endcomment %}
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ card_title | xml_escape }}">
+<meta name="twitter:image" content="{{ card_image }}">
+<meta name="twitter:image:alt" content="{{ card_title | xml_escape }}">
+<meta name="twitter:title" content="{{ card_title | xml_escape }}">
+<meta name="twitter:description" content="{{ card_description | xml_escape }}">
+{% endif %}
