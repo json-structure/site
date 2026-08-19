@@ -83,7 +83,7 @@ is invalid:
 ```
 
 `invoiceRequested` is present, so the dependency fires even though its value is
-`false`. The same would hold for `null` if the property's type admitted null.
+`false`. The same would hold for [`null`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#null) if the property's type admitted null.
 [`dependentRequired`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#dependentRequired) does not inspect the trigger value.
 
 If the business rule is "require billing fields only when the value is true,"
@@ -109,8 +109,8 @@ it defines object shape; cross-property dependency remains validation policy.
 
 ## The draft is ahead of the meta-schema
 
-The validation draft calls its feature `JSONSchemaValidation`, while the
-repository offers `JSONStructureValidation`. The dedicated validation
+The validation draft calls its feature [`JSONSchemaValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), while the
+repository offers [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). The dedicated validation
 meta-schema enables the repository name, which is why the example references
 that meta-schema directly.
 

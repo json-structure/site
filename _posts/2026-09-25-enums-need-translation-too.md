@@ -85,7 +85,7 @@ The order-status schema keeps the canonical values separate from their mappings:
 }
 ```
 
-A JSON encoder that supports the reserved `json` purpose can represent the
+A JSON encoder that supports the reserved [`json`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) purpose can represent the
 canonical value `SHIPPED` as `S`:
 
 ```json
@@ -117,7 +117,7 @@ its alternate representation:
 }
 ```
 
-`json` is reserved for JSON encoding. Keys beginning with `lang:` are reserved
+[`json`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) is reserved for JSON encoding. Keys beginning with [`lang:`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) are reserved
 for localized alternatives. Their suffixes are language tags. Other keys, such
 as `erp`, are permitted custom purposes, but the draft assigns no standard
 behavior to them.

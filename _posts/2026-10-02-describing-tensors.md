@@ -29,11 +29,11 @@ column 2 means.
 
 [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) adds three pieces:
 
-- `frames` names one frame per index. Its length is the tensor rank and must be
+- [`frames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames-frames) names one frame per index. Its length is the tensor rank and must be
   at least two.
-- `components` binds the tensor positions to one nested property or to named
+- [`components`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames-components) binds the tensor positions to one nested property or to named
   scalar properties.
-- `symmetry` optionally states `symmetric`, `skewSymmetric`, or `none` for an
+- [`symmetry`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) optionally states [`symmetric`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames), [`skewSymmetric`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames), or [`none`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) for an
   eligible rank-2 tensor.
 
 ## Six values can determine nine
@@ -130,8 +130,8 @@ Voigt-style orders in circulation.
 
 ## Variance changes the interpretation
 
-Each frame entry may include `variance`, either `contravariant` or `covariant`.
-When omitted, it defaults to `contravariant`.
+Each frame entry may include [`variance`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#variance), either [`contravariant`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#variance) or [`covariant`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#variance).
+When omitted, it defaults to [`contravariant`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#variance).
 
 A stress tensor is contravariant in both indices. A Jacobian may be
 contravariant in the first and covariant in the second. Two rank-2 arrays can
@@ -145,10 +145,10 @@ would not preserve the stated relation.
 ## Two component forms
 
 The example uses named scalar properties. Every component supplies a unique
-`index` and `property`. With `symmetric` or `skewSymmetric`, one member of each
-mirrored pair is enough. With `none`, every position must be named.
+[`index`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames-components) and [`property`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames-components). With [`symmetric`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) or [`skewSymmetric`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames), one member of each
+mirrored pair is enough. With [`none`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames), every position must be named.
 
-The other form names one nested `array` or `tuple` property. Its nesting depth
+The other form names one nested [`array`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#array) or [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple) property. Its nesting depth
 must equal the rank, and each level must have the extent of the corresponding
 frame. In that form a symmetric tensor is still written out in full because the
 nested value carries every position.

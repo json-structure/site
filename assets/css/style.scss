@@ -417,6 +417,19 @@ body {
   font-size: 90%;
 }
 
+.blog-post .post-content a code {
+  color: #245f9e;
+  background: #eaf3fb;
+  box-shadow: inset 0 -1px 0 #8ab6dc;
+}
+
+.blog-post .post-content a:hover code,
+.blog-post .post-content a:focus-visible code {
+  color: #174672;
+  background: #d9eaf8;
+  box-shadow: inset 0 -2px 0 #4078c0;
+}
+
 .blog-post .post-content pre {
   background: #f6f8fa;
   border: 1px solid #ddd;

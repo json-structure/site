@@ -134,7 +134,7 @@ structurize json2s events.jsonl --infer-choices --out events.jstruct.json --type
 
 Now the inferrer detects that `event_type` is a **discriminator** whose values
 correlate with distinct field signatures. It produces a JSON Structure
-`choice` type — an inline union:
+[`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) type — an inline union:
 
 ```json
 {

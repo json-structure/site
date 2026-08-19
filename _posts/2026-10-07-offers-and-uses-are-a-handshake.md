@@ -22,16 +22,16 @@ selected. A use says what this document actually selected.
 
 The extended v0 meta-schema offers five named bundles:
 
-- `JSONStructureAlternateNames`
-- `JSONStructureUnits`
-- `JSONStructureImport`
-- `JSONStructureConditionalComposition`
-- `JSONStructureValidation`
+- [`JSONStructureAlternateNames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#enabling-the-annotations)
+- [`JSONStructureUnits`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#enabling-the-annotations)
+- [`JSONStructureImport`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#enabling-the-extensions)
+- [`JSONStructureConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions)
+- [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions)
 
 An offer may point to one add-in definition or to an array of them. The
 validation offer, for example, selects five add-ins together:
-`NumberValidationAddIn`, `StringValidationAddIn`, `StringFormatAddIn`,
-`ArrayValidationAddIn`, and `ObjectValidationAddIn`. The public name is the
+[`NumberValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), [`StringValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), [`StringFormatAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions),
+[`ArrayValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), and [`ObjectValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). The public name is the
 stable choice; the pointers describe the concrete additions it activates.
 
 This is a fragment of the actual shape:

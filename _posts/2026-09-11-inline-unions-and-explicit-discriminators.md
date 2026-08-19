@@ -15,13 +15,13 @@ street, or it may carry a post office box number. Looking at those optional
 properties to identify the address variant works until an object has both, or
 until the model acquires another overlapping variant.
 
-An inline `choice` puts the decision in the data. Its variants share an
+An inline [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) puts the decision in the data. Its variants share an
 abstract base, and a string property in the object names the selected variant.
 The address remains one flat JSON object; no wrapper is added.
 
 ## The wire shape
 
-A `choice` is JSON Structure's discriminated union type. Its [`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword) map
+A [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) is JSON Structure's discriminated union type. Its [`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword) map
 associates selector values with types. In the tagged form, a property wraps the
 selected value. In the inline form used here, the selected object's members
 remain in place and the selector sits beside them.
@@ -92,7 +92,7 @@ There is no `{ "StreetAddress": { ... } }` wrapper. `addressType` has the value
 concrete definition. `StreetAddress` therefore has `city`, `state`, `zip`, and
 `street`; an extending type may not redefine an inherited property.
 
-On the `choice`, [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) identifies the common base required for the inline
+On the [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice), [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) identifies the common base required for the inline
 representation. That base must be abstract, and every selected type must extend
 it. `Address` can supply reusable properties, but it cannot itself be used as a
 property type or referenced through [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword).
@@ -109,7 +109,7 @@ selector can: the processor validates the named branch and has no reason to
 rank the two shapes.
 
 The selector may shadow a property from the base, but only when that inherited
-property is a `string`. Usually there is no reason to declare it in the base:
+property is a [`string`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#string). Usually there is no reason to declare it in the base:
 the inline choice injects it.
 
 Choice names and selector values are case-sensitive. `streetAddress` does not
@@ -122,7 +122,7 @@ turn the base into a polymorphic assignment target. You cannot declare a
 property as `Address` and then place either concrete subtype there. An abstract
 type cannot be referenced through [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) at all.
 
-Use the `choice` as the property's type when a property may hold either address:
+Use the [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) as the property's type when a property may hold either address:
 
 ```json
 {
@@ -135,9 +135,9 @@ Use the `choice` as the property's type when a property may hold either address:
 }
 ```
 
-Here `AddressChoice` would be a reusable `choice` under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword), using the
+Here `AddressChoice` would be a reusable [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword), using the
 same construction as the root example above.
 
-The base records shared members. The `choice` records which concrete values may
+The base records shared members. The [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) records which concrete values may
 occur and how an instance selects one. Keep those jobs separate: declaring a
 base does not introduce subtype assignment elsewhere in the model.

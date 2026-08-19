@@ -122,10 +122,10 @@ The instance shape follows the declarations:
 }
 ```
 
-## `single` and `multiple` choose different JSON shapes
+## [`single`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) and [`multiple`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) choose different JSON shapes
 
-`"cardinality": "single"` means exactly one target and uses one relation
-object, rather than an array of length one. `"cardinality": "multiple"` means
+[`"cardinality": "single"`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) means exactly one target and uses one relation
+object, rather than an array of length one. [`"cardinality": "multiple"`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) means
 zero or more targets and uses an array of relation objects. An empty array
 states that the relation currently has no targets.
 

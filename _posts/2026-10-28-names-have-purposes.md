@@ -20,8 +20,8 @@ that reason and leaves the property declaration as the canonical name.
 [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is a map from purpose indicators to strings. The draft reserves two
 parts of that key space:
 
-- `json` identifies the property key used when encoding JSON.
-- `lang:<tag>` identifies a localized display name. The suffix must be an RFC
+- [`json`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) identifies the property key used when encoding JSON.
+- [`lang:<tag>`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) identifies a localized display name. The suffix must be an RFC
   5646 language tag, such as `en`, `de`, or `fr-CA`.
 
 Every other key is custom. A team may define `sql`, `typescript`, or
@@ -111,10 +111,10 @@ mean the same thing.
 
 ## The extension name has one authoritative spelling
 
-The repository meta-schema offers `JSONStructureAlternateNames`, which is the
+The repository meta-schema offers [`JSONStructureAlternateNames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#enabling-the-annotations), which is the
 value used above. The draft's enabling prose once says
-`JSONSchemaAlternateNames`, while its adjacent example says
-`JSONStructureAlternateNames`. That is an inconsistency, not an alias. Current
+[`JSONSchemaAlternateNames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#enabling-the-annotations), while its adjacent example says
+[`JSONStructureAlternateNames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#enabling-the-annotations). That is an inconsistency, not an alias. Current
 schemas should follow the offered key in the meta-schema.
 
 Do not confuse [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) with [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) or [`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword). [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) maps members

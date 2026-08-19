@@ -90,7 +90,7 @@ array's length.
 There is no [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) keyword inside the tuple. That keyword belongs to
 objects, while tuple positions are required by the tuple definition itself.
 Adding [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) would not clarify the model; it would violate the core rule
-that permits [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) only on `object` schemas.
+that permits [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) only on [`object`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#object) schemas.
 
 ## When an object is the better shape
 
@@ -110,7 +110,7 @@ The schema and generated code retain names either way.
 
 ## Nearby models, different tradeoffs
 
-JSON Schema Draft 2020-12 models positional arrays with `prefixItems`. Each
+JSON Schema Draft 2020-12 models positional arrays with [`prefixItems`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.1.1). Each
 position gets a schema, but the positions themselves have no standard names.
 Titles or descriptions can annotate them, yet those annotations do not create
 property identities for language mappings.

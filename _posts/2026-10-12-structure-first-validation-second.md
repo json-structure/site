@@ -10,8 +10,8 @@ description: >-
   that constrain otherwise well-shaped data.
 ---
 
-`int32` tells a processor how to represent a value and which machine-level value
-space it occupies. `minimum: 0` rejects part of that space for one application.
+[`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) tells a processor how to represent a value and which machine-level value
+space it occupies. [`minimum: 0`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum) rejects part of that space for one application.
 A generator needs the first fact; it may have no use for the second.
 
 JSON Structure keeps the foundation structural and makes validation a
@@ -23,15 +23,15 @@ description tools.
 
 Core describes facts needed to construct and exchange a value:
 
-- `type: int32` selects a signed 32-bit integer represented as a JSON number.
-- `type: object` and [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) define named members and their types.
+- [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword): [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) selects a signed 32-bit integer represented as a JSON number.
+- [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword): [`object`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#object) and [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) define named members and their types.
 - [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) distinguishes members that must be present from members that may
   be absent.
-- `additionalProperties: false` closes the declared object shape.
+- [`additionalProperties: false`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) closes the declared object shape.
 
 Those declarations support generation. A tool can produce a class, record, or
 table layout from them. They also perform structural validation: a string in an
-`int32` property is not the declared representation.
+[`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) property is not the declared representation.
 
 The following complete schema adds the validation companion for policy:
 
@@ -76,7 +76,7 @@ This instance satisfies both layers:
 
 ## Validation narrows valid values
 
-The object declaration, its properties, [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword), and `int32` remain true if
+The object declaration, its properties, [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword), and [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) remain true if
 the warehouse later raises capacity from 5,000 to 8,000. They describe the data
 model.
 
@@ -89,13 +89,13 @@ object layout. A policy-aware validator must enforce them, while a core-aware
 generator can still understand the shape without implementing regular
 expressions or every constraint vocabulary.
 
-Core still rejects structurally incompatible values. An `int32` outside its
-defined range is not an `int32`; an object missing a required property does not
+Core still rejects structurally incompatible values. An [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) outside its
+defined range is not an [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32); an object missing a required property does not
 have the declared shape. Companion validation restricts values that already
 satisfy those structural rules.
 
 For example, `"itemCount": 12.5` violates the structural integer contract.
-`"itemCount": 6000` is structurally a valid `int32` but violates warehouse
+`"itemCount": 6000` is structurally a valid [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) but violates warehouse
 policy. The distinction produces better diagnostics and cleaner tooling.
 
 ## The companion must be declared
@@ -103,7 +103,7 @@ policy. The distinction produces better diagnostics and cleaner tooling.
 The validation keywords are not harmless annotations. A schema using
 [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum), or [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern) needs a meta-schema contract that admits and
 defines them. The published validation meta-schema composes the extended
-feature offers and selects `JSONStructureValidation`.
+feature offers and selects [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions).
 
 That explicit dependency prevents a core-only processor from silently ignoring
 policy and reporting a false success. It may decline the vocabulary, or another

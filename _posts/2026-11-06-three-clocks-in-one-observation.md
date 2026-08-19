@@ -11,8 +11,8 @@ description: >-
 ---
 
 A weather observation may carry three timestamps for three different events:
-`phenomenonTime` says when the value applied to the world, `resultTime` says
-when the result became available, and `ingestionTime` says when a declared
+[`phenomenonTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#phenomenon-time) says when the value applied to the world, [`resultTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#result-time) says
+when the result became available, and [`ingestionTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#ingestion-time) says when a declared
 receiving system accepted the record. The values may be close or even equal,
 but a generic `timestamp` leaves consumers guessing which event it records.
 
@@ -91,10 +91,10 @@ another fifteen seconds before acceptance.
 
 ## Phenomenon time is the analytical axis
 
-`phenomenonTime` is the time during which the result applies to the observed
+[`phenomenonTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#phenomenon-time) is the time during which the result applies to the observed
 property. For an instantaneous reading, it annotates a temporal position. It
 may also annotate a named object or tuple representing a period; flattened
-periods use the separate `phenomenonTimeStart` and `phenomenonTimeEnd` roles.
+periods use the separate [`phenomenonTimeStart`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#phenomenon-time-start) and [`phenomenonTimeEnd`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#phenomenon-time-end) roles.
 
 Windowing observations by `gatewayAcceptedAt` would move delayed records into
 the wrong weather interval. Joining temperature with wind by result production
@@ -103,7 +103,7 @@ analytics therefore needs the phenomenon clock.
 
 ## Result time measures production latency
 
-`resultTime` is the temporal position at which the result became available.
+[`resultTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#result-time) is the temporal position at which the result became available.
 The difference between result and phenomenon time describes observation
 production delay. That delay may come from sensor integration, laboratory
 analysis, model execution, quality control, or publication.
@@ -115,7 +115,7 @@ into the names.
 
 ## Ingestion time depends on a receiving system
 
-`ingestionTime` is an operational event-time role: the temporal position when a
+[`ingestionTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#ingestion-time) is an operational event-time role: the temporal position when a
 declared system accepted the record. In this schema that system is the telemetry
 gateway named by the property. A data lake could add its own acceptance time in
 a downstream record because ingestion is relative to an operational boundary.
@@ -132,7 +132,7 @@ freshness alert. One value cannot answer all three unless the system guarantees
 the events coincide, and even then the roles describe different events.
 
 [`semanticRole`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#semantic-role) carries the distinction without changing the instance encoding.
-All three fields remain ordinary `datetime` values. The annotation tells a
+All three fields remain ordinary [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime) values. The annotation tells a
 processor which temporal concern each value serves; the Core type and any
 temporal reference-system binding tell it how the position is represented.
 

@@ -138,8 +138,8 @@ The relation instance carries the composite identity and a separate qualifier:
 ## Scope is a schema pointer
 
 The [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) value is an RFC 6901 JSON Pointer to a schema location, not a JSON
-Path query over the instance. The pointed-to property must hold an `array`,
-`set`, or `map` compatible with [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword). For maps, resolution searches the
+Path query over the instance. The pointed-to property must hold an [`array`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#array),
+[`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set), or [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) compatible with [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword). For maps, resolution searches the
 values rather than treating map keys as target identities.
 
 At runtime, the schema pointer identifies the corresponding collection in the

@@ -80,7 +80,7 @@ In the schema below, `customerId` is the property name. That is the name used by
 }
 ```
 
-A JSON-oriented encoder that honors the reserved `json` mapping can emit this
+A JSON-oriented encoder that honors the reserved [`json`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) mapping can emit this
 instance:
 
 ```json
@@ -100,8 +100,8 @@ that convention is part of the toolchain's contract.
 
 [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is a map of strings. Its keys say why a name exists:
 
-- `json` is reserved for the property key used in JSON encoding.
-- `lang:<tag>` is reserved for localized display names. The suffix is an RFC
+- [`json`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is reserved for the property key used in JSON encoding.
+- [`lang:<tag>`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is reserved for localized display names. The suffix is an RFC
   5646 language tag.
 - Other keys are application-defined purpose indicators.
 
@@ -118,11 +118,11 @@ name-resolution protocol for databases, IDLs, or user interfaces.
 
 A localized [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) entry is short text suitable for a field label. A
 localized [`descriptions`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-descriptions-keyword) entry explains the field. A paragraph under
-`altnames["lang:de"]` may be syntactically possible, but it is still a
+[`altnames["lang:de"]`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) may be syntactically possible, but it is still a
 paragraph where a label belongs.
 
 [`descriptions`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-descriptions-keyword) can appear anywhere the ordinary [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword) annotation can
-appear. Its values are strings keyed by purpose, with `lang:` reserved for
+appear. Its values are strings keyed by purpose, with [`lang:`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) reserved for
 localized variants. It supplements [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword); it does not change the
 property's type, required status, or encoded value.
 

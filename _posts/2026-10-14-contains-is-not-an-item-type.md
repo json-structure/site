@@ -128,7 +128,7 @@ satisfy [`contains`](https://json-structure.github.io/validation/draft-vasters-j
 
 In the example, a batch of 100 records may be valid if one, two, or three are
 alarms. Four alarms violate [`maxContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maxContains). Zero alarms violate both the basic
-[`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) requirement and `minContains: 1`.
+[`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) requirement and [`minContains: 1`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minContains).
 
 Order is irrelevant to the count. The matching records may appear anywhere,
 and one element either contributes one match or none. [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) does not carve
@@ -138,7 +138,7 @@ Every alarm still has to be a valid `BatchRecord`.
 ## What happens when one keyword is missing
 
 Without [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword), [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) says nothing about nonmatching elements. A string,
-an unrelated object, or `null` could coexist with a matching alarm unless some
+an unrelated object, or [`null`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#null) could coexist with a matching alarm unless some
 other rule excludes it. That may be intentional for a heterogeneous collection,
 but it is not an item-type declaration.
 

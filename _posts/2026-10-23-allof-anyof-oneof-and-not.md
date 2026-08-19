@@ -122,7 +122,7 @@ affirmative shape; it only excludes a matching region.
 
 ## Closed objects belong outside the branches
 
-The base object owns `additionalProperties: false`. Putting a closed-object
+The base object owns [`additionalProperties: false`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword). Putting a closed-object
 rule into each partial branch would make sibling properties appear illegal.
 Composition evaluates complete instances against each member, so partial
 policy overlays should generally remain open while the stable structural schema
@@ -134,8 +134,8 @@ does not change the truth conditions.
 
 ## What the repository can check today
 
-The draft calls the feature `JSONSchemaConditionalComposition`, while the
-meta-schema offers `JSONStructureConditionalComposition`. The validation
+The draft calls the feature [`JSONSchemaConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions), while the
+meta-schema offers [`JSONStructureConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions). The validation
 meta-schema used above enables the repository name. The validation draft also
 permits [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword) inside [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains), which gives the authentication checks their
 fixed values.

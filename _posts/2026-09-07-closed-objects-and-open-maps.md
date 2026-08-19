@@ -62,7 +62,7 @@ record:
 properties. Because [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) is `false`, no other property may
 appear beside them.
 
-Inside `labels`, the rules change. A `map` permits any valid JSON string as a
+Inside `labels`, the rules change. A [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) permits any valid JSON string as a
 key, and every value must conform to its [`values`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#values-keyword) schema. `site` and
 `sensor.vendor` are data, not schema-defined fields.
 
@@ -96,14 +96,14 @@ Core allows [`additionalProperties`](https://json-structure.github.io/core/draft
 With a schema, every undeclared property must conform to it. Use that form for
 an object intentionally combining named fields with an extension area.
 
-It still does not turn the object into a `map`. An object has declared
+It still does not turn the object into a [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map). An object has declared
 properties with individual schemas. A map has dynamic keys and one value schema.
 Those contracts produce different generated types and different expectations
 for consumers.
 
 The core draft makes [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) optional but states no default for
-its absence. A closed record must therefore say `"additionalProperties":
-false` explicitly. Processor assumptions are a poor compatibility policy.
+its absence. A closed record must therefore say [`"additionalProperties": false`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword)
+explicitly. Processor assumptions are a poor compatibility policy.
 
 ## One namespace or two?
 
@@ -123,10 +123,10 @@ No generator has to combine known members and an indexer into one awkward type.
 
 ## Records and dictionaries elsewhere
 
-JSON Schema uses [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) and [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) for both patterns. A
-closed record sets [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) to `false`; a string-valued dictionary
-can use an empty [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) object with an [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) schema.
-JSON Structure instead names the latter abstraction `map` and uses [`values`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#values-keyword).
+JSON Schema uses [`properties`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.2.1) and [`additionalProperties`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.2.3) for both patterns. A
+closed record sets [`additionalProperties`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.2.3) to `false`; a string-valued dictionary
+can use an empty [`properties`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.2.1) object with an [`additionalProperties`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.2.3) schema.
+JSON Structure instead names the latter abstraction [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) and uses [`values`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#values-keyword).
 
 Avro makes the boundary similarly explicit: records declare fields and maps
 carry string keys with one value type. Avro records do not accept arbitrary

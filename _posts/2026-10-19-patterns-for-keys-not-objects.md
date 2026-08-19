@@ -110,8 +110,8 @@ do not grant names that core syntax otherwise forbids.
 
 ## Four missing declarations
 
-The validation draft names its opt-in `JSONSchemaValidation`; the extended
-meta-schema offers `JSONStructureValidation`. The checked-in validation add-in
+The validation draft names its opt-in [`JSONSchemaValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions); the extended
+meta-schema offers [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). The checked-in validation add-in
 also omits all four keywords used here: [`patternProperties`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys), [`patternKeys`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys),
 [`propertyNames`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#propertyNames-and-keyNames), and [`keyNames`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#propertyNames-and-keyNames).
 

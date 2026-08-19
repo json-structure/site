@@ -12,7 +12,7 @@ description: >-
 
 `2026-09-10`, `09:30:00+02:00`, and `P0DT2H` all sit inside JSON quotes. Nobody
 writing application code would treat them as the same kind of value. JSON
-Structure declares `date`, `time`, `datetime`, and `duration` as core types, so
+Structure declares [`date`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#date), [`time`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#time), [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime), and [`duration`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#duration) as core types, so
 consumers do not have to recover temporal intent from property names or a
 format convention.
 
@@ -20,12 +20,12 @@ format convention.
 
 The distinctions are small in syntax and large in use:
 
-- `date` is an RFC 3339 `full-date`, such as `2026-09-10`.
-- `time` is an RFC 3339 `full-time`, including a UTC offset, such as
+- [`date`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#date) is an RFC 3339 `full-date`, such as `2026-09-10`.
+- [`time`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#time) is an RFC 3339 `full-time`, including a UTC offset, such as
   `09:30:00+02:00`.
-- `datetime` is an RFC 3339 `date-time`, including a UTC offset, such as
+- [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime) is an RFC 3339 `date-time`, including a UTC offset, such as
   `2026-09-10T09:30:00+02:00`.
-- `duration` is an RFC 3339 duration, such as `P2DT3H`.
+- [`duration`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#duration) is an RFC 3339 duration, such as `P2DT3H`.
 
 A maintenance window can use all four without collapsing them into generic
 strings:
@@ -78,28 +78,28 @@ column. Documentation can promise that a time includes an offset without
 relying on an example. The validator applies the RFC 3339 production named by
 the type.
 
-`datetime` is deliberately offset-aware. It is not a local date and time whose
+[`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime) is deliberately offset-aware. It is not a local date and time whose
 time zone must be guessed from a server setting. If a domain needs a named time
 zone such as `Europe/Berlin`, that is additional domain data; an RFC 3339 offset
 records an offset, not the complete rules of an IANA time zone.
 
-A `duration` is not an endpoint. Adding one to a date-time requires calendar and
+A [`duration`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#duration) is not an endpoint. Adding one to a date-time requires calendar and
 application rules, especially when months, varying day lengths, or daylight
 saving transitions are involved. The type says what the value is; it does not
 invent those policies.
 
 ## Formats leave a tooling decision
 
-JSON Schema commonly expresses these values as `type: "string"` with `format:
-"date"`, `"time"`, `"date-time"`, or `"duration"`. The format vocabulary gives
+JSON Schema commonly expresses these values with [`type: "string"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.1) and the
+[`format`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.2.1) values [`"date"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1), [`"time"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1), [`"date-time"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1), or [`"duration"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1). The format vocabulary gives
 those strings useful semantics, but assertion behavior depends on the dialect,
-vocabulary, and validator configuration. Many integrations also treat [`format`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#format)
+vocabulary, and validator configuration. Many integrations also treat [`format`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.2.1)
 as an annotation.
 
 For validation, that flexibility can be desirable. For data definition, tools
 still need a policy that says a recognized format should become a particular
 language or storage type. JSON Structure removes that extra inference: the
-schema element's [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) is already `date`, `datetime`, `time`, or `duration`.
+schema element's [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) is already [`date`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#date), [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime), [`time`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#time), or [`duration`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#duration).
 
 The lexical standards substantially overlap. JSON Structure puts the semantic
 choice in the type declaration rather than a string annotation.
@@ -107,7 +107,7 @@ choice in the type declaration rather than a string annotation.
 ## Avro uses numeric storage
 
 Avro adds temporal semantics through logical types over primitive storage.
-`date` counts days from the Unix epoch in an `int`. Time logical types count
+[`date`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#date) counts days from the Unix epoch in an `int`. Time logical types count
 milliseconds or microseconds after midnight. Timestamp logical types count from
 the Unix epoch in a `long`, with separate local-timestamp forms where no time
 zone is implied.

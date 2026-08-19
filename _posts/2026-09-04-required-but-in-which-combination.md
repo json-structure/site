@@ -88,7 +88,7 @@ is also invalid.
 ```
 
 That invalidity is easy to miss if you read the construct as JSON Schema's
-[`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf). The core draft says exactly one set must match. The nested form is an
+[`anyOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.2). The core draft says exactly one set must match. The nested form is an
 exclusive choice among presence patterns.
 
 "Match" concerns the object's property set, not a quick check that the listed
@@ -122,8 +122,8 @@ alternatives are explicit.
 
 ## Do not translate by keyword
 
-In JSON Schema, the common spelling is [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) with two branches, each carrying
-a [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) array, plus exclusions when necessary. JSON Schema's own [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword)
+In JSON Schema, the common spelling is [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3) with two branches, each carrying
+a [`required`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.5.3) array, plus exclusions when necessary. JSON Schema's own [`required`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.5.3)
 keyword remains a flat array. Directly copying JSON Structure's nested array
 into a JSON Schema document is invalid vocabulary usage.
 

@@ -98,7 +98,7 @@ table.results td.num {
 }
 </style>
 
-**Two schemas can agree that a member is a `double` in metres, pass every
+**Two schemas can agree that a member is a [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double) in metres, pass every
 validator, and still be describing different quantities.** *JSON Structure:
 Semantic and Reference-System Annotations* is a new IETF Internet-Draft that
 puts the missing fact in the schema.
@@ -110,7 +110,7 @@ slot for it, so nothing downstream can check it — and every value still
 validates.
 
 **The short version.** Nine optional keywords, nearly all of them the same
-shape: a `reference` that identifies a definition, and a `kind` that names the
+shape: a [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that identifies a definition, and a [`kind`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that names the
 model that definition belongs to. That one shape binds an EPSG coordinate
 system, an ICC profile, an ITU-R weighting curve, an ICAO register, a Landsat
 band set, and a spacecraft vector frame alike. Validation is unchanged. Bytes on
@@ -124,7 +124,7 @@ the wire are unchanged.
 
 ## The failure this exists to stop
 
-Two teams publish telemetry. Both schemas declare a member `double`. Both,
+Two teams publish telemetry. Both schemas declare a member [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double). Both,
 because these are careful people who use JSON Structure Units, declare the unit
 `m`. Every validator on earth is happy. Somebody joins the two streams and
 subtracts.
@@ -165,8 +165,8 @@ map a set of members onto the channels or bands that give them meaning.
 [`measurementConditioning`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#measurement-conditioning-keyword) carries the frequency weighting, time weighting, and
 level reference that a conditioned measurement already has baked in.
 
-Nearly all of them are the same shape: an object with a `reference` that
-identifies a definition and a `kind` that names the model that definition
+Nearly all of them are the same shape: an object with a [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that
+identifies a definition and a [`kind`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that names the model that definition
 belongs to. Learn the shape once and you have nine keywords.
 
 One test decided every one of them. A quality of a value earns a keyword when a
@@ -189,7 +189,7 @@ Several people have, and each of them solved it somewhere that does not travel.
 **Type systems describe shape.** JSON Schema, Avro, Protobuf, Thrift, Table
 Schema, Parquet, Iceberg — every one of them will tell you a member is a 64-bit
 float and none of them has a place to record what it is a float *of*. That is
-not an oversight. Shape is what they were built for, and a [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword) string
+not an oversight. Shape is what they were built for, and a [`description`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-9.1) string
 is where everything else has been going for twenty years.
 
 **Graph vocabularies carry meaning on the instance.** RDF, JSON-LD, schema.org
@@ -224,7 +224,7 @@ Pointing at the registries those communities already maintain, so it competes
 with none of them.
 
 And then the part with no precedent anywhere on that list — **it is one shape**.
-The same `reference`-and-`kind` pair binds an EPSG coordinate system, an ICC
+The same [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model)-and-[`kind`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) pair binds an EPSG coordinate system, an ICC
 profile, an ITU-R weighting curve, an ICAO register, a Landsat band set, a
 spacecraft vector frame, a leap-second-free ordinal clock. Those communities
 have never shared a mechanism and have had no reason to look for one. Under
@@ -328,20 +328,20 @@ means eighteen nanotesla *westward*, or that `hp` from satellite 19 must not go
 into the same average as `hp` from satellite 18. The instance never carries
 that. Only the schema can.
 
-Look at what falls out. `total` is the magnitude, and `derivation: "calculated"`
+Look at what falls out. `total` is the magnitude, and [`derivation: "calculated"`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#derivation)
 says it was produced by deterministic arithmetic that no named summary covers —
-not measured, not estimated, not one of [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum) or `mean`, which
-would have taken `derivation: "statistic"` instead. So it adds no information
+not measured, not estimated, not one of [`minimum`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#statistic), [`maximum`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#statistic) or [`mean`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#statistic), which
+would have taken [`derivation: "statistic"`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#derivation) instead. So it adds no information
 the three components do not already carry.
 
-But look at where it is *not*. `total` is absent from the `components` array of
+But look at where it is *not*. `total` is absent from the [`components`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames-components) array of
 [`vectorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#vector-reference-frames), and that absence is the annotation. `hp`, `he` and `hn`
 are resolved in a spacecraft-local frame, so their numbers mean nothing outside
 it. A magnitude is frame-invariant. **`total` is therefore the member that may
 be compared across two spacecraft, and `hp` is not.** Try guessing that from the
 field names.
 
-And `arcjet_flag` is `resultQuality`. When the electric thrusters fire they
+And `arcjet_flag` is [`resultQuality`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#result-quality). When the electric thrusters fire they
 generate a field at the sensor that looks exactly like a geophysical signal.
 Flagged records get thrown away, not corrected.
 
@@ -384,7 +384,7 @@ in a bucket with an unweighted 58.4 from a professional meter two streets over
 and you have averaged two different quantities that print the same.
 
 Two details in there matter more than the keyword. The feed names the weighting
-but not the time constant, so `timeWeighting` is left out rather than guessed
+but not the time constant, so [`timeWeighting`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#measurement-conditioning-keyword-time-weighting) is left out rather than guessed
 at. And the particulate and temperature channels in the same record carry a unit
 and no conditioning at all, because nothing is hidden in them. An annotation you
 do not need is an annotation you do not write.
@@ -396,7 +396,7 @@ planner nothing.**
 
 `B77W` is an aircraft type because ICAO Doc 8643 says so. `EGLL` is an aerodrome
 because Doc 7910 says so. Both are strings. Both validate against
-`"type": "string"` forever without anybody learning anything.
+[`"type": "string"`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) forever without anybody learning anything.
 
 <pre class="jsonx"><span class="k">"aircraft_short"</span><span class="p">: {</span>
   <span class="k">"type"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
@@ -425,8 +425,8 @@ Four opaque strings. A human who flies knows three of them on sight. A join
 planner knows none, until [`codedValues`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coded-values) tells it that two of them resolve
 against tables it can go and fetch.
 
-Both fields carry `kind: "icao"`, because ICAO is the register model behind them.
-But they draw from two different lists, and it is `reference` that says which.
+Both fields carry [`kind: "icao"`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coded-values-reference-and-kind), because ICAO is the register model behind them.
+But they draw from two different lists, and it is [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coded-values-reference-and-kind) that says which.
 Confusing the two is the easiest mistake to make with this keyword, which is why
 this sample exists.
 
@@ -480,7 +480,7 @@ are positions in an array and mean nothing on their own.
 The word *latitude* never appears in this schema. It does not need to. The CRS
 registry already says that axis 1 of CRS84 is longitude and axis 1 of EPSG:4326
 is latitude — that fact has been published for decades. What was missing is the
-join: which of *your* members supplies axis 1. That is all `coordinates` does,
+join: which of *your* members supplies axis 1. That is all [`coordinates`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coordinate-reference-systems-coordinates) does,
 and it is why the keyword binds members rather than just naming a CRS. Swap the
 two references and the same two arrays describe a point in Kazakhstan, with
 every validator still green.

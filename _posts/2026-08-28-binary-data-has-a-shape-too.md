@@ -12,7 +12,7 @@ description: >-
 
 You receive a Base64 string. After decoding it, do you have a PNG, a PDF, or a
 gzip stream containing a CSV file? Base64 cannot answer. JSON Structure's
-`binary` type records the processing contract with [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword),
+[`binary`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#binary) type records the processing contract with [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword),
 [`contentCompression`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword), and [`contentMediaType`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentmediatype-keyword).
 
 ## Describe the decoding pipeline
@@ -67,15 +67,15 @@ operations and identifies the decoded content.
 
 ## Encoding is the outer layer
 
-The `binary` type has JSON `string` as its base representation. Its default
+The [`binary`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#binary) type has JSON [`string`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#string) as its base representation. Its default
 encoding is Base64, and [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword) can select one of the RFC 4648
 encodings:
 
-- `base64`
-- `base64url`
-- `base16`
-- `base32`
-- `base32hex`
+- [`base64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword)
+- [`base64url`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword)
+- [`base16`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword)
+- [`base32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword)
+- [`base32hex`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword)
 
 These names describe how the final byte sequence is represented as JSON text.
 They do not describe the payload's character encoding. A `text/csv` payload may
@@ -88,8 +88,8 @@ the pipeline stays visible, and readers need not remember the implicit choice.
 ## Compression happens before encoding
 
 [`contentCompression`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword) says that the binary payload was compressed before its
-bytes were text-encoded. The core specification permits `gzip`, `deflate`,
-`zlib`, and `brotli`.
+bytes were text-encoded. The core specification permits [`gzip`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword), [`deflate`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword),
+[`zlib`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword), and [`brotli`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword).
 
 Those names are not interchangeable. Raw DEFLATE, the zlib wrapper, and gzip
 use related compression machinery but different wrappers and metadata. A
@@ -116,13 +116,13 @@ contract here, not a nested schema language for every media format.
 
 ## JSON Schema annotates string content
 
-JSON Schema also defines [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword) and [`contentMediaType`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentmediatype-keyword) for strings,
-and newer dialects can associate a `contentSchema` with decoded content. These
+JSON Schema also defines [`contentEncoding`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-8.3) and [`contentMediaType`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-8.4) for strings,
+and newer dialects can associate a [`contentSchema`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-8.5) with decoded content. These
 keywords are annotations by default; the specification does not require every
 validator to decode and inspect payloads.
 
 JSON Structure attaches encoding and media annotations to a first-class
-`binary` type and adds [`contentCompression`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword) to distinguish an intermediate
+[`binary`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#binary) type and adds [`contentCompression`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword) to distinguish an intermediate
 compression layer. The type tells generators and bindings that the application
 value is bytes rather than ordinary text.
 

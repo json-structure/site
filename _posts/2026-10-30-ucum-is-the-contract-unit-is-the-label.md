@@ -97,8 +97,8 @@ When both annotations appear, the draft says UCUM-aware systems should prefer
 [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) for computation and conversion. They may still use [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) for
 display. The presence of both annotations is not grounds for rejection.
 
-Both annotations still have to agree. `"unit": "kPa"` beside
-`"ucumUnit": "bar"` describes two convertible units, but not the same unit,
+Both annotations still have to agree. [`"unit": "kPa"`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) beside
+[`"ucumUnit": "bar"`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) describes two convertible units, but not the same unit,
 and violates the draft's compatibility expectation. The ability to convert
 between them does not repair the declaration.
 
@@ -110,8 +110,8 @@ changes the JSON number on the wire or silently converts an instance.
 ## The checked-in meta-schema lags the draft
 
 The repository's extended meta-schema offers the feature name
-`JSONStructureUnits`, despite the units draft's enabling section and example
-using `JSONSchemaUnits`. The offered meta-schema key is the spelling used above.
+[`JSONStructureUnits`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#enabling-the-annotations), despite the units draft's enabling section and example
+using [`JSONSchemaUnits`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#enabling-the-annotations). The offered meta-schema key is the spelling used above.
 
 The current units draft also defines [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword), while the checked-in extended
 meta-schema exposes only [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) for the units add-ins. The schema example is

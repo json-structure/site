@@ -74,31 +74,36 @@ encoding:
 }
 ```
 
-The quoted credit limit is deliberate. `decimal` is a base-10 type represented
+The quoted credit limit is deliberate. [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) is a base-10 type represented
 by a JSON string, preserving a value that should not silently become an IEEE 754
-binary floating-point approximation. Likewise, `datetime` means RFC 3339 date
+binary floating-point approximation. Likewise, [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime) means RFC 3339 date
 and time with an offset. Those are type semantics, not naming conventions.
 
 ## Validation describes a set
 
 JSON Schema is exceptionally good at describing sets of acceptable JSON
-instances. Its vocabulary combines assertions such as [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword),
-[`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword), and numeric bounds with applicators such as [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf),
-[`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf), and conditional subschemas. That model supports sophisticated
+instances. Its vocabulary combines assertions such as [`required`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.5.3),
+[`additionalProperties`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.2.3), and numeric bounds with applicators such as [`allOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.1),
+[`anyOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.2), and conditional subschemas. That model supports sophisticated
 validation precisely because schemas can be composed as constraints.
 
 The same flexibility leaves data-definition tools with interpretation work. A
-JSON Schema `integer` denotes a JSON number with no fractional part; it does not
-select a storage width. A `string` with `format: "uuid"` carries useful semantic
+JSON Schema [`integer`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.1) denotes a JSON number with no fractional part; it does not
+select a storage width. A [`string`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.1) with [`format`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.2.1): [`"uuid"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.5) carries useful semantic
 information, but format handling depends on the selected vocabulary and
 implementation configuration. Code generators therefore need conventions and
 policies beyond the validation result.
 
 JSON Structure takes the other route. Every schema element declares [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword), and
 the core specification owns a fixed vocabulary of primitive, extended, and
-compound types. `int32`, `uint64`, `decimal`, `uuid`, `datetime`, `map`, and
-`set` are type declarations. A consumer does not infer them from a combination
-of assertions.
+compound types. [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32),
+[`uint64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint64),
+[`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal),
+[`uuid`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uuid),
+[`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime),
+[`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map), and
+[`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set) are type declarations. A consumer does not infer them from a
+combination of assertions.
 
 JSON Structure deliberately has the narrower model. Some of JSON Schema's
 open-ended constraint composition gives way to a deterministic type graph for
@@ -106,8 +111,8 @@ programming languages, database columns, and serialization APIs.
 
 ## Structure is explicit
 
-An `object` lists its known [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword). A `map` models dynamic keys whose
-values share a type. An `array` preserves order and permits duplicates; a `set`
+An [`object`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#object) lists its known [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword). A [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) models dynamic keys whose
+values share a type. An [`array`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#array) preserves order and permits duplicates; a [`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set)
 does not. Reusable compound types live under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) and are referenced
 through a [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) containing [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword).
 
@@ -117,9 +122,9 @@ map maps to a map; tooling need not deduce one from an [`additionalProperties`](
 rule.
 
 Requiredness is similarly direct. In the Customer schema, four properties must
-appear. `creditLimit` may be absent, but when present it is always a `decimal`.
+appear. `creditLimit` may be absent, but when present it is always a [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal).
 Optional does not mean untyped, and nullability is separate: a property that may
-also be `null` declares a type union such as `["string", "null"]`.
+also be [`null`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#null) declares a type union such as `["string", "null"]`.
 
 ## One declaration, several consumers
 

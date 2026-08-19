@@ -16,7 +16,7 @@ Both still have the same structural type. The country selects an additional
 validation rule for `postalCode`.
 
 Conditional composition evaluates overlays against the current JSON node. It
-leaves the data's representation alone: no new `choice`, no derived type.
+leaves the data's representation alone: no new [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice), no derived type.
 
 ## One address, conditional policy
 
@@ -102,15 +102,15 @@ only constrains `country` may succeed vacuously when the property is absent.
 The base schema already requires `country`, but keeping the condition complete
 makes its matching rule explicit and reusable.
 
-Use a core `choice` when alternatives have different representations or
+Use a core [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) when alternatives have different representations or
 structures selected by a discriminator. Use conditional composition when one
 stable type carries policies that depend on its values or property presence.
 
 ## Which vocabulary the example uses
 
 The conditional-composition draft calls its feature
-`JSONSchemaConditionalComposition`; the extended meta-schema offers
-`JSONStructureConditionalComposition`. The validation meta-schema enables the
+[`JSONSchemaConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions); the extended meta-schema offers
+[`JSONStructureConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions). The validation meta-schema enables the
 repository spelling by default, so the example needs no explicit [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword)
 entry.
 

@@ -14,7 +14,7 @@ A union should tell you which branch it contains. Otherwise a consumer must
 inspect fields, try branches in order, or hope two variants never grow into the
 same shape. None of those guesses belongs in a wire contract.
 
-JSON Structure's tagged `choice` uses a one-property JSON object. The property
+JSON Structure's tagged [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) uses a one-property JSON object. The property
 name is the tag; its value is the selected variant. Selection is explicit before
 a consumer reads the variant's fields.
 
@@ -109,18 +109,18 @@ reference names a reusable schema; the key selects it in an instance.
 
 ## JSON Schema leaves the representation open
 
-JSON Schema commonly represents unions with [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf). [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) requires exactly
+JSON Schema commonly represents unions with [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3). [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3) requires exactly
 one subschema to validate, but it does not prescribe a tag representation. A
-schema may add a [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword) discriminator property to each branch, use an enclosing
+schema may add a [`const`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.3) discriminator property to each branch, use an enclosing
 single-property object, or rely entirely on mutually exclusive shapes.
 
 Some tooling recognizes OpenAPI's `discriminator`, but that keyword belongs to
 the OpenAPI Schema Object and carries tooling-specific mapping behavior; it is
-not a general JSON Schema keyword that changes [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) evaluation. A careful
+not a general JSON Schema keyword that changes [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3) evaluation. A careful
 conversion must preserve the actual wrapper shape shown here. Adding a
 discriminator annotation alone does not do that.
 
-JSON Structure's `choice` permits less variation. A tagged choice has one
+JSON Structure's [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) permits less variation. A tagged choice has one
 specified JSON representation, so processors already know how to dispatch it.
 
 ## Avro uses a similar wrapper

@@ -160,7 +160,7 @@ Repository samples sometimes use relative paths for local development. Those
 are useful fixtures, but they conflict with the draft's absolute-URI
 requirement. The complete documents above follow the draft.
 
-The extended meta-schema offers `JSONStructureImport` and enables it for its
+The extended meta-schema offers [`JSONStructureImport`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#enabling-the-extensions) and enables it for its
 own root import. The import draft, unlike the validation and conditional
 drafts, introduces no competing [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) name; it makes the extension available
 through the extended meta-schema. The explicit [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) above names the

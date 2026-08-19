@@ -133,7 +133,7 @@ Test the intersections as well as one clean example per branch. For each pair
 of object branches, construct a value that satisfies their common requirements
 and verify that the earlier branch is the intended one.
 
-If you do not want precedence to settle an overlap, use a `choice` with an
+If you do not want precedence to settle an overlap, use a [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) with an
 explicit selector. A non-discriminated union works when the JSON forms already
 separate the alternatives, or when first-match precedence expresses the model.
 After publication, reordering its branches is a behavioral change, however

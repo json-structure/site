@@ -117,8 +117,8 @@ Every relation declaration requires [`targettype`](https://json-structure.github
 declaration. That rule prevents a relation from pointing vaguely at an object
 shape that has no declared matching key.
 
-[`cardinality`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) is either `single` or `multiple`. `single` means exactly one
-target instance and is represented by one relation object. `multiple` means zero
+[`cardinality`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) is either [`single`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) or [`multiple`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword). [`single`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) means exactly one
+target instance and is represented by one relation object. [`multiple`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) means zero
 or more targets and is represented by an array of relation objects.
 
 Cardinality is not inferred from an English plural or a property name. The
@@ -127,8 +127,8 @@ schema says it.
 ## Scope says where to look
 
 [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) is a JSON Pointer, or an array of JSON Pointers, to schema locations for
-collections in the same document. A target collection must be an `array`,
-`set`, or `map` compatible with [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword). Map resolution searches values,
+collections in the same document. A target collection must be an [`array`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#array),
+[`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set), or [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) compatible with [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword). Map resolution searches values,
 not keys.
 
 In the example, the resolver follows
@@ -142,7 +142,7 @@ everywhere in this JSON document.”
 
 ## Composite identities preserve order
 
-If a target declares `"identity": ["isbn", "edition"]`, a relation instance
+If a target declares [`"identity": ["isbn", "edition"]`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword), a relation instance
 uses an array in that same order:
 
 ```json

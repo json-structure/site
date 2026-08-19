@@ -117,7 +117,7 @@ numbers.
 
 [`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword) annotates how a value may be presented. It may accompany [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) or
 [`currency`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#currency-keyword), or appear independently. [`symbols`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbols-keyword) is the multi-purpose form and
-reserves `lang:` keys for language-specific variants.
+reserves [`lang:`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbols-keyword) keys for language-specific variants.
 
 A symbol is not the machine meaning of a measurement. The euro sign is useful
 on a screen, while `EUR` is the ISO 4217-style currency code a processor can act
