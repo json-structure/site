@@ -107,15 +107,17 @@
             </p>
             {% assign share_url = page.url | absolute_url | cgi_escape %}
             {% assign share_title = page.title | cgi_escape %}
+            {% assign share_description = page.description | strip_html | truncate: 180 %}
+            {% assign share_text = page.title | append: ": " | append: share_description | cgi_escape %}
             <nav class="share-links" aria-label="Share this article">
               <span>Share</span>
               <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url }}" aria-label="Share on LinkedIn" title="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
-              <a href="https://bsky.app/intent/compose?text={{ share_title }}%20{{ share_url }}" aria-label="Share on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-bluesky" aria-hidden="true"></i></a>
-              <a href="https://mastodonshare.com/?text={{ share_title }}&amp;url={{ share_url }}" aria-label="Share on Mastodon" title="Mastodon" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-mastodon" aria-hidden="true"></i></a>
+              <a href="https://bsky.app/intent/compose?text={{ share_text }}%20{{ share_url }}" aria-label="Share on Bluesky" title="Bluesky" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-bluesky" aria-hidden="true"></i></a>
+              <a href="https://mastodonshare.com/?text={{ share_text }}&amp;url={{ share_url }}" aria-label="Share on Mastodon" title="Mastodon" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-mastodon" aria-hidden="true"></i></a>
               <a href="https://www.reddit.com/submit?url={{ share_url }}&amp;title={{ share_title }}" aria-label="Share on Reddit" title="Reddit" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-reddit-alien" aria-hidden="true"></i></a>
               <a href="https://news.ycombinator.com/submitlink?u={{ share_url }}&amp;t={{ share_title }}" aria-label="Share on Hacker News" title="Hacker News" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-hacker-news" aria-hidden="true"></i></a>
               <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url }}" aria-label="Share on Facebook" title="Facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
-              <a href="https://x.com/intent/post?text={{ share_title }}&amp;url={{ share_url }}" aria-label="Share on X" title="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+              <a href="https://x.com/intent/post?text={{ share_text }}&amp;url={{ share_url }}" aria-label="Share on X" title="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
             </nav>
           </header>
 
