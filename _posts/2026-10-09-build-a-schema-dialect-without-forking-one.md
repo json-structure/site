@@ -94,7 +94,7 @@ contract exposed through the composed meta-schema.
 }
 ```
 
-Here is a corresponding application instance:
+An application instance then points to that schema:
 
 ```json
 {

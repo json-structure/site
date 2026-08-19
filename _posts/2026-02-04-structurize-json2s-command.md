@@ -9,12 +9,11 @@ description: >-
   JSONL samples for validation, code generation, and documentation.
 ---
 
-If you have JSON data and need a schema for it, the new `json2s` command in
-**Structurize** can help. It analyzes your JSON files, figures out what types
-you're working with, and produces a valid JSON Structure schema document — one
-that you can use for validation, code generation, or documentation.
+The new **Structurize** `json2s` command infers a valid JSON Structure schema
+from JSON files for validation, code generation, or documentation. It analyzes
+the samples and determines the types they contain.
 
-## What is Structurize?
+## What Structurize is
 
 [Structurize](https://avrotize.com) is a schema conversion
 toolkit that transforms between various schema formats: JSON Schema, JSON
@@ -32,13 +31,13 @@ Install it with:
 pip install structurize
 ```
 
-## The json2s Command: Schema Inference from JSON
+## Schema inference with `json2s`
 
 The `json2s` command reads one or more JSON files and infers a JSON Structure
 schema from them. It handles single JSON objects, JSON arrays, and JSONL
 (newline-delimited JSON) files.
 
-### Basic Usage
+### Basic usage
 
 ```bash
 structurize json2s data.json --out schema.jstruct.json --type-name MyType
@@ -53,14 +52,14 @@ Parameters:
 - `--sample-size` — Maximum records to sample (0 = all, default: 0)
 - `--infer-choices` — Detect discriminated unions (more on this below)
 
-### Multiple Files and JSONL
+### Multiple files and JSONL
 
 The command accepts multiple input files, merging their structures into a
 unified schema. This is useful when your data is split across files or when
 you want to analyze several examples together.
 
-JSONL files (one JSON object per line) are first-class citizens. The inferrer
-reads each line as a separate document and consolidates their structures.
+For JSONL files (one JSON object per line), the inferrer reads each line as a
+separate document and consolidates their structures.
 
 ```bash
 # Multiple JSON files
@@ -70,10 +69,10 @@ structurize json2s orders.json users.json events.json --out unified.jstruct.json
 structurize json2s events.jsonl --out events.jstruct.json --type-name DomainEvent
 ```
 
-## Detecting Discriminated Unions with `--infer-choices`
+## Detect discriminated unions with `--infer-choices`
 
-Here's where things get interesting. Many event-driven systems, APIs, and
-message formats use **discriminated unions**: a single field (often called
+Many event-driven systems, APIs, and message formats use **discriminated
+unions**: a single field (often called
 `type`, `kind`, or `event_type`) determines which variant of a structure you're
 dealing with.
 
@@ -88,7 +87,7 @@ Consider this JSONL file with three event types:
 {"event_type": "payment_received", "payment_id": "pay-002", "order_id": "ord-002", "amount": 150.00, "method": "paypal"}
 ```
 
-### Without `--infer-choices`: A Flat Object
+### Without `--infer-choices`: a flat object
 
 Running the basic inference:
 
@@ -125,7 +124,7 @@ This works, but it loses the structure: `email` only makes sense for
 become optional except `event_type`, which is the only one present in every
 record.
 
-### With `--infer-choices`: An Inline Union
+### With `--infer-choices`: an inline union
 
 Add the `--infer-choices` flag:
 
@@ -208,7 +207,7 @@ This is a proper inline union:
 The choice keys (`order_placed`, `payment_received`, `user_created`) match the
 actual values in the data, so instances validate correctly.
 
-### Validating the Result
+### Validate the result
 
 Using the [json-structure Python SDK](https://pypi.org/project/json-structure/),
 we can verify that both the schema and the original instances are valid:
@@ -249,7 +248,7 @@ payment_received: valid
 
 All six instances validate against the inferred schema.
 
-## How the Algorithm Works
+## How the algorithm works
 
 The `--infer-choices` option uses a clustering algorithm:
 
@@ -274,7 +273,7 @@ The `--infer-choices` option uses a clustering algorithm:
 The result is a schema that captures the polymorphic structure of your data
 rather than flattening everything into a single bag of optional fields.
 
-## Use Cases
+## Use cases
 
 - **Event Sourcing**: Infer schemas from event logs with multiple event types
 - **API Documentation**: Generate schemas from sample API responses
@@ -282,7 +281,7 @@ rather than flattening everything into a single bag of optional fields.
 - **Data Lake Schemas**: Create schemas for semi-structured data in Parquet or Iceberg
 - **Code Generation**: Feed the schema into structurize's code generators to produce typed classes
 
-## Getting Started
+## Get started
 
 Install structurize:
 
@@ -298,11 +297,4 @@ structurize json2s your-data.jsonl --infer-choices --out schema.jstruct.json --t
 
 Validate the result with the json-structure SDK, or use structurize to convert
 the schema to code, documentation, or other formats.
-
----
-
-The `json2s` command with `--infer-choices` bridges the gap between the JSON
-data you have and the structured schema you need. It understands that your
-data isn't just a blob of fields — it's a collection of distinct types
-with a common discriminator. And it produces schemas that reflect that structure.
 

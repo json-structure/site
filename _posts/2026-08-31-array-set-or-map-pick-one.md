@@ -25,7 +25,7 @@ all three of these "collections" is accurate and not terribly helpful.
 
 ## One model, three collection types
 
-Here is the complete schema:
+The playlist schema assigns each collection its own contract:
 
 ```json
 {

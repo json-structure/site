@@ -19,7 +19,7 @@ instance stays an array.
 
 ## A point with named positions
 
-This complete schema defines a WGS 84 geographic point. The coordinate reference
+The schema below defines a WGS 84 geographic point. The coordinate reference
 system is stated in the type name and description here; the core tuple mechanism
 itself is about structure, not geodesy.
 
@@ -48,7 +48,7 @@ itself is about structure, not geodesy.
 }
 ```
 
-The corresponding instance remains lean:
+Its JSON instance remains an array:
 
 ```json
 {

@@ -166,9 +166,4 @@ repair a missing target, and it does not filter the scope unless an application
 adds that policy. The draft gives it typed link properties, not query-language
 semantics.
 
-In the example, the composite identity selects the German catalog entry, the
-scope confines that lookup to `entries`, and the qualifier limits the web
-listing's effective period. None of those declarations substitutes for either
-of the others.
-
 [relations]: https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html

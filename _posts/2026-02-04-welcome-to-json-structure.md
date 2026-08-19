@@ -9,17 +9,18 @@ description: >-
   cleanly to programming languages, databases, APIs, and JSON.
 ---
 
-JSON Structure is here, and with it comes a fresh perspective on how we define data types and structures for modern applications.
+JSON Structure is a strongly typed schema language for data models that must
+work consistently across code, databases, APIs, and JSON.
 
-## What is JSON Structure?
+## What JSON Structure is
 
 JSON Structure is a schema language designed to describe data types and structures that map cleanly to programming language types, database constructs, and the ubiquitous JSON data encoding. If you've worked with JSON Schema, the syntax will feel familiar – but the philosophy is different.
 
 Where JSON Schema focuses primarily on document validation (asking "does this JSON document conform to these rules?"), JSON Structure focuses on being a strong **data definition language**. It's about defining types that your code, your databases, and your APIs can share and understand consistently.
 
-## Why Another Schema Language?
+## Why another schema language?
 
-The landscape of data definition is fragmented. You have Protocol Buffers for efficient binary serialization, Avro for Hadoop ecosystems, JSON Schema for validation, OpenAPI for API definitions, and countless language-specific type systems. Each serves its purpose, but none quite hits the sweet spot for developers who want:
+Data definition is split across specialized tools. You have Protocol Buffers for efficient binary serialization, Avro for Hadoop ecosystems, JSON Schema for validation, OpenAPI for API definitions, and countless language-specific type systems. Each serves its purpose, but none combines the following properties:
 
 - **Clear mapping to programming language types** – Your schema types should translate directly to `string`, `int32`, `decimal`, `datetime`, and so on in your favorite language. No ambiguity about what "number" means.
 
@@ -31,13 +32,13 @@ The landscape of data definition is fragmented. You have Protocol Buffers for ef
 
 - **Rich annotations** – Add multilingual descriptions, alternate names for different serialization formats, scientific units, and currency codes directly in your schema.
 
-## The Core Philosophy
+## The core philosophy
 
 JSON Structure schemas are deterministic. Given a schema, there's exactly one way to interpret it. This might sound obvious, but it's a departure from JSON Schema's flexibility, where the same data might validate differently depending on interpretation.
 
-The type system is designed to be **generative** – you can generate code, database schemas, API documentation, and validation logic from a single source of truth. Your schema isn't just a validation artifact; it's the canonical definition of your data model.
+The type system is designed to be **generative** – you can generate code, database schemas, API documentation, and validation logic from a single source of truth. The schema is both a validation artifact and the canonical definition of the data model.
 
-## What You'll Find on This Blog
+## What this blog covers
 
 This blog exists to go beyond the specification. While the [Core Specification](https://json-structure.github.io/core) provides the normative definition of the language, here we'll explore:
 
@@ -47,12 +48,8 @@ This blog exists to go beyond the specification. While the [Core Specification](
 - **Integration patterns** – How JSON Structure fits with databases, message queues, API frameworks, and code generation pipelines
 - **Migration guides** – Moving from JSON Schema or other formats to JSON Structure
 
-## Getting Started
+## Getting started
 
 If you're new to JSON Structure, start with the [Primer](/json-structure-primer.html) for a high-level overview, then dive into the [Core Specification](https://json-structure.github.io/core) when you're ready for the details.
 
 The official SDKs are available for all major languages – check the [homepage](/) for installation instructions. Each SDK provides schema validation and instance validation, with consistent behavior across platforms.
-
-We're excited to have you here. JSON Structure is designed to make data definition cleaner, more precise, and more useful across your entire stack. We hope you find it as practical as we do.
-
-Stay tuned for more posts exploring specific features and real-world applications.

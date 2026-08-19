@@ -55,8 +55,8 @@ Every extension begins with `x-` and carries a string value.
 }
 ```
 
-A useful instance mixes the stable envelope with one extension and three
-dynamic labels:
+This instance mixes the stable envelope with one extension and three dynamic
+labels:
 
 ```json
 {

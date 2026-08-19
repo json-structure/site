@@ -23,7 +23,7 @@ external or localized representations to them.
 
 ## Keep the values boring and stable
 
-Here is a complete schema for an order status record:
+The order-status schema keeps the canonical values separate from their mappings:
 
 ```json
 {

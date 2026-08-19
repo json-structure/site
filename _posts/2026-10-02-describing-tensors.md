@@ -103,8 +103,8 @@ a spherical frame ordered as up, south, east.
 }
 ```
 
-Here is a useful instance, adapted from the catalogue's sample earthquake below
-El Salvador on 1 January 2005:
+This instance is adapted from the catalogue's sample earthquake below El
+Salvador on 1 January 2005:
 
 ```json
 {

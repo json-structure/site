@@ -26,7 +26,7 @@ instance, [`$schema`](https://json-structure.github.io/core/draft-vasters-json-s
 document root in both cases, but the referenced document plays a different
 role.
 
-This complete schema uses only the core vocabulary:
+The following schema uses only the core vocabulary:
 
 ```json
 {

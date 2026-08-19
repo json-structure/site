@@ -27,7 +27,7 @@ encoded as Base64 for JSON. The operations happened in this order:
 A consumer reverses the sequence: Base64-decode, gzip-decompress, then interpret
 the result as CSV.
 
-The complete schema declares every step:
+The schema declares every step in that pipeline:
 
 ```json
 {

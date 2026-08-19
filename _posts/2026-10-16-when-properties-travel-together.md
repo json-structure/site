@@ -20,7 +20,7 @@ property's presence makes others mandatory.
 
 ## Two different presence rules
 
-This complete schema always requires `orderId` and `total`. It conditionally
+The schema always requires `orderId` and `total`. It conditionally
 requires the four billing fields when `invoiceRequested` occurs:
 
 ```json

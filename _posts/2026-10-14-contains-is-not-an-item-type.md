@@ -26,7 +26,7 @@ entry shares an envelope: a timestamp, a kind, and a numeric value. A choice
 type uses `kind` to select the concrete record shape, and [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) requires every
 array element to be one of those records.
 
-The complete schema then uses [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) to identify alarms and requires one to
+The schema uses [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) to identify alarms and requires one to
 three matches:
 
 ```json

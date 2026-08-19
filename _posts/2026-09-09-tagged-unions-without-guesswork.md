@@ -20,7 +20,7 @@ a consumer reads the variant's fields.
 
 ## A payment method choice
 
-Here is a complete schema for card and bank-transfer payment methods:
+The payment-method schema declares card and bank-transfer variants:
 
 ```json
 {
