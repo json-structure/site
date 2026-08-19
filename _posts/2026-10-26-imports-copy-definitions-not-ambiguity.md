@@ -125,8 +125,8 @@ A matching instance is ordinary JSON:
 }
 ```
 
-`$import` copies the external root type as `People/Person` and copies its
-`definitions`. `$importdefs` copies only the external `definitions`, so
+[`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) copies the external root type as `People/Person` and copies its
+[`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword). [`$importdefs`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#importdefs-keyword) copies only the external [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword), so
 `Common/AuditStamp` exists but `Common/CommonDocument` does not.
 
 Placement supplies the namespace. An import at the schema root, or directly as
@@ -139,7 +139,7 @@ deeper still.
 The source `Person` points to `#/definitions/Address`. During import, the
 processor prefixes that pointer so it resolves inside `People`, not against a
 consumer-level `Address`. The rewrite also applies recursively through imported
-imports and to `$ref`, `$extends`, and `$addins` pointers.
+imports and to [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword), [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword), and [`$addins`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extensions-and-add-ins) pointers.
 
 Shadowing comes next. The local `People/Address` replaces the imported type of
 the same name entirely; there is no merge and no route back to the replaced
@@ -162,6 +162,6 @@ requirement. The complete documents above follow the draft.
 
 The extended meta-schema offers `JSONStructureImport` and enables it for its
 own root import. The import draft, unlike the validation and conditional
-drafts, introduces no competing `$uses` name; it makes the extension available
-through the extended meta-schema. The explicit `$uses` above names the
+drafts, introduces no competing [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) name; it makes the extension available
+through the extended meta-schema. The explicit [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) above names the
 repository feature so a reader can see the dependency at the point of use.

@@ -59,11 +59,11 @@ record:
 ```
 
 `observationId`, `recordedAt`, `value`, and `labels` are declared object
-properties. Because `additionalProperties` is `false`, no other property may
+properties. Because [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) is `false`, no other property may
 appear beside them.
 
 Inside `labels`, the rules change. A `map` permits any valid JSON string as a
-key, and every value must conform to its `values` schema. `site` and
+key, and every value must conform to its [`values`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#values-keyword) schema. `site` and
 `sensor.vendor` are data, not schema-defined fields.
 
 ## The typo test
@@ -90,9 +90,9 @@ while the missing required `labels` would still fail. With an optional field,
 however, a typo could pass silently. Closed records make a schema evolution or a
 spelling error visible at the boundary where it occurs.
 
-## `additionalProperties` does not make a map
+## [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) does not make a map
 
-Core allows `additionalProperties` on an object to be a boolean or a schema.
+Core allows [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) on an object to be a boolean or a schema.
 With a schema, every undeclared property must conform to it. Use that form for
 an object intentionally combining named fields with an extension area.
 
@@ -101,7 +101,7 @@ properties with individual schemas. A map has dynamic keys and one value schema.
 Those contracts produce different generated types and different expectations
 for consumers.
 
-The core draft makes `additionalProperties` optional but states no default for
+The core draft makes [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) optional but states no default for
 its absence. A closed record must therefore say `"additionalProperties":
 false` explicitly. Processor assumptions are a poor compatibility policy.
 
@@ -115,7 +115,7 @@ years. Every evolution becomes a naming negotiation.
 A dedicated map gives each namespace its own rules. The outer object evolves
 through schema changes; runtime systems add keys inside `labels`. Fixed fields
 may have different types and documentation, while every dynamic value follows
-the map's one `values` schema.
+the map's one [`values`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#values-keyword) schema.
 
 That boundary also helps code generation. The outer shape becomes a record or
 class with named members. `labels` becomes a dictionary from strings to strings.
@@ -123,10 +123,10 @@ No generator has to combine known members and an indexer into one awkward type.
 
 ## Records and dictionaries elsewhere
 
-JSON Schema uses `properties` and `additionalProperties` for both patterns. A
-closed record sets `additionalProperties` to `false`; a string-valued dictionary
-can use an empty `properties` object with an `additionalProperties` schema.
-JSON Structure instead names the latter abstraction `map` and uses `values`.
+JSON Schema uses [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) and [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) for both patterns. A
+closed record sets [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) to `false`; a string-valued dictionary
+can use an empty [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) object with an [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) schema.
+JSON Structure instead names the latter abstraction `map` and uses [`values`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#values-keyword).
 
 Avro makes the boundary similarly explicit: records declare fields and maps
 carry string keys with one value type. Avro records do not accept arbitrary

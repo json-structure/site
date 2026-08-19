@@ -82,9 +82,9 @@ and time with an offset. Those are type semantics, not naming conventions.
 ## Validation describes a set
 
 JSON Schema is exceptionally good at describing sets of acceptable JSON
-instances. Its vocabulary combines assertions such as `required`,
-`additionalProperties`, and numeric bounds with applicators such as `allOf`,
-`anyOf`, and conditional subschemas. That model supports sophisticated
+instances. Its vocabulary combines assertions such as [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword),
+[`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword), and numeric bounds with applicators such as [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf),
+[`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf), and conditional subschemas. That model supports sophisticated
 validation precisely because schemas can be composed as constraints.
 
 The same flexibility leaves data-definition tools with interpretation work. A
@@ -94,7 +94,7 @@ information, but format handling depends on the selected vocabulary and
 implementation configuration. Code generators therefore need conventions and
 policies beyond the validation result.
 
-JSON Structure takes the other route. Every schema element declares `type`, and
+JSON Structure takes the other route. Every schema element declares [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword), and
 the core specification owns a fixed vocabulary of primitive, extended, and
 compound types. `int32`, `uint64`, `decimal`, `uuid`, `datetime`, `map`, and
 `set` are type declarations. A consumer does not infer them from a combination
@@ -106,14 +106,14 @@ programming languages, database columns, and serialization APIs.
 
 ## Structure is explicit
 
-An `object` lists its known `properties`. A `map` models dynamic keys whose
+An `object` lists its known [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword). A `map` models dynamic keys whose
 values share a type. An `array` preserves order and permits duplicates; a `set`
-does not. Reusable compound types live under `definitions` and are referenced
-through a `type` containing `$ref`.
+does not. Reusable compound types live under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) and are referenced
+through a [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) containing [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword).
 
 The difference appears after validation. Two documents may have the same JSON
 object shape while representing different programming constructs. A declared
-map maps to a map; tooling need not deduce one from an `additionalProperties`
+map maps to a map; tooling need not deduce one from an [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword)
 rule.
 
 Requiredness is similarly direct. In the Customer schema, four properties must

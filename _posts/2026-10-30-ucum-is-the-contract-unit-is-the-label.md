@@ -1,6 +1,7 @@
 ---
 layout: post
-title: "UCUM Is the Contract; `unit` Is the Label"
+title: "UCUM Is the Contract; unit Is the Label"
+display_title: "UCUM Is the Contract; [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) Is the Label"
 date: 2026-10-30
 published: false
 author: Clemens Vasters
@@ -10,9 +11,9 @@ description: >-
   get a useful label and processors get a computational contract.
 ---
 
-`unit` and `ucumUnit` may describe the same measurement, but processors use
-them differently. `unit` carries scientific notation for recognition and
-display; `ucumUnit` carries a case-sensitive UCUM expression for computation
+[`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) may describe the same measurement, but processors use
+them differently. [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) carries scientific notation for recognition and
+display; [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) carries a case-sensitive UCUM expression for computation
 and conversion. A schema may include either keyword. When it includes both,
 the values must denote the same physical quantity and unit.
 
@@ -67,7 +68,7 @@ beside `742.6`, while a UCUM-aware processor can normalize the value to
 pascals, compare it with a limit expressed in bar, or reject an attempt to add
 it to an energy quantity.
 
-The distinction becomes visible with Celsius: the draft shows `°C` for `unit`
+The distinction becomes visible with Celsius: the draft shows `°C` for [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword)
 and `Cel` for case-sensitive UCUM. Typography and computational syntax need not
 look alike to remain compatible.
 
@@ -84,7 +85,7 @@ a visually similar character, or otherwise apply identifier formatting rules.
 For example, UCUM uses `u` for the micro prefix in machine expressions, while a
 display-oriented unit or symbol may use `μ`.
 
-The same rule applies to composition. The draft's `unit` syntax writes
+The same rule applies to composition. The draft's [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) syntax writes
 multiplication with `*`, division with `/`, and exponentiation with `^`, such
 as `m/s^2`. Its UCUM example writes acceleration as `m/s2`. A processor should
 parse each notation according to its own grammar, not transform one with a few
@@ -93,7 +94,7 @@ string replacements and hope.
 ## Processor behavior is deliberately asymmetric
 
 When both annotations appear, the draft says UCUM-aware systems should prefer
-`ucumUnit` for computation and conversion. They may still use `unit` for
+[`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) for computation and conversion. They may still use [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) for
 display. The presence of both annotations is not grounds for rejection.
 
 Both annotations still have to agree. `"unit": "kPa"` beside
@@ -101,7 +102,7 @@ Both annotations still have to agree. `"unit": "kPa"` beside
 and violates the draft's compatibility expectation. The ability to convert
 between them does not repair the declaration.
 
-A processor that understands only `unit` can still interpret or display the
+A processor that understands only [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) can still interpret or display the
 annotation according to the named scientific-unit standards. A processor that
 understands neither keyword ignores them as annotations. Neither keyword
 changes the JSON number on the wire or silently converts an instance.
@@ -112,14 +113,14 @@ The repository's extended meta-schema offers the feature name
 `JSONStructureUnits`, despite the units draft's enabling section and example
 using `JSONSchemaUnits`. The offered meta-schema key is the spelling used above.
 
-The current units draft also defines `ucumUnit`, while the checked-in extended
-meta-schema exposes only `unit` for the units add-ins. The schema example is
+The current units draft also defines [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword), while the checked-in extended
+meta-schema exposes only [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) for the units add-ins. The schema example is
 valid JSON and follows the draft, but strict validation against that repository
-meta-schema may reject `ucumUnit` until the meta-schema catches up. The example
+meta-schema may reject [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) until the meta-schema catches up. The example
 keeps the keyword because removing it would conceal the mismatch and erase the
 machine-readable unit expression under discussion.
 
-`symbol`, `symbols`, and alternate enum representations are separate features.
+[`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword), [`symbols`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbols-keyword), and alternate enum representations are separate features.
 A pleasant glyph can label a value. Only the unit annotations say what physical
 unit the number carries.
 

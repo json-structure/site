@@ -13,14 +13,14 @@ description: >-
 How many types called `Address` can one schema contain? As many as the model
 needs, provided they live in different namespaces.
 
-JSON Structure's `definitions` is a case-sensitive type library. An order can
+JSON Structure's [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) is a case-sensitive type library. An order can
 have both `Billing/Address` and `Shipping/Address`, without inventing flattened
 names merely to satisfy a global registry.
 
 ## Namespaces are JSON objects
 
-Every type directly under `definitions` belongs to the root namespace. Any
-object there that does not declare `type` is a namespace, and namespaces may
+Every type directly under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) belongs to the root namespace. Any
+object there that does not declare [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) is a namespace, and namespaces may
 contain types or further namespaces.
 
 Here is an order schema with two `Address` definitions:
@@ -78,14 +78,14 @@ Here is an order schema with two `Address` definitions:
 as `BillingAddressType` would only flatten information the namespace already
 expresses.
 
-The `$root` pointer also traverses the namespace hierarchy. It designates
+The [`$root`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#root-keyword) pointer also traverses the namespace hierarchy. It designates
 `Commerce/Order` as the type of instances governed by this schema document.
 
 ## Referring to a library type
 
-JSON Structure uses `$ref` for reusable types in the same schema document. The
-reference appears as the value of `type`, in an object containing the single
-`$ref` property:
+JSON Structure uses [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) for reusable types in the same schema document. The
+reference appears as the value of [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword), in an object containing the single
+[`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) property:
 
 ```json
 {
@@ -95,14 +95,14 @@ reference appears as the value of `type`, in an object containing the single
 }
 ```
 
-The pointer must resolve to an existing type declaration. `$ref` neither
+The pointer must resolve to an existing type declaration. [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) neither
 overlays arbitrary schema keywords nor fetches another document. The import
 extension handles external composition; once processed, imported types also
-appear locally under `definitions`.
+appear locally under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword).
 
-This placement differs from JSON Schema habits. Writing `$ref` next to
-`properties`, or using it as the property schema without the surrounding
-`type`, is not JSON Structure syntax.
+This placement differs from JSON Schema habits. Writing [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) next to
+[`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword), or using it as the property schema without the surrounding
+[`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword), is not JSON Structure syntax.
 
 ## Case survives the trip
 
@@ -130,7 +130,7 @@ inside an identifier.
 
 ## What belongs in the library
 
-Reusable types must be declared under `definitions`. An inline object inside a
+Reusable types must be declared under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword). An inline object inside a
 property, array, map, or union can describe local structure, but another part of
 the document cannot reference it as a library type.
 

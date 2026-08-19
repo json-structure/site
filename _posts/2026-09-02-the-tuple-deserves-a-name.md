@@ -13,8 +13,8 @@ description: >-
 `[13.405, 52.52]` is compact, valid JSON, and a trap. Longitude then latitude?
 Latitude then longitude? Perhaps two unrelated measurements?
 
-A tuple needs order and names. In JSON Structure, `properties` defines the named
-positions and their types, while `tuple` fixes those names in wire order. The
+A tuple needs order and names. In JSON Structure, [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) defines the named
+positions and their types, while [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword) fixes those names in wire order. The
 instance stays an array.
 
 ## A point with named positions
@@ -57,11 +57,11 @@ The corresponding instance remains lean:
 }
 ```
 
-The first number is `longitude` because `longitude` is first in `tuple`. Its
+The first number is `longitude` because `longitude` is first in [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword). Its
 schema is the property named `longitude`. The second number is `latitude` for
 the same reason.
 
-Swap the names in the `tuple` array and you change the wire contract. Swap only
+Swap the names in the [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword) array and you change the wire contract. Swap only
 the two instance values and the JSON remains structurally valid, because both
 positions are doubles, but the point moves. A schema cannot detect a plausible
 number placed in the wrong same-typed position. Naming the positions makes the
@@ -71,7 +71,7 @@ contract reviewable and gives generated APIs better names than `item0` and
 ## The length is fixed
 
 Every property declared by a tuple is implicitly required. Every declared
-property name must appear in the `tuple` array, whose order defines the instance
+property name must appear in the [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword) array, whose order defines the instance
 positions. The resulting array therefore has the tuple's exact length.
 
 That means this is invalid:
@@ -87,10 +87,10 @@ So is `[13.405, 52.52, 34.0]`. There is no suggested prefix followed by an
 open-ended tail. The named property schemas determine every position and the
 array's length.
 
-There is no `required` keyword inside the tuple. That keyword belongs to
+There is no [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) keyword inside the tuple. That keyword belongs to
 objects, while tuple positions are required by the tuple definition itself.
-Adding `required` would not clarify the model; it would violate the core rule
-that permits `required` only on `object` schemas.
+Adding [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) would not clarify the model; it would violate the core rule
+that permits [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) only on `object` schemas.
 
 ## When an object is the better shape
 
@@ -130,6 +130,6 @@ change, that permits named APIs without changing the JSON.
 `GeographicPoint` and its description document WGS 84, but core does not make
 that reference machine-resolvable. When a processor must identify and check the
 reference system rather than trust prose, the semantic annotations extension
-provides `coordinateReferenceSystem`. Position names prevent a longitude and
+provides [`coordinateReferenceSystem`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coordinate-reference-systems). Position names prevent a longitude and
 latitude from becoming anonymous numbers; they cannot tell a processor which
 geodetic datum those numbers use.

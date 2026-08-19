@@ -24,8 +24,8 @@ description tools.
 Core describes facts needed to construct and exchange a value:
 
 - `type: int32` selects a signed 32-bit integer represented as a JSON number.
-- `type: object` and `properties` define named members and their types.
-- `required` distinguishes members that must be present from members that may
+- `type: object` and [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) define named members and their types.
+- [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) distinguishes members that must be present from members that may
   be absent.
 - `additionalProperties: false` closes the declared object shape.
 
@@ -76,13 +76,13 @@ This instance satisfies both layers:
 
 ## Validation narrows valid values
 
-The object declaration, its properties, `required`, and `int32` remain true if
+The object declaration, its properties, [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword), and `int32` remain true if
 the warehouse later raises capacity from 5,000 to 8,000. They describe the data
 model.
 
-The range and pattern encode local acceptance policy. `minimum` prevents a
-negative count, `maximum` captures the current operational capacity, and
-`pattern` imposes the warehouse's bin-label convention.
+The range and pattern encode local acceptance policy. [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum) prevents a
+negative count, [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum) captures the current operational capacity, and
+[`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern) imposes the warehouse's bin-label convention.
 
 Changing one of those policies need not change the generated integer type or
 object layout. A policy-aware validator must enforce them, while a core-aware
@@ -101,7 +101,7 @@ policy. The distinction produces better diagnostics and cleaner tooling.
 ## The companion must be declared
 
 The validation keywords are not harmless annotations. A schema using
-`minimum`, `maximum`, or `pattern` needs a meta-schema contract that admits and
+[`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum), or [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern) needs a meta-schema contract that admits and
 defines them. The published validation meta-schema composes the extended
 feature offers and selects `JSONStructureValidation`.
 

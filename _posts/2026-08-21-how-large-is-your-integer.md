@@ -100,7 +100,7 @@ It is preferable to delivering a nearby integer with no warning.
 
 JSON Schema's `integer` describes a mathematical property of a JSON number: it
 has no fractional part. Bounds can narrow the accepted set, so a schema author
-can spell out the limits of an `int64` with `minimum` and `maximum`.
+can spell out the limits of an `int64` with [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum) and [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum).
 
 That still leaves representation and mapping policy to tooling. A code generator
 must recognize the particular bounds, decide whether they imply a machine type,

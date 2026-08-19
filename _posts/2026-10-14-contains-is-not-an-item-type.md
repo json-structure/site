@@ -1,6 +1,7 @@
 ---
 layout: post
-title: "`contains` Is Not an Item Type"
+title: "contains Is Not an Item Type"
+display_title: "[`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) Is Not an Item Type"
 date: 2026-10-14
 published: false
 author: Clemens Vasters
@@ -13,19 +14,19 @@ description: >-
 How do you require an array of sensor records to include at least one alarm?
 Typing the array elements is only half of that rule.
 
-In JSON Structure, `items` describes every element. The validation companion's
-`contains`, `minContains`, and `maxContains` inspect the collection and count
+In JSON Structure, [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) describes every element. The validation companion's
+[`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains), [`minContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minContains), and [`maxContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maxContains) inspect the collection and count
 elements that match another schema. Confusing those jobs leaves either the
 array contents or the alarm count underspecified.
 
-## `items` applies to every element
+## [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) applies to every element
 
 Consider a sensor batch containing ordinary readings and alarm records. Every
 entry shares an envelope: a timestamp, a kind, and a numeric value. A choice
-type uses `kind` to select the concrete record shape, and `items` requires every
+type uses `kind` to select the concrete record shape, and [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) requires every
 array element to be one of those records.
 
-The complete schema then uses `contains` to identify alarms and requires one to
+The complete schema then uses [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) to identify alarms and requires one to
 three matches:
 
 ```json
@@ -120,33 +121,33 @@ A useful batch with two alarms satisfies the schema:
 
 ## Count matches, not positions
 
-The draft defines `contains` for arrays and sets. At least one element must
-satisfy its schema. `minContains` raises that lower bound; `maxContains` adds an
+The draft defines [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) for arrays and sets. At least one element must
+satisfy its schema. [`minContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minContains) raises that lower bound; [`maxContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maxContains) adds an
 upper bound. Both bounds are non-negative integers and count elements that
-satisfy `contains`. They do not constrain total collection length.
+satisfy [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains). They do not constrain total collection length.
 
 In the example, a batch of 100 records may be valid if one, two, or three are
-alarms. Four alarms violate `maxContains`. Zero alarms violate both the basic
-`contains` requirement and `minContains: 1`.
+alarms. Four alarms violate [`maxContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maxContains). Zero alarms violate both the basic
+[`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) requirement and `minContains: 1`.
 
 Order is irrelevant to the count. The matching records may appear anywhere,
-and one element either contributes one match or none. `contains` does not carve
-out a second item channel and does not exempt matching elements from `items`.
+and one element either contributes one match or none. [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) does not carve
+out a second item channel and does not exempt matching elements from [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword).
 Every alarm still has to be a valid `BatchRecord`.
 
 ## What happens when one keyword is missing
 
-Without `items`, `contains` says nothing about nonmatching elements. A string,
+Without [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword), [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) says nothing about nonmatching elements. A string,
 an unrelated object, or `null` could coexist with a matching alarm unless some
 other rule excludes it. That may be intentional for a heterogeneous collection,
 but it is not an item-type declaration.
 
-Conversely, `items` alone can require valid sensor records but cannot say that
+Conversely, [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) alone can require valid sensor records but cannot say that
 the batch actually contains an alarm, much less bound the alarm count.
 
-For this batch, every element must satisfy `items`, and between one and three of
-those elements must also satisfy `contains`. Remove either clause and the rule
-changes. That is why treating `contains` as an item type is not a harmless
+For this batch, every element must satisfy [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword), and between one and three of
+those elements must also satisfy [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains). Remove either clause and the rule
+changes. That is why treating [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) as an item type is not a harmless
 shorthand; it accepts data the schema author probably meant to reject.
 
 [validation]: https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html

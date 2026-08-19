@@ -12,12 +12,12 @@ description: >-
 
 One schema property may appear as a JSON key, a SQL column, a generated
 identifier, and several labels written for people. Treating all of those names
-as aliases loses the reason each name exists. The `altnames` annotation records
+as aliases loses the reason each name exists. The [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) annotation records
 that reason and leaves the property declaration as the canonical name.
 
 ## The key says what the name is for
 
-`altnames` is a map from purpose indicators to strings. The draft reserves two
+[`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is a map from purpose indicators to strings. The draft reserves two
 parts of that key space:
 
 - `json` identifies the property key used when encoding JSON.
@@ -87,8 +87,8 @@ its stated purpose.
 
 ## Canonical identity stays in the schema
 
-Within the schema, `properties` and `required` still use `customerNumber`.
-References to the schema use the stable `$id`, not an alternate type or
+Within the schema, [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) and [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) still use `customerNumber`.
+References to the schema use the stable [`$id`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#id-keyword), not an alternate type or
 property name. A database migration can change `CUST_NO`, a generator can
 change its casing rules, and a translator can edit `Kundennummer` without
 renaming the schema property or minting a new schema identity. An alternate
@@ -117,7 +117,7 @@ value used above. The draft's enabling prose once says
 `JSONStructureAlternateNames`. That is an inconsistency, not an alias. Current
 schemas should follow the offered key in the meta-schema.
 
-Do not confuse `altnames` with `altenums` or `symbol`. `altenums` maps members
+Do not confuse [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) with [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) or [`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword). [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) maps members
 of an enumeration, while unit symbols annotate the presentation of measured
 values. Neither supplies another name for a property.
 

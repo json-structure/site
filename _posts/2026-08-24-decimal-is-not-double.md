@@ -69,11 +69,11 @@ A valid instance keeps the decimal values quoted:
 ```
 
 The lexical form follows JSON's decimal syntax without an exponent: an optional
-minus sign, an integer part, and a required fractional part. `precision` states
-the total number of significant digits. `scale` states the number of digits to
+minus sign, an integer part, and a required fractional part. [`precision`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#precision-keyword) states
+the total number of significant digits. [`scale`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#scale-keyword) states the number of digits to
 the right of the decimal point.
 
-Both keywords are annotations on `decimal` and `number`; `scale` also constrains
+Both keywords are annotations on `decimal` and `number`; [`scale`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#scale-keyword) also constrains
 the fractional part. For `decimal`, the core defaults are 34 significant digits
 and seven fractional digits when the schema does not override them.
 
@@ -117,7 +117,7 @@ value. A schema with `scale: 2` makes the expected fractional capacity clear.
 ## A validation increment is not an arithmetic type
 
 JSON Schema has one `number` type and an `integer` specialization. Keywords such
-as `multipleOf` can require increments like 0.01, and bounds can constrain a
+as [`multipleOf`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#multipleOf) can require increments like 0.01, and bounds can constrain a
 range. That is useful validation, but it does not declare a decimal arithmetic
 type or protect the instance from a binary64 parser.
 

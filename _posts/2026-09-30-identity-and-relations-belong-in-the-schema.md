@@ -18,7 +18,7 @@ be unique in this document, unique in a database, or not unique at all. The name
 suggests a foreign key while leaving its target and resolution rules in prose.
 
 The relations extension gives the schema vocabulary for those rules:
-`identity`, `relations`, `targettype`, `cardinality`, and `scope`.
+[`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword), [`relations`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#relations-keyword), [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword), [`cardinality`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword), and [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword).
 
 ## Identity starts at the target
 
@@ -106,18 +106,18 @@ A corresponding document contains the relation as an ordinary JSON property:
 
 The familiar conceptual link `Order.customerId -> Customer.id` is present, but
 it is not modeled as a bare `customerId` property. The draft gives relation
-instances their own shape. A single relation is an object whose `identity`
+instances their own shape. A single relation is an object whose [`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword)
 member matches the target type's identity.
 
 ## Target and cardinality are explicit
 
-Every relation declaration requires `targettype` and `cardinality`.
+Every relation declaration requires [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword) and [`cardinality`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword).
 
-`targettype` is a schema containing a `$ref` to a type with an `identity`
+[`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword) is a schema containing a [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) to a type with an [`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword)
 declaration. That rule prevents a relation from pointing vaguely at an object
 shape that has no declared matching key.
 
-`cardinality` is either `single` or `multiple`. `single` means exactly one
+[`cardinality`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) is either `single` or `multiple`. `single` means exactly one
 target instance and is represented by one relation object. `multiple` means zero
 or more targets and is represented by an array of relation objects.
 
@@ -126,18 +126,18 @@ schema says it.
 
 ## Scope says where to look
 
-`scope` is a JSON Pointer, or an array of JSON Pointers, to schema locations for
+[`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) is a JSON Pointer, or an array of JSON Pointers, to schema locations for
 collections in the same document. A target collection must be an `array`,
-`set`, or `map` compatible with `targettype`. Map resolution searches values,
+`set`, or `map` compatible with [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword). Map resolution searches values,
 not keys.
 
 In the example, the resolver follows
 `#/definitions/CommerceDocument/properties/customers`, then finds the customer
 whose declared identity equals `C-1042`.
 
-Omit `scope` and the meaning changes: the target exists outside the document.
+Omit [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) and the meaning changes: the target exists outside the document.
 The application must resolve it through an external database, service, or other
-source. The absence of `scope` is therefore not shorthand for “search
+source. The absence of [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) is therefore not shorthand for “search
 everywhere in this JSON document.”
 
 ## Composite identities preserve order

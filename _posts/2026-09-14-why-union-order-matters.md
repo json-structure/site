@@ -19,7 +19,7 @@ and after the edit. Array order is part of this contract.
 
 ## First match, not best match
 
-A JSON Structure union is the array form of `type`:
+A JSON Structure union is the array form of [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword):
 
 ```json
 {
@@ -40,7 +40,7 @@ type.
 
 A non-discriminated union may contain primitive types and type references. It
 must not define an object inline, so compound branches belong under
-`definitions`.
+[`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword).
 
 This schema lets the root value be a pickup point or a street address. Both
 branches require `locationId` and `label`; an object containing only their
@@ -100,14 +100,14 @@ A validator accepts the value in either order. A code generator, data mapper,
 or dispatch function still needs one type identity, and the first branch
 provides it.
 
-## Why the union sits under `definitions`
+## Why the union sits under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword)
 
-A schema document's root object may declare one `type`, but the root itself must
+A schema document's root object may declare one [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword), but the root itself must
 not use a type array. To make a union the type of document instances, declare
-the union under `definitions` and designate it with `$root`.
+the union under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) and designate it with [`$root`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#root-keyword).
 
-`$root` and a root-level `type` are mutually exclusive. Its value is a JSON
-Pointer to an existing reusable type under `definitions`:
+[`$root`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#root-keyword) and a root-level [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) are mutually exclusive. Its value is a JSON
+Pointer to an existing reusable type under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword):
 
 ```json
 {
@@ -120,8 +120,8 @@ Pointer to an existing reusable type under `definitions`:
 }
 ```
 
-The key under `definitions` gives the union a reusable location and gives
-`$root` something to point at. It remains a union of referenced or primitive
+The key under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) gives the union a reusable location and gives
+[`$root`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#root-keyword) something to point at. It remains a union of referenced or primitive
 types, not a new compound type category.
 
 ## Choose the precedence before publishing

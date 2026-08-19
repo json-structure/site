@@ -12,7 +12,7 @@ description: >-
 
 A product identity alone does not tell a resolver which catalog collection to
 search, nor does it record the dates or sales channel for a storefront listing.
-The relations extension uses `scope` to bound resolution and `qualifiertype` to
+The relations extension uses [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) to bound resolution and [`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) to
 describe the listing itself. Those qualifier values do not become properties
 of the storefront or the catalog entry.
 
@@ -137,25 +137,25 @@ The relation instance carries the composite identity and a separate qualifier:
 
 ## Scope is a schema pointer
 
-The `scope` value is an RFC 6901 JSON Pointer to a schema location, not a JSON
+The [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) value is an RFC 6901 JSON Pointer to a schema location, not a JSON
 Path query over the instance. The pointed-to property must hold an `array`,
-`set`, or `map` compatible with `targettype`. For maps, resolution searches the
+`set`, or `map` compatible with [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword). For maps, resolution searches the
 values rather than treating map keys as target identities.
 
 At runtime, the schema pointer identifies the corresponding collection in the
-document. The resolver then compares the relation's `identity` with each
+document. The resolver then compares the relation's [`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword) with each
 candidate's declared identity. Here all three values must match in declaration
 order, so the German entry does not accidentally resolve to the English entry
 for the same product and version.
 
-`scope` may also be an array of pointers when candidates live in several
+[`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) may also be an array of pointers when candidates live in several
 collections. `"#"` identifies the document root only when the root itself is a
-compatible collection. Omitting `scope` means external resolution; it does not
+compatible collection. Omitting [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) means external resolution; it does not
 mean “search the entire document.”
 
 ## Qualifiers describe the edge
 
-`qualifiertype` must be a `$ref` to a reusable type. Its instance appears under
+[`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) must be a [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) to a reusable type. Its instance appears under
 `qualifier` inside each relation object. The `channel` and effective dates
 describe this storefront-to-entry link. Another storefront can link to the
 same catalog identity with different dates without duplicating or mutating the

@@ -12,7 +12,7 @@ description: >-
 
 The title needs a qualification. The author does not copy a shared type, but a
 JSON Structure processor does. It fetches the external schema, copies its types
-into the importing document's `definitions`, and treats the result as local.
+into the importing document's [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword), and treats the result as local.
 
 This is deliberate copy semantics, not a live cross-document reference. The
 maintained declaration still has one source; consumers of the processed schema
@@ -46,7 +46,7 @@ Suppose the postal team publishes this schema at
 }
 ```
 
-The root declares `PostalAddress`, and its `definitions` section contributes
+The root declares `PostalAddress`, and its [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) section contributes
 the reusable `PostalCode` type.
 
 ## Bring both into a namespace
@@ -74,7 +74,7 @@ namespace:
 }
 ```
 
-`$import` brings in the external root type and its `definitions`. After
+[`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) brings in the external root type and its [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword). After
 processing, `Postal/PostalAddress` and `Postal/PostalCode` behave as local
 reusable types. The processor prefixes cross-references inside the imported
 material with the local namespace. `PostalAddress` therefore still reaches the
@@ -84,10 +84,10 @@ that short name.
 Processors handle imports before other schema keywords. One schema may import
 several documents into separate local namespaces.
 
-## Leave the root behind with `$importdefs`
+## Leave the root behind with [`$importdefs`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#importdefs-keyword)
 
 Sometimes the external document's root describes a message you do not need,
-while its `definitions` section is the useful library. Replace the import with:
+while its [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword) section is the useful library. Replace the import with:
 
 ```json
 {
@@ -100,16 +100,16 @@ while its `definitions` section is the useful library. Replace the import with:
 ```
 
 Now `#/definitions/Postal/PostalCode` exists, but
-`#/definitions/Postal/PostalAddress` does not. `$importdefs` has the same merge
-and namespace behavior as `$import`; its only difference is that it omits the
+`#/definitions/Postal/PostalAddress` does not. [`$importdefs`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#importdefs-keyword) has the same merge
+and namespace behavior as [`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword); its only difference is that it omits the
 external root type.
 
-Choose `$import` when the published root belongs in the local contract. Choose
-`$importdefs` when only the external type library is relevant.
+Choose [`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) when the published root belongs in the local contract. Choose
+[`$importdefs`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#importdefs-keyword) when only the external type library is relevant.
 
 ## The URI is the identity
 
-The values of `$import` and `$importdefs` must be absolute URIs. Processors
+The values of [`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) and [`$importdefs`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#importdefs-keyword) must be absolute URIs. Processors
 resolve them according to RFC 3986 and RFC 3987. The import specification adds
 no package-name search, filesystem convention, registry protocol, or fallback
 rule.

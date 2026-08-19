@@ -15,19 +15,19 @@ covariance. Shape alone cannot tell you which.
 
 A tensor gets its meaning from the range of each index and from how its
 components respond when the frame changes. That information usually lives in a
-format manual or a variable name. `tensorReferenceFrames` records it in the
+format manual or a variable name. [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) records it in the
 schema.
 
 ## Shape is only the first layer
 
 A rank-2 tensor is nested two levels deep. With the validation extension,
-`minItems` and `maxItems` can fix each extent. The innermost schema gives the
+[`minItems`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minItems) and [`maxItems`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maxItems) can fix each extent. The innermost schema gives the
 numeric type and unit.
 
 That describes a correctly shaped grid. It still does not say what row 1,
 column 2 means.
 
-`tensorReferenceFrames` adds three pieces:
+[`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) adds three pieces:
 
 - `frames` names one frame per index. Its length is the tensor rank and must be
   at least two.
@@ -157,7 +157,7 @@ nested value carries every position.
 
 Higher-rank symmetries, including the minor and major symmetries of an elastic
 stiffness tensor, are not expressible. A rank-2 object that represents a
-transformation should use `frameTransforms`; `tensorReferenceFrames` says what
+transformation should use [`frameTransforms`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#frame-transforms); [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) says what
 its indices range over, not that the numbers perform a transformation.
 
 Large machine-learning tensors are usually better carried as binary data with

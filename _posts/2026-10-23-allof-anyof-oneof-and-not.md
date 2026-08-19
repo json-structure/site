@@ -103,20 +103,20 @@ A write request satisfying the policy is:
 
 ## Read the match counts
 
-`allOf` requires every member to evaluate true. Here the subject exclusion, the
-strong-authentication rule, and the action rule must all pass. `allOf` does not
+[`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) requires every member to evaluate true. Here the subject exclusion, the
+strong-authentication rule, and the action rule must all pass. [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) does not
 merge the members before evaluation; contradictory members simply make the
 combined constraint impossible to satisfy.
 
-`anyOf` requires at least one match. A request may contain `mfa`,
-`hardware-key`, or both. Two matches are valid here; `oneOf` would reject them.
+[`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf) requires at least one match. A request may contain `mfa`,
+`hardware-key`, or both. Two matches are valid here; [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) would reject them.
 
-`oneOf` requires exactly one match. The `const` values make the read and write
+[`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) requires exactly one match. The [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword) values make the read and write
 branches disjoint, so an action cannot satisfy both. The write branch also
 requires a usable explanation. If branches overlap accidentally, an instance
 matching two branches fails even when each branch looks acceptable alone.
 
-`not` inverts one subschema result. The request passes that constraint when the
+[`not`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#not) inverts one subschema result. The request passes that constraint when the
 anonymous-subject schema fails. It contributes no replacement type or
 affirmative shape; it only excludes a matching region.
 
@@ -128,8 +128,8 @@ Composition evaluates complete instances against each member, so partial
 policy overlays should generally remain open while the stable structural schema
 defines the closed member set.
 
-The draft requires non-empty type-union arrays for `allOf`, `anyOf`, and
-`oneOf`; `not` takes one schema, which may itself be a type union. Array order
+The draft requires non-empty type-union arrays for [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf), [`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf), and
+[`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf); [`not`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#not) takes one schema, which may itself be a type union. Array order
 does not change the truth conditions.
 
 ## What the repository can check today
@@ -137,11 +137,11 @@ does not change the truth conditions.
 The draft calls the feature `JSONSchemaConditionalComposition`, while the
 meta-schema offers `JSONStructureConditionalComposition`. The validation
 meta-schema used above enables the repository name. The validation draft also
-permits `const` inside `contains`, which gives the authentication checks their
+permits [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword) inside [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains), which gives the authentication checks their
 fixed values.
 
-Core already defines `const`, and the validation add-in defines `minLength`.
-The checked-in extended meta-schema, however, omits `contains` and gives the
+Core already defines [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword), and the validation add-in defines [`minLength`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minLength).
+The checked-in extended meta-schema, however, omits [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) and gives the
 composition members shapes that differ from the draft text. A
 draft-conforming evaluator can apply this policy, but meta-schema validation
 may stop at either discrepancy.

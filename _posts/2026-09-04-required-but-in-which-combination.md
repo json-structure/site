@@ -14,7 +14,7 @@ A contact must provide an email address or a phone number, but not both. Making
 both properties optional does not express that rule. Making both required
 expresses the opposite rule.
 
-JSON Structure puts the combination directly in `required`. A flat array names
+JSON Structure puts the combination directly in [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword). A flat array names
 one required set. An array of arrays names alternative required sets, and
 exactly one set must match the properties present in the object.
 
@@ -88,7 +88,7 @@ is also invalid.
 ```
 
 That invalidity is easy to miss if you read the construct as JSON Schema's
-`anyOf`. The core draft says exactly one set must match. The nested form is an
+[`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf). The core draft says exactly one set must match. The nested form is an
 exclusive choice among presence patterns.
 
 "Match" concerns the object's property set, not a quick check that the listed
@@ -117,13 +117,13 @@ them.
 Use the nested form only when property presence selects one mutually exclusive
 shape. May email and phone both be supplied? Then the rule is "at least one,"
 and core's alternative required sets are the wrong construct. Use the
-conditional composition extension's `anyOf`, or remodel the data so the
+conditional composition extension's [`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf), or remodel the data so the
 alternatives are explicit.
 
 ## Do not translate by keyword
 
-In JSON Schema, the common spelling is `oneOf` with two branches, each carrying
-a `required` array, plus exclusions when necessary. JSON Schema's own `required`
+In JSON Schema, the common spelling is [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) with two branches, each carrying
+a [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) array, plus exclusions when necessary. JSON Schema's own [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword)
 keyword remains a flat array. Directly copying JSON Structure's nested array
 into a JSON Schema document is invalid vocabulary usage.
 
@@ -145,5 +145,5 @@ property combinations establish structure. Pattern, format, and length checks
 belong to validation constraints. Real-world reachability requires sending a
 message or placing a call.
 
-Here, `required` answers one question: which properties must occur together? It
+Here, [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) answers one question: which properties must occur together? It
 does not answer whether the values will work once you try to use them.

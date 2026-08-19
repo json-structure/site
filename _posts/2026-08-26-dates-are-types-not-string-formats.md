@@ -93,13 +93,13 @@ invent those policies.
 JSON Schema commonly expresses these values as `type: "string"` with `format:
 "date"`, `"time"`, `"date-time"`, or `"duration"`. The format vocabulary gives
 those strings useful semantics, but assertion behavior depends on the dialect,
-vocabulary, and validator configuration. Many integrations also treat `format`
+vocabulary, and validator configuration. Many integrations also treat [`format`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#format)
 as an annotation.
 
 For validation, that flexibility can be desirable. For data definition, tools
 still need a policy that says a recognized format should become a particular
 language or storage type. JSON Structure removes that extra inference: the
-schema element's `type` is already `date`, `datetime`, `time`, or `duration`.
+schema element's [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) is already `date`, `datetime`, `time`, or `duration`.
 
 The lexical standards substantially overlap. JSON Structure puts the semantic
 choice in the type declaration rather than a string annotation.

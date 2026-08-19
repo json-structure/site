@@ -94,12 +94,12 @@ list.
 
 The keys under `deviceVolume` are not declared property names. New devices
 appear at runtime, so this is a `map`; every key is a JSON string and every value
-must satisfy the `uint8` schema. `values`, not `items`, declares that value type.
+must satisfy the `uint8` schema. [`values`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#values-keyword), not [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword), declares that value type.
 
 ## How other schema systems spell it
 
 JSON Schema can express much of this with validation vocabulary. Arrays are
-ordered, `uniqueItems` can prohibit duplicates, and `additionalProperties` can
+ordered, [`uniqueItems`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#uniqueItems) can prohibit duplicates, and [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) can
 constrain dictionary values. A tool must interpret the combination of keywords
 to recover the intended collection model. JSON Structure declares that model as
 the type.

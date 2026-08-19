@@ -1,6 +1,7 @@
 ---
 layout: post
-title: "`$offers` and `$uses` Are a Handshake"
+title: "$offers and $uses Are a Handshake"
+display_title: "[`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) and [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) Are a Handshake"
 date: 2026-10-07
 published: false
 author: Clemens Vasters
@@ -11,8 +12,8 @@ description: >-
 ---
 
 Optional vocabulary needs two declarations. A meta-schema publishes named
-feature bundles through `$offers`; a document checked by that meta-schema
-selects bundles through `$uses` at its own root.
+feature bundles through [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword); a document checked by that meta-schema
+selects bundles through [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) at its own root.
 
 Neither declaration substitutes for the other. An offer says what can be
 selected. A use says what this document actually selected.
@@ -60,7 +61,7 @@ and contains the referenced definitions.
 
 ## A schema selects by name
 
-The following complete schema consumes two offers. `$uses` occurs at the root
+The following complete schema consumes two offers. [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) occurs at the root
 of the schema document because that document is the instance being checked by
 the extended meta-schema.
 
@@ -97,7 +98,7 @@ the extended meta-schema.
 }
 ```
 
-This application instance needs no `$uses` because it selects no optional
+This application instance needs no [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) because it selects no optional
 add-ins from the application schema:
 
 ```json
@@ -109,27 +110,27 @@ add-ins from the application schema:
 ```
 
 The instance simply obeys the resulting schema. The schema document is where
-`unit`, `pattern`, `minimum`, and `maximum` had to be admitted into the schema
+[`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword), [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern), [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), and [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum) had to be admitted into the schema
 vocabulary.
 
 ## Core uses the same mechanism one layer down
 
-Core also describes instance-level add-ins. An application schema can `$offers`
+Core also describes instance-level add-ins. An application schema can [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword)
 an optional type augmentation such as delivery instructions, and an application
-instance can select it with `$uses`. In that case `$uses` belongs to the data
+instance can select it with [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword). In that case [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) belongs to the data
 instance, not to the schema.
 
 The layers are consistent: a schema document is an instance when a meta-schema
 checks it. The current core draft's wording is not as tidy. Its normative rules
-say `$uses` "MUST only" occur in instance documents, while the same section says
+say [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) "MUST only" occur in instance documents, while the same section says
 it may occur in a meta-schema that references a parent schema. The core
-meta-schema includes `$uses` as a `SchemaDocument` property, and the published
+meta-schema includes [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as a `SchemaDocument` property, and the published
 extended and validation meta-schemas use it at their roots.
 
-The interoperable reading is therefore concrete: `$uses` occurs at the root of
+The interoperable reading is therefore concrete: [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) occurs at the root of
 the document receiving the add-ins. For vocabulary composition, that receiver
 is a schema or meta-schema document. For an application add-in, it is the
-application instance. Treating `$uses` as globally "data-only" would reject the
+application instance. Treating [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as globally "data-only" would reject the
 project's own meta-schemas.
 
 This mechanism rejects wishful extension. A consumer cannot select an

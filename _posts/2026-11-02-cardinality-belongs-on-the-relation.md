@@ -12,11 +12,11 @@ description: >-
 
 `orders` sounds like a collection and `customer` sounds singular. A processor
 cannot derive an instance shape from either spelling. The relations extension
-declares that shape with `cardinality`, next to the `targettype` it qualifies.
+declares that shape with [`cardinality`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword), next to the [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword) it qualifies.
 
 ## Identity starts with the target type
 
-Every relation names a `targettype`, and that target must declare `identity`.
+Every relation names a [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword), and that target must declare [`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword).
 The identity is an ordered array of property names. One name produces a scalar
 relation identity. Several names produce an array in the declared order.
 
@@ -129,14 +129,14 @@ object, rather than an array of length one. `"cardinality": "multiple"` means
 zero or more targets and uses an array of relation objects. An empty array
 states that the relation currently has no targets.
 
-The relation object carries `identity`; it does not embed the target object.
+The relation object carries [`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword); it does not embed the target object.
 That keeps association separate from containment. For a composite target
 identity such as `["catalogNumber", "revision"]`, the value becomes an array
 such as `{"identity": ["A-17", 3]}`.
 
 ## Relation names are not ordinary properties
 
-Relations are declared under `relations`, not under `properties`, although
+Relations are declared under [`relations`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#relations-keyword), not under [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword), although
 they appear as properties in an instance. The two declaration maps share a
 namespace, so a type cannot declare both an ordinary property and a relation
 named `customer`.
@@ -147,8 +147,8 @@ member.
 
 ## Scope completes the reference
 
-`targettype` says what kind of thing is referenced. `identity` says which
-values identify one. `scope` says where candidates are found in this document.
+[`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword) says what kind of thing is referenced. [`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword) says which
+values identify one. [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) says where candidates are found in this document.
 The resolver follows the schema pointer to an array, set, or map, then searches
 its elements or map values for the matching identity.
 

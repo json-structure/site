@@ -141,28 +141,28 @@ draft gives it somewhere to go.
 
 It extends JSON Structure Core with optional annotations, in four groups.
 
-**Bind a node to a published term.** `concepts` and `observedProperty` attach a
+**Bind a node to a published term.** [`concepts`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#concepts) and [`observedProperty`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#observed-property) attach a
 type or a member to a definition somebody else maintains — QUDT, the CF standard
 names, a SKOS scheme, a domain catalogue — so two systems calling one thing by
 two names can establish that they mean the same thing.
 
-**Say what the record observes.** `semanticRole` separates the result from the
+**Say what the record observes.** [`semanticRole`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#semantic-role) separates the result from the
 property observed, the feature it belongs to, the procedure that produced it,
-and the several distinct times one record can carry. `derivation`, `statistic`,
-`phenomenonTimeRelation`, and `cadence` record what has already been done to the
+and the several distinct times one record can carry. [`derivation`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#derivation), [`statistic`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#statistic),
+[`phenomenonTimeRelation`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#phenomenon-time-relation), and [`cadence`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#cadence) record what has already been done to the
 value: measured, modelled, calculated; a mean, a maximum, a fourth-highest; an
 instant, an interval, an accumulation; every minute, or on change.
 
-**Name the reference system.** `temporalReferenceSystem`,
-`coordinateReferenceSystem`, `linearReferenceSystem`, `vectorReferenceFrames`,
-`tensorReferenceFrames`, and `frameTransforms` say what a position, a direction,
+**Name the reference system.** [`temporalReferenceSystem`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#temporal-reference-systems),
+[`coordinateReferenceSystem`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coordinate-reference-systems), [`linearReferenceSystem`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#linear-reference-systems), [`vectorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#vector-reference-frames),
+[`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames), and [`frameTransforms`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#frame-transforms) say what a position, a direction,
 or an orientation is read against — and, this is the part nothing else does,
 *which of your members supplies which axis*.
 
-**Resolve compound values.** `colorSpaces`, `audioChannels`, and `spectralBands`
+**Resolve compound values.** [`colorSpaces`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#color-spaces), [`audioChannels`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#audio-channels), and [`spectralBands`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#spectral-bands)
 map a set of members onto the channels or bands that give them meaning.
-`codedValues` binds a short code to the register that assigns it a meaning.
-`measurementConditioning` carries the frequency weighting, time weighting, and
+[`codedValues`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coded-values) binds a short code to the register that assigns it a meaning.
+[`measurementConditioning`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#measurement-conditioning-keyword) carries the frequency weighting, time weighting, and
 level reference that a conditioned measurement already has baked in.
 
 Nearly all of them are the same shape: an object with a `reference` that
@@ -189,7 +189,7 @@ Several people have, and each of them solved it somewhere that does not travel.
 **Type systems describe shape.** JSON Schema, Avro, Protobuf, Thrift, Table
 Schema, Parquet, Iceberg — every one of them will tell you a member is a 64-bit
 float and none of them has a place to record what it is a float *of*. That is
-not an oversight. Shape is what they were built for, and a `description` string
+not an oversight. Shape is what they were built for, and a [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword) string
 is where everything else has been going for twenty years.
 
 **Graph vocabularies carry meaning on the instance.** RDF, JSON-LD, schema.org
@@ -330,12 +330,12 @@ that. Only the schema can.
 
 Look at what falls out. `total` is the magnitude, and `derivation: "calculated"`
 says it was produced by deterministic arithmetic that no named summary covers —
-not measured, not estimated, not one of `minimum`, `maximum` or `mean`, which
+not measured, not estimated, not one of [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum) or `mean`, which
 would have taken `derivation: "statistic"` instead. So it adds no information
 the three components do not already carry.
 
 But look at where it is *not*. `total` is absent from the `components` array of
-`vectorReferenceFrames`, and that absence is the annotation. `hp`, `he` and `hn`
+[`vectorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#vector-reference-frames), and that absence is the annotation. `hp`, `he` and `hn`
 are resolved in a spacecraft-local frame, so their numbers mean nothing outside
 it. A magnitude is frame-invariant. **`total` is therefore the member that may
 be compared across two spacecraft, and `hp` is not.** Try guessing that from the
@@ -422,7 +422,7 @@ The record it describes:
 <span class="p">}</span></pre>
 
 Four opaque strings. A human who flies knows three of them on sight. A join
-planner knows none, until `codedValues` tells it that two of them resolve
+planner knows none, until [`codedValues`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coded-values) tells it that two of them resolve
 against tables it can go and fetch.
 
 Both fields carry `kind: "icao"`, because ICAO is the register model behind them.
@@ -512,7 +512,7 @@ attributable to the one layer that separates them.
 | arm | what the reader was given |
 | --- | --- |
 | `bare` | member names and types, nothing else |
-| `prose` | `bare` plus every `description` |
+| `prose` | `bare` plus every [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword) |
 | `annotated` | `prose` plus the annotation keywords, specification withheld |
 | `spec` | `annotated` plus the specification text |
 
@@ -578,7 +578,7 @@ regression at 22 violations. Three decisions produce them, one of which — turn
 megawatts into megawatt-hours by dividing by the gap between records — is counted
 twenty times because seventeen fuel members carry the same annotations.
 
-The `supportPeriod` claims show the same shape more sharply. Restricted to the 25
+The [`supportPeriod`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#support-period) claims show the same shape more sharply. Restricted to the 25
 claims those annotations force, the `annotated` arm gets 6 right and 0 wrong; the
 `spec` arm gets 7 right and 10 wrong, deriving the period from record spacing
 anyway. Same annotations, plus the specification, opposite behaviour.
@@ -619,7 +619,7 @@ reports, GCMT moment tensors, CCSDS attitude quaternions, KITTI sensor
 alignment, FOGRA characterization patches, MODIS fire detections, broadcast
 audio frames.
 
-Each one exists because of a specific hazard, and each root `description` names
+Each one exists because of a specific hazard, and each root [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword) names
 the hazard. Read half a dozen and you have the argument for the draft without
 reading the draft.
 

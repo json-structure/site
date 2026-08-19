@@ -85,7 +85,7 @@ A bank transfer uses the other property name:
 }
 ```
 
-The keys of `choices` are the selectors. There is no separate `type`, `kind`, or
+The keys of [`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword) are the selectors. There is no separate `type`, `kind`, or
 `method` field in a tagged choice. The wrapper object must have one property,
 and that property's name selects the corresponding schema.
 
@@ -109,14 +109,14 @@ reference names a reusable schema; the key selects it in an instance.
 
 ## JSON Schema leaves the representation open
 
-JSON Schema commonly represents unions with `oneOf`. `oneOf` requires exactly
+JSON Schema commonly represents unions with [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf). [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) requires exactly
 one subschema to validate, but it does not prescribe a tag representation. A
-schema may add a `const` discriminator property to each branch, use an enclosing
+schema may add a [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword) discriminator property to each branch, use an enclosing
 single-property object, or rely entirely on mutually exclusive shapes.
 
 Some tooling recognizes OpenAPI's `discriminator`, but that keyword belongs to
 the OpenAPI Schema Object and carries tooling-specific mapping behavior; it is
-not a general JSON Schema keyword that changes `oneOf` evaluation. A careful
+not a general JSON Schema keyword that changes [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) evaluation. A careful
 conversion must preserve the actual wrapper shape shown here. Adding a
 discriminator annotation alone does not do that.
 
@@ -133,7 +133,7 @@ to JSON Structure's tagged representation.
 The details are not interchangeable. Avro derives the JSON wrapper key from the
 branch's Avro name or primitive type name, and Avro restricts union branch
 composition, including duplicate branch types. JSON Structure declares selector
-names explicitly as keys in `choices`, and each key maps to a schema. A converter
+names explicitly as keys in [`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword), and each key maps to a schema. A converter
 must choose and preserve those names rather than assume the two naming systems
 are identical.
 

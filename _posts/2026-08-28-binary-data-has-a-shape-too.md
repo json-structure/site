@@ -12,8 +12,8 @@ description: >-
 
 You receive a Base64 string. After decoding it, do you have a PNG, a PDF, or a
 gzip stream containing a CSV file? Base64 cannot answer. JSON Structure's
-`binary` type records the processing contract with `contentEncoding`,
-`contentCompression`, and `contentMediaType`.
+`binary` type records the processing contract with [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword),
+[`contentCompression`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword), and [`contentMediaType`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentmediatype-keyword).
 
 ## Describe the decoding pipeline
 
@@ -68,7 +68,7 @@ operations and identifies the decoded content.
 ## Encoding is the outer layer
 
 The `binary` type has JSON `string` as its base representation. Its default
-encoding is Base64, and `contentEncoding` can select one of the RFC 4648
+encoding is Base64, and [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword) can select one of the RFC 4648
 encodings:
 
 - `base64`
@@ -87,7 +87,7 @@ the pipeline stays visible, and readers need not remember the implicit choice.
 
 ## Compression happens before encoding
 
-`contentCompression` says that the binary payload was compressed before its
+[`contentCompression`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword) says that the binary payload was compressed before its
 bytes were text-encoded. The core specification permits `gzip`, `deflate`,
 `zlib`, and `brotli`.
 
@@ -105,7 +105,7 @@ as JSON text. They solve different transport problems.
 
 ## Media type describes the result
 
-`contentMediaType` is a valid media type as defined by RFC 6838. It describes the
+[`contentMediaType`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentmediatype-keyword) is a valid media type as defined by RFC 6838. It describes the
 payload after decoding and decompression: `text/csv` in this example,
 `image/png` for a PNG image, or `application/pdf` for a PDF document.
 
@@ -116,13 +116,13 @@ contract here, not a nested schema language for every media format.
 
 ## JSON Schema annotates string content
 
-JSON Schema also defines `contentEncoding` and `contentMediaType` for strings,
+JSON Schema also defines [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword) and [`contentMediaType`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentmediatype-keyword) for strings,
 and newer dialects can associate a `contentSchema` with decoded content. These
 keywords are annotations by default; the specification does not require every
 validator to decode and inspect payloads.
 
 JSON Structure attaches encoding and media annotations to a first-class
-`binary` type and adds `contentCompression` to distinguish an intermediate
+`binary` type and adds [`contentCompression`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword) to distinguish an intermediate
 compression layer. The type tells generators and bindings that the application
 value is bytes rather than ordinary text.
 

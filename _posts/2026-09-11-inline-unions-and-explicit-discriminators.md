@@ -21,7 +21,7 @@ The address remains one flat JSON object; no wrapper is added.
 
 ## The wire shape
 
-A `choice` is JSON Structure's discriminated union type. Its `choices` map
+A `choice` is JSON Structure's discriminated union type. Its [`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword) map
 associates selector values with types. In the tagged form, a property wraps the
 selected value. In the inline form used here, the selected object's members
 remain in place and the selector sits beside them.
@@ -39,7 +39,7 @@ For addresses, that means an instance looks like this:
 ```
 
 There is no `{ "StreetAddress": { ... } }` wrapper. `addressType` has the value
-`StreetAddress`, so a processor uses that entry from `choices`.
+`StreetAddress`, so a processor uses that entry from [`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword).
 
 ## The complete schema
 
@@ -87,20 +87,20 @@ There is no `{ "StreetAddress": { ... } }` wrapper. `addressType` has the value
 }
 ```
 
-`$extends` appears in two roles here. On `StreetAddress` and
+[`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) appears in two roles here. On `StreetAddress` and
 `PostOfficeBoxAddress`, it merges the properties of `Address` into each
 concrete definition. `StreetAddress` therefore has `city`, `state`, `zip`, and
 `street`; an extending type may not redefine an inherited property.
 
-On the `choice`, `$extends` identifies the common base required for the inline
+On the `choice`, [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) identifies the common base required for the inline
 representation. That base must be abstract, and every selected type must extend
 it. `Address` can supply reusable properties, but it cannot itself be used as a
-property type or referenced through `$ref`.
+property type or referenced through [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword).
 
 ## Selection is declared, not inferred
 
-The `selector` keyword names the injected string property. Its value must match
-a key in `choices` exactly. In this schema, the only selector values are
+The [`selector`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#selector-keyword) keyword names the injected string property. Its value must match
+a key in [`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword) exactly. In this schema, the only selector values are
 `StreetAddress` and `PostOfficeBoxAddress`.
 
 Suppose an object contains `city`, `state`, `zip`, `street`, and `poBox`.
@@ -117,10 +117,10 @@ select `StreetAddress`.
 
 ## No subtype assignment
 
-`$extends` supports property reuse, but JSON Structure deliberately does not
+[`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) supports property reuse, but JSON Structure deliberately does not
 turn the base into a polymorphic assignment target. You cannot declare a
 property as `Address` and then place either concrete subtype there. An abstract
-type cannot be referenced through `$ref` at all.
+type cannot be referenced through [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) at all.
 
 Use the `choice` as the property's type when a property may hold either address:
 
@@ -135,7 +135,7 @@ Use the `choice` as the property's type when a property may hold either address:
 }
 ```
 
-Here `AddressChoice` would be a reusable `choice` under `definitions`, using the
+Here `AddressChoice` would be a reusable `choice` under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword), using the
 same construction as the root example above.
 
 The base records shared members. The `choice` records which concrete values may

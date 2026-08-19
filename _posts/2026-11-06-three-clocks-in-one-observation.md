@@ -131,7 +131,7 @@ for event-time windows, measures sensor latency, or can drive a pipeline
 freshness alert. One value cannot answer all three unless the system guarantees
 the events coincide, and even then the roles describe different events.
 
-`semanticRole` carries the distinction without changing the instance encoding.
+[`semanticRole`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#semantic-role) carries the distinction without changing the instance encoding.
 All three fields remain ordinary `datetime` values. The annotation tells a
 processor which temporal concern each value serves; the Core type and any
 temporal reference-system binding tell it how the position is represented.

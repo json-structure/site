@@ -18,8 +18,8 @@ kilopascals, or an amount in euros. The JSON number carries none of that. A
 numeric type and range can reject malformed values while still accepting a
 perfectly formed misunderstanding.
 
-The units extension supplies that missing contract through `unit`, `ucumUnit`,
-`symbol`, `symbols`, and `currency`.
+The units extension supplies that missing contract through [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword), [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword),
+[`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword), [`symbols`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbols-keyword), and [`currency`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#currency-keyword).
 
 ## The JSON type is not the quantity
 
@@ -86,18 +86,18 @@ The instance stays compact. Its schema says that `4.2` is degrees Celsius,
 `245.0` is kilopascals, and `1899.50` is euros. A consumer no longer has to
 infer units from property names or documentation parked elsewhere.
 
-## `unit` and `ucumUnit` overlap on purpose
+## [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) overlap on purpose
 
-`unit` carries a scientific unit symbol drawn from the standards named by the
+[`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) carries a scientific unit symbol drawn from the standards named by the
 draft. Derived SI units use `*` for multiplication, `/` for division, and `^`
 for exponentiation; acceleration, for example, is `m/s^2`.
 
-`ucumUnit` carries a case-sensitive UCUM expression. UCUM supports computation
+[`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) carries a case-sensitive UCUM expression. UCUM supports computation
 and conversion rather than display alone. A schema may include both annotations.
 When it does, they should denote the same physical quantity and unit, and a
-system that supports UCUM should prefer `ucumUnit` for conversion.
+system that supports UCUM should prefer [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) for conversion.
 
-That is why Celsius appears as `°C` under `unit` and `Cel` under `ucumUnit`.
+That is why Celsius appears as `°C` under [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and `Cel` under [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword).
 They are two notations for the same unit, serving different consumers. A
 validator must not reject a schema merely because both are present.
 
@@ -115,8 +115,8 @@ numbers.
 
 ## A symbol is for presentation
 
-`symbol` annotates how a value may be presented. It may accompany `unit` or
-`currency`, or appear independently. `symbols` is the multi-purpose form and
+[`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword) annotates how a value may be presented. It may accompany [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) or
+[`currency`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#currency-keyword), or appear independently. [`symbols`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbols-keyword) is the multi-purpose form and
 reserves `lang:` keys for language-specific variants.
 
 A symbol is not the machine meaning of a measurement. The euro sign is useful

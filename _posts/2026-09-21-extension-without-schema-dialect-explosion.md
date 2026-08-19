@@ -15,10 +15,10 @@ An address sometimes needs delivery instructions. Giving every address an
 address schema for that one property starts a dialect collection.
 
 JSON Structure calls this optional extension an add-in. The schema advertises
-an abstract add-in through `$offers`. An instance that needs the extra contract
-selects it through `$uses`.
+an abstract add-in through [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword). An instance that needs the extra contract
+selects it through [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword).
 
-Watch where `$uses` appears. It belongs to the JSON instance receiving the
+Watch where [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) appears. It belongs to the JSON instance receiving the
 extra members, not to the schema that advertises them.
 
 ## The schema makes an offer
@@ -58,11 +58,11 @@ adds one property for producers that need it.
 }
 ```
 
-At the schema root, `$offers` maps a public add-in name to a definition in the
+At the schema root, [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) maps a public add-in name to a definition in the
 same document. The declaration advertises `DeliveryInstructions`; it does not
 apply it. Without an opt-in, the root type remains `StreetAddress`.
 
-The add-in is `abstract` because it is not a second independently selectable
+The add-in is [`abstract`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#abstract-keyword) because it is not a second independently selectable
 address type. In the add-in model, it extends the object it augments and is
 injected into that type when selected.
 
@@ -94,29 +94,29 @@ An instance that needs delivery instructions opts in:
 }
 ```
 
-Here `$schema` identifies the address schema and `$uses` selects one of its
-offers. `$uses` is a set of names, so an instance may select several compatible
+Here [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) identifies the address schema and [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) selects one of its
+offers. [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) is a set of names, so an instance may select several compatible
 add-ins.
 
 There is one wrinkle. A schema document may itself be an instance of a
-meta-schema, in which case `$uses` applies at that level. In ordinary use, the
-document receiving optional members carries `$uses`.
+meta-schema, in which case [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) applies at that level. In ordinary use, the
+document receiving optional members carries [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword).
 
-## The unusual direction of `$extends`
+## The unusual direction of [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword)
 
-`$extends` normally merges properties and constraints from abstract base types
+[`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) normally merges properties and constraints from abstract base types
 into an extending object or tuple. A concrete derived type cannot redefine an
 inherited property. Abstract bases also cannot be used directly as property
-types or referenced through `$ref`.
+types or referenced through [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword).
 
-An add-in points `$extends` in an unusual direction: the abstract add-in names
+An add-in points [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) in an unusual direction: the abstract add-in names
 the concrete schema type it augments. When selected, the resulting composite
 replaces that base type in the instance's effective type model. The base schema
 stays unchanged, while the instance records the optional contract it selected.
 
 The current core draft contradicts itself here. The add-in section and its
-normative example allow an abstract add-in to `$extends` a concrete type, as
-`DeliveryInstructions` does above. The general `$extends` rules require every
+normative example allow an abstract add-in to [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) a concrete type, as
+`DeliveryInstructions` does above. The general [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) rules require every
 pointer to target an abstract type. Implementations need to recognize the
 add-in case described by its dedicated section. The draft needs an explicit
 exception so these rules agree.
@@ -124,12 +124,12 @@ exception so these rules agree.
 ## No unadvertised add-ins
 
 This mechanism is not open-ended inheritance. An instance may select only a
-name advertised by the referenced schema's `$offers`, or an allowed pointer in
+name advertised by the referenced schema's [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword), or an allowed pointer in
 the meta-schema case. The offered definition must already exist in the same
 schema document.
 
-The base type defines what every instance has. `$offers` publishes the supported
-extensions, and `$uses` records what one instance activated. A consumer can
+The base type defines what every instance has. [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) publishes the supported
+extensions, and [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) records what one instance activated. A consumer can
 distinguish a declared optional feature from an unknown property without
 assuming that every optional field belongs to every address. Producers also
 avoid minting a schema URI for every combination of add-ins, which is how the

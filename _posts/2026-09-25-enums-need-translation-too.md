@@ -17,8 +17,8 @@ a German invoice, and a legacy API may insist on the code `P`. Replacing the
 enum value for either consumer would make presentation and transport choices
 part of the type's identity.
 
-The alternate-names extension uses `altenums` to keep that distinction in the
-schema. The `enum` array holds the canonical values. Purpose maps attach
+The alternate-names extension uses [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) to keep that distinction in the
+schema. The [`enum`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#enum-keyword) array holds the canonical values. Purpose maps attach
 external or localized representations to them.
 
 ## Keep the values boring and stable
@@ -97,8 +97,8 @@ canonical value `SHIPPED` as `S`:
 ```
 
 That encoded instance depends on an extension-aware processor applying the
-mapping. The core `enum` still contains `SHIPPED`, not `S`. A processor that
-ignores `altenums` sees only the canonical contract and must not be expected to
+mapping. The core [`enum`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#enum-keyword) still contains `SHIPPED`, not `S`. A processor that
+ignores [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) sees only the canonical contract and must not be expected to
 validate the mapped representation as though the mapping did not exist.
 
 ## The map has two levels
@@ -129,18 +129,18 @@ change the translation without changing the schema contract.
 ## These are not unit symbols
 
 The draft calls the mapped values alternate representations or symbols. That
-does not make `altenums` the same feature as the units extension's `symbol` and
-`symbols` keywords.
+does not make [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) the same feature as the units extension's [`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword) and
+[`symbols`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbols-keyword) keywords.
 
-`altenums` maps individual members of an `enum`. The units annotations attach a
+[`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) maps individual members of an [`enum`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#enum-keyword). The units annotations attach a
 presentation symbol such as `€` or `°C` to a schema element and may accompany a
 number. They have different placement, shape, and purpose. An order status does
-not acquire a `symbol` annotation merely because one external system encodes it
+not acquire a [`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword) annotation merely because one external system encodes it
 as `S`.
 
 ## Policy stays outside the map
 
-`altenums` does not select a locale or negotiate one. It does not define fallback
+[`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) does not select a locale or negotiate one. It does not define fallback
 from `lang:de-CH` to `lang:de`. It does not say whether an ERP adapter is allowed
 to accept both `30` and `SHIPPED`. Those are processor and application policies.
 

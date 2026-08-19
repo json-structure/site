@@ -16,13 +16,13 @@ wrong verdict.
 
 JSON Structure can catch that error before the schema reaches application data.
 A schema document is itself an instance, checked by a meta-schema. Its root
-`$schema` identifies the language it claims to use, and a processor can test
+[`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) identifies the language it claims to use, and a processor can test
 that claim before generating code or validating a business document.
 
-## Follow `$schema` up one layer
+## Follow [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) up one layer
 
-In a schema document, `$schema` identifies a meta-schema. In an application
-instance, `$schema` identifies the application schema. The keyword stays at the
+In a schema document, [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) identifies a meta-schema. In an application
+instance, [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) identifies the application schema. The keyword stays at the
 document root in both cases, but the referenced document plays a different
 role.
 
@@ -51,8 +51,8 @@ This complete schema uses only the core vocabulary:
 ```
 
 The core meta-schema checks the document above as an instance. It knows that
-`properties` must be a map, `required` must be an array of property names, and
-`additionalProperties` must have the form allowed on an object type. It also
+[`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) must be a map, [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) must be an array of property names, and
+[`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) must have the form allowed on an object type. It also
 knows which type names belong to core.
 
 An application instance then points at the schema one level down:
@@ -66,7 +66,7 @@ An application instance then points at the schema one level down:
 }
 ```
 
-Resolving `$schema` does not import the referenced document's definitions into
+Resolving [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) does not import the referenced document's definitions into
 the current namespace. It selects the contract against which the current
 document is interpreted and checked.
 
@@ -81,9 +81,9 @@ The extended meta-schema imports core and advertises named feature bundles for
 alternate names, units, import, conditional composition, and validation. A
 schema that needs one of those vocabularies references an appropriate
 meta-schema. Where that meta-schema exposes optional add-ins, the schema selects
-the relevant names through root-level `$uses`.
+the relevant names through root-level [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword).
 
-This separation means that `minimum` is not silently accepted by a core-only
+This separation means that [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum) is not silently accepted by a core-only
 processor. The schema must enter a vocabulary contract that defines it.
 
 ## Bad schemas fail before bad instances
@@ -100,11 +100,11 @@ valid JSON Structure object type:
 }
 ```
 
-`properties` must be a map from property names to property declarations. An
+[`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) must be a map from property names to property declarations. An
 array does not become acceptable because its contents look plausible. The
 meta-schema rejects the fragment at the schema layer.
 
-Without meta-validation, a tool might ignore the malformed `properties`, infer
+Without meta-validation, a tool might ignore the malformed [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword), infer
 an empty object, or fail later with a tool-specific error. Meta-validation gives
 one useful answer immediately: this schema document violates its declared
 language.

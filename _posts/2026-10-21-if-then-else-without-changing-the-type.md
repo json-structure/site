@@ -1,6 +1,7 @@
 ---
 layout: post
-title: "`if`/`then`/`else` Without Changing the Type"
+title: "if/then/else Without Changing the Type"
+display_title: "[`if`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else)/[`then`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else)/[`else`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else) Without Changing the Type"
 date: 2026-10-21
 published: false
 author: Clemens Vasters
@@ -79,16 +80,16 @@ This Canadian instance keeps the ordinary address shape:
 ```
 
 The engine first evaluates the complete object against the base schema. It then
-evaluates the `if` schema against that same object. Since `country` is not `DE`,
-the outer `else` applies. Its nested condition matches `CA`, so the Canadian
+evaluates the [`if`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else) schema against that same object. Since `country` is not `DE`,
+the outer [`else`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else) applies. Its nested condition matches `CA`, so the Canadian
 postal-code overlay must also match.
 
-For another country, neither `then` branch applies. `postalCode` remains a
+For another country, neither [`then`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else) branch applies. `postalCode` remains a
 required string, but this schema imposes no country-specific pattern.
 
 ## A branch adds constraints
 
-The base `properties` and `required` constraints remain in force after a branch
+The base [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) and [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) constraints remain in force after a branch
 is selected. The branch adds constraints to the current node, and all of them
 must hold.
 
@@ -96,7 +97,7 @@ That is why the branches mention only the policy delta. Repeating the full
 address schema in each branch would invite drift and suggest separate types
 where none exist.
 
-The `required` inside each `if` is deliberate. Without it, a condition that
+The [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) inside each [`if`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else) is deliberate. Without it, a condition that
 only constrains `country` may succeed vacuously when the property is absent.
 The base schema already requires `country`, but keeping the condition complete
 makes its matching rule explicit and reusable.
@@ -110,10 +111,10 @@ stable type carries policies that depend on its values or property presence.
 The conditional-composition draft calls its feature
 `JSONSchemaConditionalComposition`; the extended meta-schema offers
 `JSONStructureConditionalComposition`. The validation meta-schema enables the
-repository spelling by default, so the example needs no explicit `$uses`
+repository spelling by default, so the example needs no explicit [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword)
 entry.
 
-Core defines `const`, and the validation add-in defines `pattern`. The remaining
+Core defines [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword), and the validation add-in defines [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern). The remaining
 problem sits in the composition add-in, whose member shapes differ from the
 draft's array-versus-single-schema requirements. The JSON is syntactically
 valid and follows the draft's evaluation model. Validation against the current

@@ -49,7 +49,7 @@ Parameters:
 - `<json_files...>` — One or more JSON files to analyze
 - `--out` — Output path for the JSON Structure schema (stdout if omitted)
 - `--type-name` — Name for the root type (default: "Document")
-- `--base-id` — Base URI for `$id` generation (default: "https://example.com/")
+- `--base-id` — Base URI for [`$id`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#id-keyword) generation (default: "https://example.com/")
 - `--sample-size` — Maximum records to sample (0 = all, default: 0)
 - `--infer-choices` — Detect discriminated unions (more on this below)
 
@@ -121,7 +121,7 @@ Produces a single object type with all fields merged:
 ```
 
 This works, but it loses the structure: `email` only makes sense for
-`user_created` events, `items` only for `order_placed`, and so on. All fields
+`user_created` events, [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) only for `order_placed`, and so on. All fields
 become optional except `event_type`, which is the only one present in every
 record.
 
@@ -200,9 +200,9 @@ correlate with distinct field signatures. It produces a JSON Structure
 
 This is a proper inline union:
 
-- **`selector`** points to the discriminator field (`event_type`)
-- **`choices`** maps each discriminator value to a variant type
-- **`$extends`** references an abstract base type with common fields
+- **[`selector`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#selector-keyword)** points to the discriminator field (`event_type`)
+- **[`choices`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choices-keyword)** maps each discriminator value to a variant type
+- **[`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword)** references an abstract base type with common fields
 - Each variant extends the base and adds its specific fields
 
 The choice keys (`order_placed`, `payment_received`, `user_created`) match the

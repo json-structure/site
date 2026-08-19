@@ -18,13 +18,13 @@ JSON likes `customer_id`. A database inherited `CUST_ID`. A Protobuf API uses
 property for each destination would create four schemas for one fact.
 
 The alternate-names extension keeps the schema name separate from those
-external names. `altnames` holds identifiers and display labels;
-`descriptions` holds localized or purpose-specific explanatory text.
+external names. [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) holds identifiers and display labels;
+[`descriptions`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-descriptions-keyword) holds localized or purpose-specific explanatory text.
 
 ## One name owns the contract
 
 In the schema below, `customerId` is the property name. That is the name used by
-`properties` and `required`, and it remains stable as mappings come and go.
+[`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) and [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword), and it remains stable as mappings come and go.
 
 ```json
 {
@@ -98,7 +98,7 @@ that convention is part of the toolchain's contract.
 
 ## Reserved names are deliberately few
 
-`altnames` is a map of strings. Its keys say why a name exists:
+[`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is a map of strings. Its keys say why a name exists:
 
 - `json` is reserved for the property key used in JSON encoding.
 - `lang:<tag>` is reserved for localized display names. The suffix is an RFC
@@ -111,19 +111,19 @@ precedence if both appear. A supporting encoder or decoder chooses the mapped
 representation consistently. A validator that does not support the extension
 ignores the annotations.
 
-That limit matters. `altnames` records mappings; it does not invent a universal
+That limit matters. [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) records mappings; it does not invent a universal
 name-resolution protocol for databases, IDLs, or user interfaces.
 
 ## Names and descriptions do different work
 
-A localized `altnames` entry is short text suitable for a field label. A
-localized `descriptions` entry explains the field. A paragraph under
+A localized [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) entry is short text suitable for a field label. A
+localized [`descriptions`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-descriptions-keyword) entry explains the field. A paragraph under
 `altnames["lang:de"]` may be syntactically possible, but it is still a
 paragraph where a label belongs.
 
-`descriptions` can appear anywhere the ordinary `description` annotation can
+[`descriptions`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-descriptions-keyword) can appear anywhere the ordinary [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword) annotation can
 appear. Its values are strings keyed by purpose, with `lang:` reserved for
-localized variants. It supplements `description`; it does not change the
+localized variants. It supplements [`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword); it does not change the
 property's type, required status, or encoded value.
 
 ## The schema name stays put
