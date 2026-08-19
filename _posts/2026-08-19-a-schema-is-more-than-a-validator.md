@@ -2,7 +2,7 @@
 layout: post
 title: "A Schema Is More Than a Validator"
 date: 2026-08-19
-published: false
+published: true
 author: Clemens Vasters
 image: /social-cards/a-schema-is-more-than-a-validator.png
 description: >-
