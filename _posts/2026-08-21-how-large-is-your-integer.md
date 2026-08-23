@@ -22,16 +22,16 @@ The integer family is regular:
 
 | Type | Range |
 | --- | --- |
-| [`int8`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int8) | $-2^7$ through $2^7-1$ |
-| [`uint8`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint8) | $0$ through $2^8-1$ |
-| [`int16`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int16) | $-2^{15}$ through $2^{15}-1$ |
-| [`uint16`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint16) | $0$ through $2^{16}-1$ |
-| [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) | $-2^{31}$ through $2^{31}-1$ |
-| [`uint32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint32) | $0$ through $2^{32}-1$ |
-| [`int64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int64) | $-2^{63}$ through $2^{63}-1$ |
-| [`uint64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint64) | $0$ through $2^{64}-1$ |
-| [`int128`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int128) | $-2^{127}$ through $2^{127}-1$ |
-| [`uint128`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint128) | $0$ through $2^{128}-1$ |
+| [`int8`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int8) | −2<sup>7</sup> through 2<sup>7</sup>−1 |
+| [`uint8`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint8) | 0 through 2<sup>8</sup>−1 |
+| [`int16`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int16) | −2<sup>15</sup> through 2<sup>15</sup>−1 |
+| [`uint16`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint16) | 0 through 2<sup>16</sup>−1 |
+| [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) | −2<sup>31</sup> through 2<sup>31</sup>−1 |
+| [`uint32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint32) | 0 through 2<sup>32</sup>−1 |
+| [`int64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int64) | −2<sup>63</sup> through 2<sup>63</sup>−1 |
+| [`uint64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint64) | 0 through 2<sup>64</sup>−1 |
+| [`int128`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int128) | −2<sup>127</sup> through 2<sup>127</sup>−1 |
+| [`uint128`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint128) | 0 through 2<sup>128</sup>−1 |
 
 The familiar [`integer`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#integer) type is an alias for [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32). It exists for JSON Schema
 compatibility, but it still has a concrete 32-bit range in JSON Structure.
@@ -80,8 +80,8 @@ Notice where the quotes begin. They are part of the type contract.
 ## The 53-bit boundary
 
 JSON's grammar permits arbitrarily long numeric literals. Interoperable software
-often does not. RFC 8259 identifies the integer range from $-(2^{53})+1$ through
-$2^{53}-1$ as exactly interoperable when implementations use IEEE 754 binary64,
+often does not. RFC 8259 identifies the integer range from −(2<sup>53</sup>)+1 through
+2<sup>53</sup>−1 as exactly interoperable when implementations use IEEE 754 binary64,
 as JavaScript and many general JSON stacks do.
 
 That is why [`int8`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int8) through [`uint32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint32) use unquoted JSON numbers, while [`int64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int64),
