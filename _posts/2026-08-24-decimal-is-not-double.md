@@ -2,7 +2,7 @@
 layout: post
 title: "Decimal Is Not Double"
 date: 2026-08-24
-published: false
+published: true
 author: Clemens Vasters
 image: /social-cards/decimal-is-not-double.png
 description: >-
