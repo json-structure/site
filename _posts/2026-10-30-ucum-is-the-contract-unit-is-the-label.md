@@ -75,8 +75,8 @@ look alike to remain compatible.
 ## Prefixes live inside the expression
 
 There is no `prefix` keyword. In `kPa`, lowercase `k` is the kilo prefix and
-scales pascals by $10^3$. In `mPa`, lowercase `m` means milli and scales them by
-$10^{-3}$. `MPa` uses uppercase `M` for mega. Those three pressures differ by
+scales pascals by 10<sup>3</sup>. In `mPa`, lowercase `m` means milli and scales them by
+10<sup>&minus;3</sup>. `MPa` uses uppercase `M` for mega. Those three pressures differ by
 orders of magnitude.
 
 UCUM requires its case-sensitive variant, so case changes the expression's
