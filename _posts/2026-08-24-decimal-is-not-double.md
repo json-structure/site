@@ -101,14 +101,23 @@ fractional digits.
 
 ## Why the JSON value is a string
 
-A JSON number is written in decimal text, but that does not make its in-memory
-value decimal. Many parsers immediately convert it to binary64. Once a parser
-has rounded the value, a later schema-aware layer cannot recover the original
-number of digits.
+JSON encodes numbers as decimal character sequences. It does not encode them as
+IEEE 754 binary64 and does not prescribe an in-memory numeric type. The problem
+arises in implementations: JSON parsers commonly materialize a number as a
+binary64 `double`. Binary64 is the standard 64-bit floating-point format used
+by the `double` type in many languages. It stores a sign, a binary exponent, and
+53 bits of significant precision. Because it represents values in base 2,
+familiar decimal fractions such as 0.1 and 19.95 usually have no exact binary64
+representation. The parser therefore rounds the decimal sequence before a
+schema-aware layer sees it. At that point, the exact decimal value and its
+original number of digits may already be gone.
 
-The string representation prevents that eager conversion. The value is not
-arbitrary text: the [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) type requires the specified numeric grammar and
-precision rules. Those semantics come from the schema, not from the quotes.
+Representing a [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) as a JSON string prevents that common parser conversion. A
+schema-aware binding can read the preserved lexical value directly into a
+base-10 decimal type instead of receiving a value that the parser has already
+converted to binary floating point. The string is not arbitrary text: the
+`decimal` type requires the specified numeric grammar and precision rules.
+Those semantics come from the schema, not from the quotes.
 
 This also preserves trailing fractional zeros. `"19.95"` and `"19.950"` can
 express different scale choices even though they denote the same mathematical
