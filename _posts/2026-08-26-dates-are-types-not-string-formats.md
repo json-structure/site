@@ -2,7 +2,7 @@
 layout: post
 title: "Dates Are Types, Not String Formats"
 date: 2026-08-26
-published: false
+published: true
 author: Clemens Vasters
 image: /social-cards/dates-are-types-not-string-formats.png
 description: >-
