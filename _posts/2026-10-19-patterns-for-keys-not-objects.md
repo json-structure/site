@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "Patterns for Keys, Not Objects"
+title: "Object Properties and Map Keys Need Different Pattern Rules"
 date: 2026-10-19
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Validation companion specification.
 image: /social-cards/patterns-for-keys-not-objects.png
 description: >-
   Apply patternProperties to named object extensions and patternKeys to dynamic
@@ -102,7 +103,7 @@ schema, regardless of whether its value is a perfectly good string.
 [`patternProperties`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys) and [`patternKeys`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys) choose value constraints based on names.
 [`propertyNames`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#propertyNames-and-keyNames) and [`keyNames`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#propertyNames-and-keyNames) validate the names themselves. If you use only
 the first pair, a schema can check the associated values and still accept a
-misspelled or hostile key.
+misspelled or unexpected key.
 
 The draft requires ECMAScript 2022 regular-expression syntax and notes the
 usual ReDoS risk. JSON Structure Core also constrains identifiers, so regexes
@@ -111,8 +112,8 @@ do not grant names that core syntax otherwise forbids.
 ## Four missing declarations
 
 The validation draft names its opt-in [`JSONSchemaValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions); the extended
-meta-schema offers [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). The checked-in validation add-in
-also omits all four keywords used here: [`patternProperties`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys), [`patternKeys`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys),
+meta-schema offers [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). As checked on 25 August 2026,
+`meta/extended/v0/index.json` omits all four keywords used here: [`patternProperties`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys), [`patternKeys`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#patternProperties-and-patternKeys),
 [`propertyNames`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#propertyNames-and-keyNames), and [`keyNames`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#propertyNames-and-keyNames).
 
 The example therefore uses the repository's validation meta-schema URI and the

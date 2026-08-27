@@ -4,6 +4,7 @@ title: "Definitions Are a Type Library"
 date: 2026-09-16
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/definitions-are-a-type-library.png
 description: >-
   Use definitions as a case-sensitive namespace hierarchy for reusable types,
@@ -96,9 +97,10 @@ reference appears as the value of [`type`](https://json-structure.github.io/core
 ```
 
 The pointer must resolve to an existing type declaration. [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) neither
-overlays arbitrary schema keywords nor fetches another document. The import
-extension handles external composition; once processed, imported types also
-appear locally under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword).
+overlays arbitrary schema keywords nor fetches another document. The
+[import extension](https://json-structure.github.io/import/draft-vasters-json-structure-import.html)
+handles external composition; once processed, imported types appear locally
+under [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword).
 
 This placement differs from JSON Schema habits. Writing [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) next to
 [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword), or using it as the property schema without the surrounding
@@ -134,7 +136,7 @@ Reusable types must be declared under [`definitions`](https://json-structure.git
 property, array, map, or union can describe local structure, but another part of
 the document cannot reference it as a library type.
 
-Stable domain concepts deserve names and pointers. One-off structure can remain
+My rule is to give stable domain concepts names and pointers. One-off structure can remain
 at its point of use. When a property says
 `#/definitions/Shipping/Address`, nobody has to recover the intended meaning
 from `Address2`, a generator convention, or surrounding prose.

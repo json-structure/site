@@ -4,6 +4,8 @@ title: "Validation Belongs in the Build"
 date: 2026-10-13
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Units and Validation companion specifications.
+uses_structurize: true
 image: /social-cards/validation-belongs-in-the-build.png
 description: >-
   Make schema, input syntax, and instance validation separate build gates so
@@ -25,20 +27,11 @@ empty input, and then run instance validation. There is no projection here; the
 point is to stop invalid schemas and discarded input from masquerading as
 evidence of conformance.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## Use three gates, not one
@@ -89,7 +82,7 @@ The repository contains `schemas/fulfillment-order.struct.json`:
 }
 ```
 
-It also contains a JSON Lines file with examples:
+It also contains a [JSON Lines](https://jsonlines.org/) file with examples:
 
 ```jsonl
 {"orderId":"0a55838a-4577-4d9d-8ee8-23df75c99f31","delivery":{"collectAt":"BER-17"},"packageWeight":1.25}
@@ -230,6 +223,38 @@ examples above returned 0. A parseable record with `orderId: "not-a-uuid"` and
 parseable but schema-invalid record, leaving that verdict to Structurize. The
 three gates therefore fail for distinct reasons rather than duplicating one
 another.
+
+<details class="generated-output" markdown="1">
+<summary>Command output: <code>structurize validate valid.jsonl</code></summary>
+
+```text
+✓ Valid: valid.jsonl:1
+✓ Valid: valid.jsonl:2
+
+Validation summary: 2/2 instances valid
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Command output: <code>structurize validate invalid.jsonl</code></summary>
+
+```text
+✗ Invalid: invalid.jsonl: Invalid uuid format at #/orderId; Value at #/packageWeight is less than minimum 0
+
+Validation summary: 0/1 instances valid
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Command output: <code>structurize validate malformed.jsonl</code></summary>
+
+```text
+Validation summary: 0/0 instances valid
+```
+
+</details>
 
 In a matrix build, run the JSON Lines preflight and instance validation for each
 sample file. Do not concatenate exit codes or let a later success overwrite an

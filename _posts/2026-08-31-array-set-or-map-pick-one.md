@@ -4,6 +4,7 @@ title: "Array, Set, or Map? Pick One"
 date: 2026-08-31
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/array-set-or-map-pick-one.png
 description: >-
   Array, set, and map encode different collection contracts. One playlist schema
@@ -104,14 +105,13 @@ constrain dictionary values. A tool must interpret the combination of keywords
 to recover the intended collection model. JSON Structure declares that model as
 the type.
 
-Avro draws a similar line between arrays and maps, but it has no native set.
-Uniqueness is consequently an application convention when an Avro array carries
-set-like data. JSON Structure puts that convention into the type.
+The [Avro specification](https://avro.apache.org/docs/1.12.0/specification/#schema-declaration) defines array and map schemas but no set schema.
+When an Avro array represents set-like data, uniqueness is an application-level
+rule. JSON Structure puts that rule into the declared `set` type.
 
-XML Schema has sequences and repeated elements, while uniqueness constraints
-can identify distinct values. Map-shaped data generally needs an explicit entry
-element with key and value children. The dictionary is a convention built from
-those elements rather than a named collection type.
+[XML Schema](https://www.w3.org/TR/xmlschema11-1/) has model groups, repeated elements, and identity
+constraints. It has no built-in map datatype. A schema can model map-shaped
+data with repeated entry elements containing keys and values.
 
 ## Start with the allowed operations
 
@@ -126,8 +126,8 @@ Do not use a map merely to get fast lookup when the keys are fixed fields. That
 model is an object. Likewise, today's duplicate-free sample does not turn an
 array into a set.
 
-There is no promise about a map's iteration order. JSON objects are unordered in
-the JSON data model, and JSON Structure defines a map as dynamic key-value
-pairs, not as a sorted or insertion-ordered dictionary. If an API returns a map
-and the UI happens to display its entries in insertion order, that behavior is
-an accident. If order matters, carry an array.
+JSON Structure does not promise a map iteration order. [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259#section-4)
+defines a JSON object as an unordered collection, and JSON Structure defines a
+map as dynamic key-value pairs, not as a sorted or insertion-ordered dictionary.
+An implementation may expose an order, but consumers cannot rely on it as part
+of this contract. If order matters, carry an array.

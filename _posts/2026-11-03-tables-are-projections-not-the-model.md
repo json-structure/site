@@ -4,42 +4,37 @@ title: "Tables Are Projections, Not the Model"
 date: 2026-11-03
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
+uses_structurize: true
 image: /social-cards/tables-are-projections-not-the-model.png
 description: >-
   Treat SQL, Kusto, Parquet, and Iceberg outputs as explicit projections of a
   richer JSON Structure model, with losses recorded as policy.
 ---
 
-Structurize's current SQL projection can turn every required property into part
-of a primary key. The pinned
+Review generated database definitions as projections, not as the source model.
+In the Structurize revision tested here, the SQL projection can turn every
+required property into part
+of a primary key. The linked
 [`structuretodb.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretodb.py)
 collects the required properties and emits them together in `PRIMARY KEY`; the
 corresponding
 [`test_structuretodb.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretodb.py#L210-L257)
 expects inherited `id` and local `name` to appear there. In JSON Structure,
 `required` means that a property is present. It says nothing about relational
-identity, uniqueness, indexing, or keys. Generated DDL therefore needs explicit
-review before anyone applies it.
+identity, uniqueness, indexing, or keys. Generated Data Definition Language (DDL) therefore needs explicit review
+before it is applied to a database.
 
-That is one vivid example of the larger rule. A table has columns. A JSON
+That behavior illustrates the larger rule. A table has columns. A JSON
 Structure model has named types, arrays, sets, maps, tuples, and choices.
 Converting the latter into the former applies target policy; it does not reveal
 that the source was secretly a table all along.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## One fulfillment model, several table shapes
@@ -90,7 +85,7 @@ partition column. Those belong to a target projection.
 
 ## SQL applies database policy
 
-Structurize's pinned command registry exposes `s2sql` and accepts `postgres` as
+Structurize's command registry exposes `s2sql` and accepts `postgres` as
 a dialect in
 [`commands.json`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
 A PostgreSQL projection is explicit:
@@ -100,7 +95,7 @@ New-Item -ItemType Directory -Force generated/postgres | Out-Null
 structurize s2sql order.resolved.struct.json --dialect postgres --out generated/postgres/order.sql
 ```
 
-At the pinned revision, the PostgreSQL type map in
+In this revision, the PostgreSQL type map in
 [`structuretodb.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretodb.py)
 maps arrays, sets, maps, objects, choices, and tuples to `JSONB`; the PostgreSQL
 converter test checks that complex fields produce `JSONB` in the generated
@@ -115,16 +110,25 @@ follow from the JSON Structure contract.
 
 The generated table makes both policies concrete:
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>order.sql</code></summary>
+
 ```sql
 CREATE TABLE "Order" (
-  "orderId" VARCHAR(512),
-  "createdAt" TIMESTAMP,
-  "tags" JSONB,
-  "attributes" JSONB,
-  "destination" JSONB,
-  PRIMARY KEY ("orderId", "createdAt", "destination")
+    "orderId" VARCHAR(512),
+    "createdAt" TIMESTAMP,
+    "tags" JSONB,
+    "attributes" JSONB,
+    "destination" JSONB,
+    PRIMARY KEY ("orderId", "createdAt", "destination")
 );
+
+COMMENT ON COLUMN "Order"."tags" IS '{"schema": {"type": "set", "items": {"type": "string"}}}';
+COMMENT ON COLUMN "Order"."attributes" IS '{"schema": {"type": "map", "values": {"type": "string"}}}';
+COMMENT ON COLUMN "Order"."destination" IS '{"schema": {"type": "choice", "name": "Destination", "choices": {"postal": {"type": "object", "name": "PostalDestination", "properties": {"address": {"type": "string"}}, "required": ["address"]}, "pickupPoint": {"type": "object", "name": "PickupDestination", "properties": {"locationId": {"type": "string"}}, "required": ["locationId"]}}}}';
 ```
+
+</details>
 
 This point is not pedantry. Presence and identity answer different questions.
 Conflating them can produce a technically valid composite key that no one
@@ -132,7 +136,7 @@ intended to operate.
 
 ## Kusto, Parquet, and Iceberg make different compromises
 
-The pinned registry exposes Kusto as a separate conversion:
+The registry exposes Kusto as a separate conversion:
 
 ```powershell
 New-Item -ItemType Directory -Force generated/kusto | Out-Null
@@ -142,17 +146,33 @@ structurize s2k order.resolved.struct.json --out generated/kusto/order.kql
 Do not infer its shape from the SQL output. The generated Kusto table uses
 `dynamic` for all three complex properties:
 
-```kusto
-.create-merge table [Order] (
-  [orderId]: string,
-  [createdAt]: datetime,
-  [tags]: dynamic,
-  [attributes]: dynamic,
-  [destination]: dynamic
-);
-```
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>order.kql</code></summary>
 
-For data-lake formats, the pinned
+````kusto
+.create-merge table [Order] (
+   [orderId]: string,
+   [createdAt]: datetime,
+   [tags]: dynamic,
+   [attributes]: dynamic,
+   [destination]: dynamic
+);
+
+.create-or-alter table [Order] ingestion json mapping "Order_json_flat"
+```
+[
+  {"column": "orderId", "path": "$.orderId"},
+  {"column": "createdAt", "path": "$.createdAt"},
+  {"column": "tags", "path": "$.tags"},
+  {"column": "attributes", "path": "$.attributes"},
+  {"column": "destination", "path": "$.destination"}
+]
+```
+````
+
+</details>
+
+For data-lake formats, the
 [`structuretoparquet.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoparquet.py)
 and
 [`structuretoiceberg.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoiceberg.py)
@@ -162,7 +182,7 @@ assert uniqueness, and the struct does not assert that exactly one alternative
 is populated. Those are specific losses in these converter outputs, not a claim
 that every Parquet or Iceberg modeling strategy must make the same compromise.
 
-Both commands expose inspection JSON with `--format schema` in the pinned
+Both commands expose inspection JSON with `--format schema` in the
 command registry:
 
 ```powershell
@@ -176,21 +196,45 @@ the schema. For `s2ib`, it selects JSON instead of the default Arrow IPC output.
 Diff that JSON, examine list element nullability, inspect the choice struct, and
 verify field names before a pipeline writes its first record.
 
-The generated Parquet inspection JSON portrays `tags` and `destination` as
-follows (unrelated fields omitted):
+The generated Parquet inspection JSON makes those mappings explicit:
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>order.schema.json</code></summary>
 
 ```json
 {
-  "name": "tags",
-  "type": "list<item: string>",
-  "nullable": true
-},
-{
-  "name": "destination",
-  "type": "struct<postal: struct<address: string not null>, pickupPoint: struct<locationId: string not null>>",
-  "nullable": false
+  "type": "struct",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "createdAt",
+      "type": "timestamp[us]",
+      "nullable": false
+    },
+    {
+      "name": "tags",
+      "type": "list<item: string>",
+      "nullable": true
+    },
+    {
+      "name": "attributes",
+      "type": "map<string, string>",
+      "nullable": true
+    },
+    {
+      "name": "destination",
+      "type": "struct<postal: struct<address: string not null>, pickupPoint: struct<locationId: string not null>>",
+      "nullable": false
+    }
+  ]
 }
 ```
+
+</details>
 
 Iceberg renders the same choice as a required outer struct containing optional
 `postal` and `pickupPoint` fields. That output preserves neither exclusivity nor
@@ -239,8 +283,8 @@ Parquet and Iceberg describe columnar storage. Generating all four from one
 source does not make their outputs interchangeable; it makes their differences
 visible and reviewable.
 
-The [`8dbb19a` Structurize source](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76)
+The [linked Structurize source](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76)
 makes these policies inspectable and repeatable. That is exactly what a
 converter should provide. JSON Structure defines the model; SQL, Kusto,
 Parquet, and Iceberg files are useful, target-shaped views of it. A projection
-can be excellent without becoming authoritative.
+can be useful without becoming authoritative.

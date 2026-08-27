@@ -4,14 +4,16 @@ title: "Wire Names Are Not Code Names"
 date: 2026-09-29
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Alternate Names companion specification.
+uses_structurize: true
 image: /social-cards/wire-names-are-not-code-names.png
 description: >-
   Serializer annotations preserve JSON wire names while generated identifiers
   follow each target language's naming and sanitization rules.
 ---
 
-A published JSON key usually outlives any generated class. C#, Java, Go, Rust,
-and TypeScript apply different case conventions and reserve different words.
+A published JSON key is part of the wire contract. C#, Java, Go, Rust,
+and TypeScript use different case conventions and reserve different words.
 Letting those rules choose the wire spelling turns routine code generation into
 a protocol-change mechanism.
 
@@ -24,23 +26,14 @@ published wire key.
 Structurize sanitizes and case-converts identifiers for each language. With the
 target's serializer annotations enabled, it binds those identifiers back to
 the declared JSON name. The code spelling changes while the wire spelling
-survives; without the annotation, that mapping is absent from the generated
+survives. In the tested outputs, that mapping is absent without the generated
 boundary.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## The wire already has a spelling
@@ -100,7 +93,7 @@ been adapted to a programming language.
 
 ## Annotation flags carry the mapping
 
-The pinned [alternate-name tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structure_altnames.py)
+The [alternate-name tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structure_altnames.py)
 cover JSON wire names for C#, Java, TypeScript, Go, and Rust when their
 serializer annotations are enabled, including nested collection values. The
 relevant CLI forms are:
@@ -117,38 +110,68 @@ structurize s2rust fulfillment-event.struct.json --out generated/rust \
   --json-annotation
 ```
 
-Java uses Jackson by default in this pinned converter. The switches are recorded
+Java uses Jackson by default in this converter. The switches are recorded
 in the [command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
 The underscore spelling of `--system_text_json_annotation` is exact.
 Without the serializer mode, a generator may still produce legal code names,
 but the generated serializer has no obligation to emit the alternate JSON key.
 That difference belongs in build configuration, not in tribal memory.
 
+For a complete multi-file code-generation example, the prebuilt Avrotize
+[Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/)
+shows its source schema and output tree. The disclosures below use the small
+article-specific schema and one representative file per target.
+
 The generated forms are idiomatic for their ecosystems. Condensed to one
 property, they carry the same mapping:
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>PickupReady.cs</code></summary>
+
 ```csharp
-[JsonPropertyName("fulfillment_id")]
+[System.Text.Json.Serialization.JsonPropertyName("fulfillment_id")]
 public required Guid fulfillmentId { get; set; }
 ```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>PickupReady.java</code></summary>
 
 ```java
 @JsonProperty("fulfillment_id")
 private UUID fulfillmentId;
 ```
 
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>PickupReady.ts</code></summary>
+
 ```typescript
 @jsonMember(String, { name: 'fulfillment_id' })
 public fulfillmentId: string;
 ```
 
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>PickupReady.go</code></summary>
+
 ```go
 FulfillmentId string `json:"fulfillment_id"`
 ```
 
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>pickupready.rs</code></summary>
+
 ```rust
 pub fulfillment_id: uuid::Uuid,
 ```
+
+</details>
 
 The Rust output has no rename attribute because its snake-case identifier is
 already the declared wire spelling. C#, Java, TypeScript, and Go carry explicit
@@ -186,7 +209,7 @@ application-defined annotation unless a particular tool explicitly documents
 how it uses that purpose.
 
 In particular, an `altnames.sql` entry is not guaranteed to control SQL
-generation. The pinned tests verify that a non-JSON purpose does not replace the
+generation. The tests verify that a non-JSON purpose does not replace the
 JSON wire name. A custom purpose needs a policy that defines its meaning and a
 tool that implements that policy; the purpose-key name alone is not a storage
 contract.

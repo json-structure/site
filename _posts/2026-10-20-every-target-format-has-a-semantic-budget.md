@@ -4,6 +4,8 @@ title: "Every Target Format Has a Semantic Budget"
 date: 2026-10-20
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Units and Validation companion specifications.
+uses_structurize: true
 image: /social-cards/every-target-format-has-a-semantic-budget.png
 description: >-
   Treat Protocol Buffers, XSD, and ASN.1 outputs as format-specific projections
@@ -18,7 +20,7 @@ JSON Structure distinguishes set uniqueness, choice alternatives, numeric
 bounds and units, and tuple positions. Structurize reads those declarations and
 projects them through a target-specific mapping.
 
-The current commands make concrete compromises and expose defects. Protocol
+The Structurize 3.9.0 converters make concrete compromises and expose defects. Protocol
 Buffers produces no artifact for the complete schema below; it exits with
 `unhashable type: 'dict'`. XSD emits `xs:choice`, but writes a Python dictionary
 as one alternative's `type` attribute, which an independent XSD reader rejects.
@@ -28,20 +30,11 @@ ASN.1 preserves `SET OF`, `CHOICE`, and tuple structure and compiles with
 That preserved and discarded meaning is the target's semantic budget. Review
 it before treating a successful compile as evidence of equivalence.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## One order, three projections
@@ -114,10 +107,15 @@ structurize s2x fulfillment-order.struct.json --out fulfillment-order.xsd
 structurize s2asn fulfillment-order.struct.json --out fulfillment-order.asn
 ```
 
-The command names and options are defined in the pinned
+The command names and options are defined in
 [`commands.json`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
 Running all three commands does not promise three semantically identical
 contracts. It asks three converters to spend three different budgets.
+
+For complex multi-file code-generation examples, use the prebuilt Avrotize
+[Structurize gallery](https://avrotize.com/gallery/#structurize), which shows
+source schemas beside complete generated output trees. The evidence below uses
+the article-specific schema above and single-file schema projections.
 
 ## Protocol Buffers fails before spending uniqueness
 
@@ -127,6 +125,15 @@ the command shown here, however. Both the regular invocation and the
 `--allow-optional` invocation fail with `unhashable type: 'dict'` before writing
 a `.proto` file. The tuple property triggers a code path that treats a nested
 schema dictionary as a hashable primitive type.
+
+<details class="generated-output" markdown="1">
+<summary>Command output: <code>structurize s2p</code></summary>
+
+```text
+Error:  unhashable type: 'dict'
+```
+
+</details>
 
 Remove or separately model the unsupported construct before evaluating how the
 remaining set and numeric fields project. Do not show a plausible `repeated`
@@ -152,12 +159,77 @@ attributes, complex types, sequences, choices, and occurrence constraints. The
 [`structuretoxsd.py` converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoxsd.py)
 must place JSON-shaped declarations into that structure.
 
-The pinned converter does emit `xs:choice` for the tagged `delivery` choice,
+The converter emits `xs:choice` for the tagged `delivery` choice,
 despite the absence of a selector. Its `ship` branch is not valid XSD: the
 generated attribute is `type="{'$ref': '#/definitions/Address'}"`. The .NET XSD
 reader reports that value as invalid. The tuple also becomes an empty
 `xs:sequence`, while the set becomes repeated `item` elements and loses
 uniqueness.
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>fulfillment-order.xsd</code></summary>
+
+```xml
+<?xml version="1.0" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:example:schema" targetNamespace="urn:example:schema" elementFormDefault="qualified">
+  <xs:element name="FulfillmentOrder">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="orderId" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element name="delivery" minOccurs="1" maxOccurs="1" type="Delivery"/>
+        <xs:element name="handlingCodes" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:enumeration value="fragile"/>
+                    <xs:enumeration value="keep-dry"/>
+                    <xs:enumeration value="upright"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="packageWeight" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:appinfo source="json-structure-extensions">{
+  &quot;unit&quot;: &quot;kg&quot;
+}</xs:appinfo>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:double">
+              <xs:minInclusive value="0"/>
+              <xs:maxInclusive value="31.5"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="warehouseSlot" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="Delivery">
+    <xs:choice>
+      <xs:element name="ship" type="{'$ref': '#/definitions/Address'}"/>
+      <xs:element name="collectAt" type="xs:string"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="Address">
+    <xs:sequence>
+      <xs:element name="street" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="city" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="postalCode" minOccurs="1" maxOccurs="1" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+```
+
+</details>
 
 Compile the generated schema with an XSD processor before validating any XML.
 For this exact output, that first check already fails. Converter success proves
@@ -168,8 +240,33 @@ only that a file was written.
 ASN.1 has its own structural vocabulary and encoding ecosystem. The
 [`structuretoasn1.py` converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoasn1.py)
 can map `SET OF`, `CHOICE`, enumerations, tuples, and references into ASN.1
-constructs. The pinned converter does not apply `minimum` and `maximum` bounds
+constructs. The converter does not apply `minimum` and `maximum` bounds
 to a `double`, so the package-weight range is not present in that projection.
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>fulfillment-order.asn</code></summary>
+
+```asn1
+Fulfillment-order DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+Address ::= SEQUENCE {
+    street UTF8String,
+    city UTF8String,
+    postalCode UTF8String
+}
+
+FulfillmentOrder ::= SEQUENCE {
+    orderId UTF8String,
+    delivery CHOICE { ship Address, collectAt UTF8String },
+    handlingCodes SET OF ENUMERATED { fragile(0), keep-dry(1), upright(2) },
+    packageWeight REAL OPTIONAL,
+    warehouseSlot SEQUENCE { aisle UTF8String, shelf INTEGER (0..65535) } OPTIONAL
+}
+
+END
+```
+
+</details>
 
 Useful is not universal. JSON number representations, annotations, defaults,
 nullability, name rules, and particular encoding choices still require review.

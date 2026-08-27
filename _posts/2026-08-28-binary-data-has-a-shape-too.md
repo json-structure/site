@@ -4,6 +4,7 @@ title: "Binary Data Has a Shape Too"
 date: 2026-08-28
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/binary-data-has-a-shape-too.png
 description: >-
   JSON Structure defines binary values together with their text encoding,
@@ -77,7 +78,8 @@ encodings:
 - [`base32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword)
 - [`base32hex`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword)
 
-These names describe how the final byte sequence is represented as JSON text.
+These names come from [RFC 4648](https://www.rfc-editor.org/rfc/rfc4648) and describe how the final byte
+sequence is represented as JSON text.
 They do not describe the payload's character encoding. A `text/csv` payload may
 still need a media-type parameter or an external agreement to establish its
 character set.
@@ -92,8 +94,8 @@ bytes were text-encoded. The core specification permits [`gzip`](https://json-st
 [`zlib`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword), and [`brotli`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentcompression-keyword).
 
 Those names are not interchangeable. Raw DEFLATE, the zlib wrapper, and gzip
-use related compression machinery but different wrappers and metadata. A
-consumer should not probe until one happens to work. The schema already knows.
+use related compression machinery but different wrappers and metadata. Read the
+declared compression value instead of probing several formats.
 
 Compression is optional. When it is absent, decoding the text yields the media
 payload directly. When it is present, decoding yields compressed bytes, and
@@ -105,7 +107,7 @@ as JSON text. They solve different transport problems.
 
 ## Media type describes the result
 
-[`contentMediaType`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentmediatype-keyword) is a valid media type as defined by RFC 6838. It describes the
+[`contentMediaType`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentmediatype-keyword) is a valid media type as defined by [RFC 6838](https://www.rfc-editor.org/rfc/rfc6838). It describes the
 payload after decoding and decompression: `text/csv` in this example,
 `image/png` for a PNG image, or `application/pdf` for a PDF document.
 
@@ -143,8 +145,9 @@ content is a CSV document.
 XML Schema provides `xs:base64Binary` and `xs:hexBinary`. Those types define how
 binary octets appear as XML character content. They do not, by themselves,
 declare gzip compression or an Internet media type for the recovered bytes.
-Applications commonly carry that information in separate attributes or a
-surrounding protocol such as MIME.
+An application can carry that information in separate attributes or a
+surrounding protocol such as MIME, but those details are outside the two XML
+Schema datatypes.
 
 For the export record, the consumer does not guess from `customers.csv.gz`.
 It Base64-decodes, gzip-decompresses, and hands the resulting `text/csv` bytes

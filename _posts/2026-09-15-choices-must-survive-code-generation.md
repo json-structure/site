@@ -4,6 +4,8 @@ title: "Choices Must Survive Code Generation"
 date: 2026-09-15
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
+uses_structurize: true
 image: /social-cards/choices-must-survive-code-generation.png
 description: >-
   Code generation should preserve a JSON Structure choice as an explicit sum
@@ -27,20 +29,11 @@ the Protocol Buffers converter emits the branch messages without a `oneof`.
 ASN.1 does emit `CHOICE`. Those differences are observable output, not a survey
 of what the target languages could express.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## One event, two possible outcomes
@@ -102,9 +95,9 @@ whose type is the selected alternative.
 
 ## Sum types have several dialects
 
-At the pinned [Avrotize implementation](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76),
-the five current language commands are registered as `s2cs`, `s2java`, `s2ts`,
-`s2go`, and `s2rust` in the
+In the [Avrotize implementation](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76),
+the five language commands used here are registered as `s2cs`, `s2java`,
+`s2ts`, `s2go`, and `s2rust` in the
 [command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
 The invocation is intentionally unsurprising:
 
@@ -116,8 +109,7 @@ structurize s2go fulfillment-event.struct.json --out generated/go
 structurize s2rust fulfillment-event.struct.json --out generated/rust
 ```
 
-The interesting part is the resulting type shape. These commands were executed
-against the pinned source tree. The pinned C#
+The interesting part is the resulting type shape. The C#
 [converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretocsharp.py#L960-L1110)
 projects the choice as a wrapper with nullable `object` members.
 Java's [choice template](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretojava/choice_core.jinja)
@@ -128,22 +120,77 @@ command emits only `ShipmentDispatched.ts` and `PickupReady.ts`. Rust's
 [converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretorust.py)
 emits enum variants.
 
+For a complete multi-file code-generation example, the prebuilt Avrotize
+[Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/)
+shows its source schema and output tree. For the small schema here, each
+disclosure shows one representative generated file.
+
 These excerpts come from the generated C#, Java, and Rust files:
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>FulfillmentEvent.cs</code></summary>
 
 ```csharp
 public partial class FulfillmentEvent
 {
+  /// <summary>
+  /// Gets or sets the ShipmentDispatched value
+  /// </summary>
   public object? ShipmentDispatched { get; set; } = null;
+  /// <summary>
+  /// Gets or sets the PickupReady value
+  /// </summary>
   public object? PickupReady { get; set; } = null;
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>FulfillmentEvent.java</code></summary>
+
+```java
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT, property = "type")
+@JsonSubTypes({
+  @JsonSubTypes.Type(value = ShipmentDispatched.class, name = "shipmentDispatched"),
+  @JsonSubTypes.Type(value = PickupReady.class, name = "pickupReady")
+})
+public abstract class FulfillmentEvent {
+  public FulfillmentEvent() {}
+
+  /** shipmentDispatched variant */
+  public static class ShipmentDispatched extends FulfillmentEvent {
+    private java.ShipmentDispatched value;
+
+    public ShipmentDispatched() {}
+
+    public ShipmentDispatched(java.ShipmentDispatched value) {
+      this.value = value;
+    }
+
+    public java.ShipmentDispatched getValue() { return value; }
+    public void setValue(java.ShipmentDispatched value) { this.value = value; }
+  }
+
+  /** pickupReady variant */
+  public static class PickupReady extends FulfillmentEvent {
+    private java.PickupReady value;
+
+    public PickupReady() {}
+
+    public PickupReady(java.PickupReady value) {
+      this.value = value;
+    }
+
+    public java.PickupReady getValue() { return value; }
+    public void setValue(java.PickupReady value) { this.value = value; }
+  }
 }
 ```
 
-```java
-public abstract class FulfillmentEvent {
-    public static class ShipmentDispatched extends FulfillmentEvent { /* ... */ }
-    public static class PickupReady extends FulfillmentEvent { /* ... */ }
-}
-```
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>fulfillmentevent.rs</code></summary>
 
 ```rust
 pub enum FulfillmentEvent {
@@ -152,6 +199,8 @@ pub enum FulfillmentEvent {
 }
 ```
 
+</details>
+
 Rust expresses exclusivity in the type itself, and Java encodes the branch set
 through a class hierarchy. TypeScript produces no `FulfillmentEvent.ts` or
 named alias for this input. Go similarly writes the two branch structs but no
@@ -159,14 +208,14 @@ root choice declaration. Treating an internal converter type expression or a
 hypothetical envelope as generated output would overstate what the commands
 produced.
 
-The pinned [Java tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretojava.py),
+The [Java tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretojava.py),
 [TypeScript tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretots.py), and
 [Rust tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretorust.py)
 exercise those generators.
 
 The C# wrapper itself permits both members or neither. Its reader loops over
 properties and can accept more than one recognized branch. Its writer chooses
-the first non-null branch in generated branch order. The pinned
+the first non-null branch in generated branch order. The
 [C# tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretocsharp.py)
 cover the generator, but the schema remains the stronger exclusivity statement.
 The generated project also fails `dotnet build`: because both branch payloads
@@ -183,10 +232,13 @@ than a weak representation: callers receive no generated type for the choice
 at all. Generated adapters must recover the root contract from the source
 schema.
 
-Protocol Buffers has a `oneof` construct, but the pinned
-[`structuretoproto.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoproto.py)
+Protocol Buffers has a `oneof` construct, but the
+[`structuretoproto.py` converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoproto.py)
 does not emit one for this root choice. The generated `.proto` contains only
 the two branch messages:
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>proto.proto</code></summary>
 
 ```proto
 message ShipmentDispatched {
@@ -200,15 +252,19 @@ message PickupReady {
 }
 ```
 
+</details>
+
 ASN.1 does preserve the root branch set with
 [`CHOICE`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoasn1.py):
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>fulfillment-event.asn</code></summary>
+
 ```asn1
-FulfillmentEvent ::= CHOICE {
-    shipmentDispatched ShipmentDispatched,
-    pickupReady PickupReady
-}
+FulfillmentEvent ::= CHOICE { shipmentDispatched ShipmentDispatched, pickupReady PickupReady }
 ```
+
+</details>
 
 The Parquet and Iceberg commands do not produce a storage shape for this input.
 Both reject it with `Expected a JSON Structure schema with type 'object' at the
@@ -219,10 +275,11 @@ than inferring one from converter code.
 
 ## Keep the loss at the boundary
 
-Generated artifacts serve their targets; they do not revise the model. Here the
-Rust enum and ASN.1 `CHOICE` preserve the branch set, Java provides a hierarchy,
-C# weakens branch values to `object`, and three commands omit or reject the root
-choice. That uneven result is precisely why the generated files must be read.
+In these tested Structurize 3.9.0 outputs, the Rust enum and ASN.1 `CHOICE`
+preserve the branch set, Java provides a hierarchy, C# weakens branch values to
+`object`, and three commands omit or reject the root choice. Those observations
+describe this implementation; they do not limit what the target
+languages or formats can express.
 
 Review generated output by asking one question: which values can this artifact
 represent that the JSON Structure contract forbids? If the answer is "both

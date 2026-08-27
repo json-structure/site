@@ -4,6 +4,8 @@ title: "One Schema, Many Artifacts"
 date: 2026-08-25
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
+uses_structurize: true
 image: /social-cards/one-schema-many-artifacts.png
 description: >-
   Keep one JSON Structure schema as the source contract and project disposable
@@ -19,27 +21,18 @@ consumer.
 
 JSON Structure provides that target-independent definition. It records the
 intended types, presence rules, and collection semantics once, before any
-language, protocol, or database narrows them. Structurize reads that schema and
-projects it into the artifacts each target needs. A target may preserve a
-declaration, translate it into a native type, or represent it more weakly; that
-result describes the projection, not a revision of the model. The generated
-outputs remain useful, but the JSON Structure schema is the contract from which
-they can be rebuilt.
+language, protocol, or database narrows them. In the Structurize version pinned
+below, the listed commands read that schema and project it into target
+artifacts. A target may preserve a declaration, translate it into a native
+type, or represent it more weakly; that result describes the projection, not a
+revision of the model. The generated outputs remain useful, but the JSON
+Structure schema is the contract from which they can be rebuilt.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## Put the decisions in the contract
@@ -54,18 +47,34 @@ service, a dispatch time, a monetary value, and a collection of handling tags.
   "$id": "https://example.com/schemas/shipment-plan",
   "name": "ShipmentPlan",
   "type": "object",
+  "description": "A shipment plan prepared after an order is allocated to a warehouse.",
   "properties": {
-    "orderId": { "type": "uuid" },
-    "carrierService": { "type": "string", "maxLength": 80 },
-    "dispatchAt": { "type": "datetime" },
+    "orderId": {
+      "type": "uuid",
+      "description": "The order for which the shipment is planned."
+    },
+    "carrierService": {
+      "type": "string",
+      "description": "The carrier service selected to transport the shipment.",
+      "maxLength": 80
+    },
+    "dispatchAt": {
+      "type": "datetime",
+      "description": "The time at which the shipment is scheduled to leave the warehouse."
+    },
     "declaredValue": {
       "type": "decimal",
+      "description": "The monetary value declared for carriage.",
       "precision": 12,
       "scale": 2
     },
     "handlingTags": {
       "type": "set",
-      "items": { "type": "string" }
+      "description": "Handling instructions that apply to the shipment.",
+      "items": {
+        "type": "string",
+        "description": "A handling instruction assigned to the shipment."
+      }
     }
   },
   "required": [
@@ -97,14 +106,16 @@ The instance remains ordinary JSON:
 ```
 
 The schema carries the information that the JSON text cannot carry by itself.
-The array under `handlingTags` is unordered and duplicate-free because its
-declared type is `set`. The quoted amount belongs to a base-10 decimal domain.
-The identifier is more specific than arbitrary text.
+Every schema element also has a description, including the `items` schema
+inside `handlingTags`. The array under `handlingTags` is unordered and
+duplicate-free because its declared type is `set`. The quoted amount belongs
+to a base-10 decimal domain. The identifier is more specific than arbitrary
+text.
 
 ## Project views, do not maintain copies
 
-[Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/) exposes direct
-JSON Structure projections. The command names and options are defined in the
+[Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/) exposes the
+direct JSON Structure projections used here. The commands and options are defined in the
 [3.9.0 CLI manifest](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
 From the same `shipment-plan.struct.json`, a build can produce several views:
 
@@ -117,8 +128,115 @@ structurize s2cs shipment-plan.struct.json --out generated/dotnet --namespace Fu
 structurize s2java shipment-plan.struct.json --out generated/java --package com.example.fulfillment
 ```
 
-`s2md` gives reviewers a readable contract view. `s2p` adapts the model to
-Protocol Buffers. `s2sql` projects it into a selected SQL dialect. The code
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>shipment-plan.md</code></summary>
+
+```markdown
+# shipment-plan.struct
+A shipment plan prepared after an order is allocated to a warehouse.
+**Schema ID:** `https://example.com/schemas/shipment-plan`
+## Objects
+
+### ShipmentPlan
+
+A shipment plan prepared after an order is allocated to a warehouse.
+**Properties:**
+- **orderId** (required): `uuid`
+  - Description: The order for which the shipment is planned.
+- **carrierService** (required): `string`
+  - Description: The carrier service selected to transport the shipment.
+  - Constraints: maxLength: 80
+- **dispatchAt** (required): `datetime`
+  - Description: The time at which the shipment is scheduled to leave the warehouse.
+- **declaredValue** (required): `decimal`
+  - Description: The monetary value declared for carriage.
+  - Constraints: precision: 12, scale: 2
+- **handlingTags** (required): set&lt;`string`&gt;
+  - Description: Handling instructions that apply to the shipment.
+```
+
+</details>
+
+For a complex multi-file code-generation example, use the prebuilt Avrotize
+[Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/),
+which shows its source schema and complete output tree. The small schema here
+emits this representative file from its generated C# project:
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>ShipmentPlan.cs</code></summary>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Fulfillment.Contracts
+{
+    /// <summary>
+    /// A shipment plan prepared after an order is allocated to a warehouse.
+    /// </summary>
+    public sealed partial class ShipmentPlan
+    {
+        /// <summary>
+      /// The order for which the shipment is planned.
+        /// </summary>
+        public required Guid orderId { get; set; }
+
+        /// <summary>
+      /// The carrier service selected to transport the shipment.
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.StringLength(80)]
+        public required string carrierService { get; set; }
+
+        /// <summary>
+      /// The time at which the shipment is scheduled to leave the warehouse.
+        /// </summary>
+        public required DateTimeOffset dispatchAt { get; set; }
+
+        /// <summary>
+      /// The monetary value declared for carriage.
+        /// </summary>
+        public required decimal declaredValue { get; set; }
+
+        /// <summary>
+      /// Handling instructions that apply to the shipment.
+        /// </summary>
+        public required HashSet<string> handlingTags { get; set; }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ShipmentPlan()
+        {
+        }
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        public override bool Equals(object? obj)
+        {
+            if (obj is not ShipmentPlan other) return false;
+            return this.orderId == other.orderId
+                && this.carrierService == other.carrierService
+                && this.dispatchAt == other.dispatchAt
+                && this.declaredValue == other.declaredValue
+                && this.handlingTags.SequenceEqual(other.handlingTags);
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(orderId, carrierService, dispatchAt, declaredValue, handlingTags.Aggregate(0, (acc, item) => HashCode.Combine(acc, item)));
+        }
+    }
+}
+```
+
+</details>
+
+`s2md` emits a Markdown contract view, `s2p` adapts the model to Protocol
+Buffers, and `s2sql` projects it into the selected SQL dialect. The code
 generators create language-facing APIs; the same manifest also defines `s2ts`,
 `s2go`, and `s2rust`.
 
@@ -159,14 +277,75 @@ structurize s2p shipment-plan.struct.json --out generated/proto
 structurize s2sql shipment-plan.struct.json --out generated/shipment-plan.sql --dialect postgres
 ```
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>proto.proto</code></summary>
+
+```proto
+syntax = "proto3";
+
+package proto;
+
+// A shipment plan prepared after an order is allocated to a warehouse.
+message ShipmentPlan {
+  // The order for which the shipment is planned.
+  string orderId = 1;
+  // The carrier service selected to transport the shipment.
+  // Max length: 80
+  string carrierService = 2;
+  // The time at which the shipment is scheduled to leave the warehouse.
+  string dispatchAt = 3;
+  // The monetary value declared for carriage.
+  // Precision: 12
+  // Scale: 2
+  string declaredValue = 4;
+  // Handling instructions that apply to the shipment.
+  repeated string handlingTags = 5;
+}
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>shipment-plan.sql</code></summary>
+
+```sql
+CREATE TABLE "ShipmentPlan" (
+    "orderId" UUID,
+    "carrierService" VARCHAR(80),
+    "dispatchAt" TIMESTAMP,
+    "declaredValue" NUMERIC(18,6),
+    "handlingTags" JSONB,
+    PRIMARY KEY ("orderId", "carrierService", "dispatchAt", "declaredValue", "handlingTags")
+);
+
+  COMMENT ON TABLE "ShipmentPlan" IS 'A shipment plan prepared after an order is allocated to a warehouse.';
+  COMMENT ON COLUMN "ShipmentPlan"."orderId" IS '{"doc": "The order for which the shipment is planned."}';
+  COMMENT ON COLUMN "ShipmentPlan"."carrierService" IS '{"doc": "The carrier service selected to transport the shipment."}';
+  COMMENT ON COLUMN "ShipmentPlan"."dispatchAt" IS '{"doc": "The time at which the shipment is scheduled to leave the warehouse."}';
+  COMMENT ON COLUMN "ShipmentPlan"."declaredValue" IS '{"doc": "The monetary value declared for carriage."}';
+  COMMENT ON COLUMN "ShipmentPlan"."handlingTags" IS '{"doc": "Handling instructions that apply to the shipment.", "schema": {"type": "set", "description": "Handling instructions that apply to the shipment.", "items": {"type": "string", "description": "A handling instruction assigned to the shipment."}}}';
+```
+
+</details>
+
+  Descriptions travel according to each target's documentation model. Markdown
+  renders the root and property descriptions as prose. C# turns them into XML
+  documentation comments, Proto turns them into source comments, and PostgreSQL
+  stores them in table and column comments. The nested `items.description` does
+  not appear in the Markdown, C#, or Proto projection because none emits a
+  separate artifact for the string item. The SQL projection retains it inside
+  the JSON schema metadata attached to `handlingTags`. That difference is
+  another visible part of the projection policy.
+
 Whether generated files belong in source control is a repository policy. The
 authority rule stays the same either way. If they are committed for packaging,
 review, or downstream tools, a clean regeneration can detect manual edits. If
 they are omitted, the build must recreate them before use.
 
-Version pinning matters because a projection includes generator behavior as
-well as schema content. An upgrade may improve naming, type selection, or
-layout without any contract change. Review that movement as a tooling change,
+Version pinning matters because a projection includes the behavior of a
+specific generator implementation as well as schema content. An upgrade can
+change naming, type selection, or layout without a contract change. Review
+that movement as a tooling change,
 separate from a change to `ShipmentPlan`.
 
 ## Change the model once

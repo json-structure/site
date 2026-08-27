@@ -4,6 +4,8 @@ title: "Samples Are Evidence, Not a Contract"
 date: 2026-09-01
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
+uses_structurize: true
 image: /social-cards/samples-are-evidence-not-a-contract.png
 description: >-
   Structurize can infer a useful JSON Structure draft from observed records,
@@ -11,14 +13,15 @@ description: >-
 ---
 
 A week of shipment records contains `carrierService` in every row and only
-three status values. That proves what the exporter produced during that week.
-It does not establish that the field is mandatory or that the lifecycle has
-only three states.
+three status values. That is evidence of what the exporter produced during
+that week. It is not a contract that makes the field mandatory or limits the
+lifecycle to those three states.
 
-Structurize's `json2s` command turns those observations into a draft JSON
-Structure schema. Raw records cannot decide whether a string is a UUID, whether
-an absent field is optional, or whether observed values form a closed enum.
-Those decisions require producer guarantees and compatibility policy.
+Structurize's [`json2s` command](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structurefromjson.py)
+turns those observations into a draft JSON Structure schema. Raw records cannot
+decide whether a string is a UUID, whether an absent field is optional, or
+whether observed values form a closed enum. Those decisions require producer
+guarantees and a compatibility policy.
 
 Reviewers express the decisions with JSON Structure types, `required`, enums,
 and choices. Structurize can then project the reviewed schema into documentation
@@ -26,20 +29,11 @@ and code. Valid observations remain covered; accidental requiredness,
 incomplete enums, and unjustified type guesses are corrected or discarded
 before they escape into generated artifacts.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## Begin with what happened
@@ -54,7 +48,7 @@ feed:
 ```
 
 [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/) can infer a
-JSON Structure schema from JSON or JSONL. Its pinned
+JSON Structure schema from JSON or JSONL. Its
 [CLI definition](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json)
 lists the controls for input scope and inference:
 
@@ -73,17 +67,33 @@ inference from observed value cardinality. For heterogeneous documents,
 change the analysis. They do not turn the resulting file into an approved
 contract.
 
-For these three records, Structurize 3.9.0 emits the following properties and
-required list (formatting retained, surrounding metadata omitted):
+For these three records, Structurize 3.9.0 emits this schema:
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>shipment-observed.struct.json</code></summary>
 
 ```json
 {
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://example.com/schemas/ShipmentObservation",
+  "type": "object",
+  "name": "ShipmentObservation",
   "properties": {
-    "carrierService": { "type": "string" },
-    "contact": { "type": "string" },
-    "dispatchAt": { "type": "datetime" },
-    "orderId": { "type": "string" },
-    "status": { "type": "string" }
+    "carrierService": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "dispatchAt": {
+      "type": "datetime"
+    },
+    "orderId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    }
   },
   "required": [
     "carrierService",
@@ -93,6 +103,8 @@ required list (formatting retained, surrounding metadata omitted):
   ]
 }
 ```
+
+</details>
 
 No enum is inferred from only three records, `dispatchAt` is optional because
 it is absent once, and UUID- and email-shaped values remain strings.
@@ -165,7 +177,7 @@ Historical consistency is evidence for that promise, not the promise itself.
 
 This edit makes the commitment explicit:
 
-```json
+```jsonc
 "dispatchAt": {
   "type": "datetime",
   "description": "Time at which the shipment left the fulfillment site."
@@ -191,7 +203,7 @@ reject valid future messages.
 
 If the lifecycle owns a closed set, declare the full domain:
 
-```json
+```jsonc
 "status": {
   "type": "string",
   "enum": ["allocated", "dispatched", "cancelled", "held", "returned"]
@@ -224,6 +236,82 @@ New-Item -ItemType Directory -Force generated | Out-Null
 structurize s2md shipment.struct.json --out generated/shipment.md
 structurize s2cs shipment.struct.json --out generated/dotnet --namespace Fulfillment.Contracts
 ```
+
+For complex code generation, the prebuilt Avrotize
+[Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/)
+shows the complete source schema and generated project. One representative
+output file from that gallery example is:
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>CategoryEnum.cs</code></summary>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace Csharp
+{
+  /// <summary>
+  /// CategoryEnum
+  /// </summary>
+  [System.Text.Json.Serialization.JsonConverter(typeof(CategoryEnumConverter))]
+  public enum CategoryEnum
+  {
+    Electronics,
+    Clothing,
+    Food,
+    Furniture,
+    Toys,
+    Books,
+    Other
+  }
+
+  /// <summary>
+  /// System.Text.Json converter for CategoryEnum that maps to schema values
+  /// </summary>
+  public class CategoryEnumConverter : System.Text.Json.Serialization.JsonConverter<CategoryEnum>
+  {
+    /// <inheritdoc/>
+    public override CategoryEnum Read(ref System.Text.Json.Utf8JsonReader reader, Type typeToConvert, System.Text.Json.JsonSerializerOptions options)
+    {
+      var stringValue = reader.GetString();
+      return stringValue switch
+      {
+        "electronics" => CategoryEnum.Electronics,
+        "clothing" => CategoryEnum.Clothing,
+        "food" => CategoryEnum.Food,
+        "furniture" => CategoryEnum.Furniture,
+        "toys" => CategoryEnum.Toys,
+        "books" => CategoryEnum.Books,
+        "other" => CategoryEnum.Other,
+        _ => throw new System.Text.Json.JsonException($"Unknown value '{stringValue}' for CategoryEnum")
+      };
+    }
+
+    /// <inheritdoc/>
+    public override void Write(System.Text.Json.Utf8JsonWriter writer, CategoryEnum value, System.Text.Json.JsonSerializerOptions options)
+    {
+      var stringValue = value switch
+      {
+        CategoryEnum.Electronics => "electronics",
+        CategoryEnum.Clothing => "clothing",
+        CategoryEnum.Food => "food",
+        CategoryEnum.Furniture => "furniture",
+        CategoryEnum.Toys => "toys",
+        CategoryEnum.Books => "books",
+        CategoryEnum.Other => "other",
+        _ => throw new System.ArgumentOutOfRangeException(nameof(value))
+      };
+      writer.WriteStringValue(stringValue);
+    }
+  }
+}
+```
+
+</details>
 
 Samples record observed values. Inference summarizes those observations. Only
 the reviewed schema states what producers may send and consumers must accept.

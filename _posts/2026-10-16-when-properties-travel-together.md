@@ -4,6 +4,7 @@ title: "When Properties Travel Together"
 date: 2026-10-16
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Validation companion specification.
 image: /social-cards/when-properties-travel-together.png
 description: >-
   Use dependentRequired when one property's presence requires companion fields,
@@ -56,7 +57,7 @@ An invoiced order therefore looks like this:
 ```json
 {
   "orderId": "c4f1328a-9f3c-4be0-945e-17a12bb3dde8",
-  "total": 129.50,
+  "total": "129.50",
   "invoiceRequested": true,
   "billingStreet": "1 Analytical Engine Way",
   "billingCity": "London",
@@ -77,7 +78,7 @@ is invalid:
 ```json
 {
   "orderId": "4bb4f178-597c-47c6-b09a-dbe0bec9a17b",
-  "total": 42.00,
+  "total": "42.00",
   "invoiceRequested": false
 }
 ```
@@ -94,8 +95,8 @@ signal you intended.
 
 Dependencies are also one-way. The schema above does not require
 `invoiceRequested` when `billingStreet` appears. Add a reverse dependency if
-that is part of the contract. Doing so for every billing field can be noisy;
-often one explicit container object is a cleaner model.
+that is part of the contract. A dependency on every billing field repeats the
+same rule; an explicit billing object avoids that repetition.
 
 ## Why [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) cannot express this
 

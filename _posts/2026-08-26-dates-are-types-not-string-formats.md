@@ -4,14 +4,15 @@ title: "Dates Are Types, Not String Formats"
 date: 2026-08-26
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/dates-are-types-not-string-formats.png
 description: >-
   JSON Structure declares date, time, datetime, and duration as distinct types
   with RFC 3339 representations instead of treating them as decorated strings.
 ---
 
-`2026-09-10`, `09:30:00+02:00`, and `P0DT2H` all sit inside JSON quotes. Nobody
-writing application code would treat them as the same kind of value. JSON
+`2026-09-10`, `09:30:00+02:00`, and `P0DT2H` all sit inside JSON quotes, but
+they have different temporal meanings. JSON
 Structure declares [`date`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#date), [`time`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#time), [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime), and [`duration`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#duration) as core types, so
 consumers do not have to recover temporal intent from property names or a
 format convention.
@@ -90,11 +91,13 @@ invent those policies.
 
 ## Formats leave a tooling decision
 
-JSON Schema commonly expresses these values with [`type: "string"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.1) and the
+JSON Schema can express these values with [`type: "string"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.1) and the
 [`format`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.2.1) values [`"date"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1), [`"time"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1), [`"date-time"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1), or [`"duration"`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.3.1). The format vocabulary gives
 those strings useful semantics, but assertion behavior depends on the dialect,
-vocabulary, and validator configuration. Many integrations also treat [`format`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-7.2.1)
-as an annotation.
+vocabulary, and validator configuration. In JSON Schema Draft 2020-12, the
+Format-Annotation vocabulary requires collection of format values as
+annotations; the separate Format-Assertion vocabulary enables assertion
+behavior.
 
 For validation, that flexibility can be desirable. For data definition, tools
 still need a policy that says a recognized format should become a particular
@@ -106,16 +109,24 @@ choice in the type declaration rather than a string annotation.
 
 ## Avro uses numeric storage
 
-Avro adds temporal semantics through logical types over primitive storage.
-[`date`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#date) counts days from the Unix epoch in an `int`. Time logical types count
+Avro adds temporal semantics through [logical types](https://avro.apache.org/docs/1.12.0/specification/#logical-types) over primitive storage.
+[`date`](https://avro.apache.org/docs/1.12.0/specification/#date) counts days from the Unix epoch in an `int`. Time logical types count
 milliseconds or microseconds after midnight. Timestamp logical types count from
 the Unix epoch in a `long`, with separate local-timestamp forms where no time
 zone is implied.
 
-Avro's duration is different again: a 12-byte fixed value stores months, days,
-and milliseconds as three unsigned little-endian integers. Those choices are
-compact and precise for Avro binary data, but their JSON form is not the familiar
-RFC 3339 text shown above.
+That is Avro's weakness for offset-aware date-times: a timestamp preserves the
+instant, but not the original UTC offset or a named time zone. The
+`2026-09-10T09:30:00+02:00` value can be reconstructed as the same instant, but
+the `+02:00` representation is lost. A local timestamp preserves wall-clock
+time but carries no information about which time zone made it local. An Avro
+record that needs an offset or an IANA name such as `Europe/Berlin` must store
+that information in a separate field.
+
+Avro's [`duration`](https://avro.apache.org/docs/1.12.0/specification/#duration) is different again: a 12-byte fixed value stores months,
+days, and milliseconds as three unsigned little-endian integers. Those choices
+define Avro's binary representation, but their JSON form is not the RFC 3339
+text shown above.
 
 JSON Structure instead standardizes the human-readable JSON representation. It
 does not expose an epoch unit or fixed binary layout in the instance.

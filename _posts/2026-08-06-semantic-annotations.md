@@ -1,20 +1,18 @@
 ---
 layout: post
-title: "Semantic and Reference-System Annotations"
+title: "Types and Units Still Don't Tell You What a Value Means"
 date: 2026-08-06
 author: Clemens Vasters
+specification_scope: Core with the Units and Semantic Annotations companion specifications.
 image: /social-cards/semantic-annotations.png
 description: >-
-  Two schemas can agree that a member is a double in metres, pass every
-  validator, and still be describing water level above a tide gauge and height
-  above the ellipsoid. A new IETF Internet-Draft puts the missing fact in the
-  schema: nine optional keywords, nearly all of them one shape, binding an EPSG
-  coordinate system, an ICC profile, an ITU-R weighting curve, an ICAO register,
-  a Landsat band set and a spacecraft vector frame alike - and saying which of
-  your members supplies which axis. Type systems describe shape, graph
-  vocabularies annotate instances, catalogs describe datasets, and the domain
-  standards that got this right do not survive leaving their ecosystem. This is
-  the first mechanism that spans all of them at zero bytes on the wire.
+  Two schemas can agree that a member is a double in metres and still describe
+  water level above a tide gauge and height above an ellipsoid. An IETF
+  Internet-Draft defines optional schema annotations for the missing semantic
+  facts. A common reference-and-kind shape can bind coordinate systems, color
+  profiles, weighting curves, code registers, spectral bands, and vector
+  frames. Component lists also state which members supply ordered axes or
+  channels. The annotations add no fields to conforming instance documents.
 ---
 
 <style>
@@ -98,19 +96,20 @@ table.results td.num {
 }
 </style>
 
-**Two schemas can agree that a member is a [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double) in metres, pass every
-validator, and still be describing different quantities.** *JSON Structure:
-Semantic and Reference-System Annotations* is a new IETF Internet-Draft that
-puts the missing fact in the schema.
+**Two schemas can agree that a member is a [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double) in metres, pass their
+type and unit checks, and still describe different quantities.** The
+*JSON Structure: Semantic and Reference-System Annotations* Internet-Draft puts
+the missing fact in the schema.
 
 **Why it matters.** The fact that would have stopped the bad arithmetic lives in
 a PDF, in a field name somebody hopes will be read the right way, or in the head
-of an engineer who has since moved teams. No mainstream schema language has a
-slot for it, so nothing downstream can check it — and every value still
-validates.
+of an engineer who has since moved teams. JSON Structure Core and its Units
+companion can state the numeric type and unit, but they do not identify a datum,
+reference frame, observed property, or weighting curve. A processor limited to
+those declarations cannot check that distinction.
 
-**The short version.** Nine optional keywords, nearly all of them the same
-shape: a [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that identifies a definition, and a [`kind`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that names the
+**The short version.** Most reference-style keywords use the same shape: a
+[`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that identifies a definition, and a [`kind`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that names the
 model that definition belongs to. That one shape binds an EPSG coordinate
 system, an ICC profile, an ITU-R weighting curve, an ICAO register, a Landsat
 band set, and a spacecraft vector frame alike. Validation is unchanged. Bytes on
@@ -126,13 +125,13 @@ the wire are unchanged.
 
 Two teams publish telemetry. Both schemas declare a member [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double). Both,
 because these are careful people who use JSON Structure Units, declare the unit
-`m`. Every validator on earth is happy. Somebody joins the two streams and
-subtracts.
+`m`. A validator checking those declarations accepts both values. Somebody
+joins the two streams and subtracts.
 
 One of them was water level above a tide-gauge datum. The other was height above
 the WGS-84 ellipsoid. They differ by tens of metres, and by how much depends on
-where you are standing. Nothing validated wrong. Nothing threw. The result is
-simply not a number about anything.
+where you are standing. The type and unit checks did their job; they did not
+have the datum needed to decide whether the subtraction was meaningful.
 
 **The schema had nowhere to put the one fact that would have caught it.** The
 draft gives it somewhere to go.
@@ -156,8 +155,8 @@ instant, an interval, an accumulation; every minute, or on change.
 **Name the reference system.** [`temporalReferenceSystem`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#temporal-reference-systems),
 [`coordinateReferenceSystem`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coordinate-reference-systems), [`linearReferenceSystem`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#linear-reference-systems), [`vectorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#vector-reference-frames),
 [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames), and [`frameTransforms`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#frame-transforms) say what a position, a direction,
-or an orientation is read against — and, this is the part nothing else does,
-*which of your members supplies which axis*.
+or an orientation is read against. They also state *which of your members
+supplies which axis*.
 
 **Resolve compound values.** [`colorSpaces`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#color-spaces), [`audioChannels`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#audio-channels), and [`spectralBands`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#spectral-bands)
 map a set of members onto the channels or bands that give them meaning.
@@ -167,15 +166,14 @@ level reference that a conditioned measurement already has baked in.
 
 Nearly all of them are the same shape: an object with a [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that
 identifies a definition and a [`kind`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) that names the model that definition
-belongs to. Learn the shape once and you have nine keywords.
+belongs to. Learn that recurring shape once and the other bindings are familiar.
 
-One test decided every one of them. A quality of a value earns a keyword when a
-consumer must know it to decide whether two values may be combined, and when it
-holds for the type rather than varying per record. Axis order, weighting curve,
-and the register a code came from all pass: get one wrong and the arithmetic is
-wrong while every value still validates. Licensing and retention fail, because
-they change nothing about what may be computed. A per-observation calibration
-record fails, because it belongs in the payload.
+The draft states one selection rule for these keywords. A quality of a value
+earns a keyword when a consumer needs it to decide whether two values may be
+combined, and when it holds for the type rather than varying per record. Axis
+order, weighting curve, and the register behind a code pass that rule. Licensing
+and retention do not change what may be computed. A calibration value that
+changes per observation belongs in the payload instead.
 
 The draft publishes no vocabulary, no reference system, no color space, no code
 list. Established bodies do that, and an annotation points at one. What is here
@@ -184,53 +182,52 @@ members agree with what you pointed at.
 
 ## Hasn't somebody solved this?
 
-Several people have, and each of them solved it somewhere that does not travel.
+Existing systems carry parts of this information at different layers. The
+comparison below concerns the named mechanisms, not every extension or
+application built around them.
 
-**Type systems describe shape.** JSON Schema, Avro, Protobuf, Thrift, Table
-Schema, Parquet, Iceberg — every one of them will tell you a member is a 64-bit
-float and none of them has a place to record what it is a float *of*. That is
-not an oversight. Shape is what they were built for, and a [`description`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-9.1) string
-is where everything else has been going for twenty years.
+**Type systems describe representation and structure.** JSON Schema, Avro,
+Protocol Buffers, Thrift, Table Schema, Parquet, and Iceberg define data shape
+through their own type and constraint systems. Their core type declarations do
+not provide the cross-domain reference-and-component binding defined by this
+draft. A JSON Schema [`description`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-9.1) can explain the distinction to a reader,
+but prose does not provide the ordered member binding used here.
 
-**Graph vocabularies carry meaning on the instance.** RDF, JSON-LD, schema.org
-bind a property to an IRI, which answers *what is this*. They do not answer
-*what is this resolved against*. A JSON-LD context has no way to say that three
-members are the components of one vector in one frame, or that two members are
-the axes of a CRS and here is their order. And the binding rides with the
-document — a mechanism priced for a catalog page, not for a telemetry topic
-doing a hundred thousand records a second.
+**Graph vocabularies bind data to identified terms.** [RDF](https://www.w3.org/TR/rdf11-concepts/) and
+[JSON-LD](https://www.w3.org/TR/json-ld11/) can identify properties and concepts with Internationalized Resource
+Identifiers (IRIs). The draft adds a schema-level shape for bindings that need
+ordered member lists, such as vector components or coordinate axes. That is the
+specific mechanism compared here.
 
-**Catalogs describe datasets.** DCAT, ISO 19115, DataHub, OpenMetadata, Unity
-Catalog: ownership, lineage, coverage, licensing, freshness. Exactly right for
-governance, and the wrong altitude for this. A catalog entry sits beside the
-stream and never reaches into a record to say the third number is earthward.
+**Catalogs describe datasets.** [DCAT](https://www.w3.org/TR/vocab-dcat-3/) and [ISO 19115](https://www.iso.org/standard/53798.html) describe
+dataset metadata such as distribution, coverage, and lineage. This draft binds
+members inside a declared type, for example to say that the third number is an
+earthward vector component. The two layers serve different purposes.
 
-**Domain standards nailed it, inside one domain.** CF conventions in netCDF.
-SensorML and Observations & Measurements in OGC SWE. ICC profiles in color.
-ITU weighting curves in audio. DICOM in medical imaging. CCSDS in spaceflight.
-SDMX in official statistics. These are decades of careful work by people who
-understood the hazard perfectly well. None of them is a schema language for
-JSON, and none of them survives contact with the boundary. Take a netCDF file
-apart into a Kafka topic and the CF attributes are simply gone.
+**Domain standards define domain-specific meaning.** CF conventions in netCDF,
+SensorML and Observations & Measurements in OGC SWE, ICC profiles in color, ITU
+weighting curves in audio, DICOM in medical imaging, CCSDS in spaceflight, and
+SDMX in official statistics define relevant semantics in their domains. When
+data is projected into another format, those semantics survive only if the
+projection carries them. These annotations can point back to the domain
+definitions.
 
-**Semantic conventions name fields.** OpenTelemetry maintains a registry saying
-what `http.request.method` means, and it works. But it is a naming agreement,
-not a reference-system mechanism: nothing in it can express axis order or a
-weighting curve, and it only governs the fields the registry has reached.
+**Semantic conventions name fields.** OpenTelemetry maintains a registry that
+defines `http.request.method`. That naming agreement does not define the
+reference-and-component model in this draft.
 
-So: type-level, so it costs nothing per record. In the schema that already
-ships with the data, so it crosses the boundary the domain standards do not.
-Pointing at the registries those communities already maintain, so it competes
-with none of them.
+The recommendation is to keep stable semantic bindings in the schema and point
+at registries maintained by the relevant domain community. That adds no members
+to conforming instance documents. A projection still has to preserve the
+annotations; the schema cannot make a lossy conversion lossless.
 
-And then the part with no precedent anywhere on that list — **it is one shape**.
+The design contribution is **one common shape across these domains**.
 The same [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model)-and-[`kind`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#annotation-model) pair binds an EPSG coordinate system, an ICC
 profile, an ITU-R weighting curve, an ICAO register, a Landsat band set, a
-spacecraft vector frame, a leap-second-free ordinal clock. Those communities
-have never shared a mechanism and have had no reason to look for one. Under
-these keywords the difference between a color space and a coordinate reference
-system is which registry the pointer resolves against, and a consumer that
-learned to check one has learned to check all of them.
+spacecraft vector frame, or a leap-second-free ordinal clock. Under these
+keywords, the registry and `kind` determine how a consumer interprets the
+reference. Support for one `reference`-and-`kind` object does not by itself give
+the consumer domain knowledge about every registry.
 
 ## Sample: three letters that lie
 
@@ -436,8 +433,8 @@ this sample exists.
 which is which.**
 
 CRS84 is longitude-first. EPSG:4326 is latitude-first. Same points, same
-ellipsoid, opposite order, and this has been quietly corrupting geospatial
-pipelines for twenty years.
+ellipsoid, opposite axis order. A consumer that assumes one order while reading
+the other swaps latitude and longitude.
 
 <pre class="jsonx"><span class="k">"crs84Position"</span><span class="p">: {</span>
   <span class="k">"type"</span><span class="p">:</span> <span class="s">"tuple"</span><span class="p">,</span>
@@ -479,11 +476,10 @@ are positions in an array and mean nothing on their own.
 
 The word *latitude* never appears in this schema. It does not need to. The CRS
 registry already says that axis 1 of CRS84 is longitude and axis 1 of EPSG:4326
-is latitude — that fact has been published for decades. What was missing is the
-join: which of *your* members supplies axis 1. That is all [`coordinates`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coordinate-reference-systems-coordinates) does,
-and it is why the keyword binds members rather than just naming a CRS. Swap the
-two references and the same two arrays describe a point in Kazakhstan, with
-every validator still green.
+is latitude. What was missing from the schema is the join: which of *your*
+members supplies axis 1. That is what [`coordinates`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coordinate-reference-systems-coordinates) supplies, and it is why the keyword
+binds members rather than only naming a CRS. Swap the two references and type
+validation can still succeed while a consumer reads the axes incorrectly.
 
 And `137.4` is metres above NAVD88 — which is where this post came in.
 
@@ -564,14 +560,14 @@ executable SQL rather than against prose:
 | `spec` | 91 | 22 | 5 | 70 | 0.6277 | 0.8053 | 0.1170 | 0.1947 |
 {: .results}
 
-**Prose stops helping the moment the answer has to run.** Accuracy on `bare`
-falls from 0.6364 to 0.3297 — of the claims its query touches at all, two thirds
-are violated. Prose lets a reader hedge and SQL does not. Collapse the violation
-counts to distinct decisions — the rubric emits one claim per annotated member,
-so a single bad division is scored once for every member it touches — and `bare`
-and `prose` are level at eleven wrong decisions each, while the two
-annotation-bearing arms make three. **A description is enough to describe the
-feed correctly and not enough to make the reader write different SQL.**
+**In this query run, prose did not reduce the count of distinct wrong
+decisions.** Accuracy on `bare` falls from 0.6364 in the comprehension run to
+0.3297 in the query run. Of the claims its query touches, 61 of 91 are violated.
+Collapse the violation counts to distinct decisions — the rubric emits one
+claim per annotated member, so a single bad division is scored once for every
+member it touches — and `bare` and `prose` are level at eleven wrong decisions
+each, while the two annotation-bearing arms make three. This observation is
+limited to the recorded run, subject model, supervisor, samples, and rubric.
 
 The same collapsing rescues the `spec` arm, which read raw looks like a
 regression at 22 violations. Three decisions produce them, one of which — turning
@@ -583,18 +579,17 @@ claims those annotations force, the `annotated` arm gets 6 right and 0 wrong; th
 `spec` arm gets 7 right and 10 wrong, deriving the period from record spacing
 anyway. Same annotations, plus the specification, opposite behaviour.
 
-**The most plausible reading is that the specification text is not helping this
-reader.** It is written for a human implementer deciding what to emit. Handed to
-a small model that already has the annotation in front of it, it is several
-thousand words of prose competing for attention with the schema — and attention
-is the scarce resource. The arm that wins is `annotated`, which has the fact and
-nothing else. Every jump worth having in this run happens between `prose` and
-`annotated`, and the layer above it costs rather than pays.
+**In this run, adding the specification did not improve the query result.** The
+`annotated` and `spec` arms each made three distinct wrong decisions, although
+their claim-level counts differ because one decision can affect several claims.
+The harness cannot confirm that the subject read the specification, so the run
+does not establish why the two arms differ.
 
-That is a claim about context, not about the specification's quality, and one
-run on one model does not settle it. But it is the reading the numbers support,
-and it has a practical consequence: **ship the annotations to the reader, not the
-document that explains them.**
+That is an observation about one recorded context, not a finding about the
+specification's quality or model attention. The practical recommendation is to
+give automated readers the annotations they need directly in the schema. Keep
+the specification available to implementers; this experiment does not support
+using specification prose as a substitute for the annotations.
 
 Two further things belong next to any number quoted above. The grader is a model
 and it is not stable: identical transcripts graded twice differ by 58 claims on

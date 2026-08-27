@@ -4,20 +4,23 @@ title: "Names Have Purposes"
 date: 2026-10-28
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Alternate Names and Units companion specifications.
 image: /social-cards/names-have-purposes.png
 description: >-
   Use altnames purpose keys to map one stable schema property into JSON,
   storage, tooling, and localized contexts without multiplying contracts.
 ---
 
-One schema property may appear as a JSON key, a SQL column, a generated
+Keep one canonical schema name and label each alternate name with its purpose.
+A schema property may appear as a JSON key, a SQL column, a generated
 identifier, and several labels written for people. Treating all of those names
 as aliases loses the reason each name exists. The [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) annotation records
 that reason and leaves the property declaration as the canonical name.
 
 ## The key says what the name is for
 
-[`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is a map from purpose indicators to strings. The draft reserves two
+[`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) is a map from purpose indicators to strings. A purpose indicator says where or
+why a name is used. The draft reserves two
 parts of that key space:
 
 - [`json`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) identifies the property key used when encoding JSON.
@@ -102,7 +105,8 @@ It does not prevent two properties from both declaring
 `"sql": "CUST_NO"`, or a JSON alternate from colliding with another emitted
 key. Such a schema is syntactically expressible and operationally ambiguous.
 
-A mapper should build the complete name table for a purpose before it generates
+My recommendation is to build the complete name table for a purpose before a
+mapper generates
 output. If two canonical properties map to one destination name, the mapper
 should report the collision rather than choose by document order. Schemas that
 cross team boundaries also need an organizational convention for custom

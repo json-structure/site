@@ -4,6 +4,8 @@ title: "A Set Should Not Become a List by Accident"
 date: 2026-09-08
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
+uses_structurize: true
 image: /social-cards/a-set-should-not-become-a-list-by-accident.png
 description: >-
   Follow a JSON Structure set through generated code and serialization targets,
@@ -20,25 +22,17 @@ JSON alone cannot distinguish that list from a collection in which membership
 is unique and order is meaningless; both appear as arrays. JSON Structure can:
 it declares `handlingTags` as a [`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set).
 
-Structurize maps that declaration to set-like collections where a target
-supports them. Other targets can carry the values while losing uniqueness or
-introducing observable order. The generated artifact must therefore preserve
-the set semantics or expose the boundary where validation must restore them.
+The Structurize 3.9.0 outputs tested below map that declaration to set-like
+collections in five language targets. Protocol Buffers and an unconstrained
+SQL table can carry the values but do not enforce uniqueness. A projection must
+either preserve the set semantics or identify the boundary where validation
+restores them.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## Declare membership at the source
@@ -104,6 +98,11 @@ structurize s2rust shipment-plan.struct.json --out generated/rust --package fulf
 structurize s2go shipment-plan.struct.json --out generated/go --package fulfillment
 ```
 
+For a complex generated project and its full file tree, see the prebuilt
+Avrotize [Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/).
+For this small schema, the TypeScript enum below is the single representative
+multi-file code-generation output shown here.
+
 The exact API idiom varies. In C#, adding `"fragile"` twice to a
 `HashSet<string>` leaves one member. Java sets, Rust's `HashSet<String>`, and
 Go's membership map express the same basic operation: test whether the value
@@ -112,13 +111,19 @@ is present. The generated TypeScript property is
 but this particular generated project is not usable as emitted. Structurize
 writes the string values as bare enum member names:
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>HandlingTagsSetEnum.ts</code></summary>
+
 ```typescript
+/** A HandlingTagsSetEnum enum. */
 export enum HandlingTagsSetEnum {
-  fragile = "fragile",
-  keep-dry = "keep-dry",
-  temperature-controlled = "temperature-controlled"
+    fragile = "fragile",
+    keep-dry = "keep-dry",
+    temperature-controlled = "temperature-controlled"
 }
 ```
+
+</details>
 
 `npm run build` rejects the hyphenated members, beginning with `TS1357: An enum
 member name must be followed by a ',', '=', or '}'`. The intended `Set<T>`
@@ -136,10 +141,10 @@ has arrays, not a distinct set token, so a serializer emits a sequence of
 values. A receiver that reads the payload without the schema sees only an
 array.
 
-This has two consequences.
+This creates two contract boundaries.
 
-First, element order can vary. Hash-based collections generally expose no
-contractual business order. Two conforming serializers may produce these
+First, JSON Structure assigns no meaning to set order. Unless another protocol
+defines an order, serializers can produce either of these
 payloads:
 
 ```json
@@ -175,14 +180,26 @@ promise uniqueness or erase ordering. The source `set` semantics therefore
 need validation around the generated protocol boundary. A downstream user who
 sees only the `.proto` cannot recover that promise from the repeated field:
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>proto.proto</code></summary>
+
 ```proto
-enum HandlingTagsItemEnumEnum {
-  fragile = 0;
-  keep-dry = 1;
-  temperature-controlled = 2;
+syntax = "proto3";
+
+package proto;
+
+message ShipmentPlan {
+  enum HandlingTagsItemEnumEnum {
+    fragile = 0;
+    keep-dry = 1;
+    temperature-controlled = 2;
+  }
+  string orderId = 1;
+  repeated HandlingTagsItemEnumEnum handlingTags = 2;
 }
-repeated HandlingTagsItemEnumEnum handlingTags = 2;
 ```
+
+</details>
 
 This is the exact Structurize 3.9.0 fragment, and it has a second defect:
 `grpc_tools.protoc` rejects the two hyphenated enum members with `Missing
@@ -196,6 +213,21 @@ with `s2sql`:
 structurize s2sql shipment-plan.struct.json --out generated/shipment-plan.sql --dialect postgres
 ```
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>shipment-plan.sql</code></summary>
+
+```sql
+CREATE TABLE "ShipmentPlan" (
+  "orderId" UUID,
+  "handlingTags" JSONB,
+  PRIMARY KEY ("orderId", "handlingTags")
+);
+
+COMMENT ON COLUMN "ShipmentPlan"."handlingTags" IS '{"schema": {"type": "set", "items": {"type": "string", "enum": ["fragile", "keep-dry", "temperature-controlled"]}}}';
+```
+
+</details>
+
 A tabular list of tag values does not inherently retain JSON Structure's set
 meaning. A relational design can enforce uniqueness with a key or unique
 constraint over the shipment and tag columns, but that is a target-specific
@@ -206,9 +238,9 @@ instance.
 Proto repeated fields and unconstrained SQL rows do not preserve set
 uniqueness. Enforce it at those boundaries or record the loss.
 
-## Decide behavior at every boundary
+## Test behavior at every boundary
 
-A reliable set projection answers four questions:
+A set projection review answers four questions:
 
 1. Does the generated in-memory type prevent duplicate membership?
 2. Does deserialization reject duplicate input instead of quietly normalizing

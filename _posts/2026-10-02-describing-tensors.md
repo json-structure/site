@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "Describing Tensors"
+title: "Tensor Shape Does Not Define Tensor Meaning"
 date: 2026-10-02
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Units, Validation, and Semantic Annotations companion specifications.
 image: /social-cards/describing-tensors.png
 description: >-
   Describe a tensor's frame, index binding, variance, and symmetry in the schema
@@ -14,7 +15,7 @@ Nine doubles in a 3x3 may be a stress tensor, a rotation matrix, or a
 covariance. Shape alone cannot tell you which.
 
 A tensor gets its meaning from the range of each index and from how its
-components respond when the frame changes. That information usually lives in a
+components respond when the frame changes. Without this annotation, a consumer must find that information in a
 format manual or a variable name. [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) records it in the
 schema.
 
@@ -157,12 +158,12 @@ nested value carries every position.
 
 Higher-rank symmetries, including the minor and major symmetries of an elastic
 stiffness tensor, are not expressible. A rank-2 object that represents a
-transformation should use [`frameTransforms`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#frame-transforms); [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) says what
+transformation is a different case. The draft recommends [`frameTransforms`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#frame-transforms)
 its indices range over, not that the numbers perform a transformation.
 
-Large machine-learning tensors are usually better carried as binary data with
-shape metadata. An opaque payload trades schema-level shape validation for size
-and speed. For six or nine scientific values exchanged between teams, spelling
+Large machine-learning tensors can be carried as binary data with
+shape metadata. An opaque payload gives up schema-level shape validation. Its
+size and processing cost depend on the chosen encoding and workload. For six
 out the components also carries the frame that gives them meaning.
 
 [semantic-annotations]: https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-semantic-annotations.html

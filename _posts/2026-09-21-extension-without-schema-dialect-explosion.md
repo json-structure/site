@@ -4,15 +4,16 @@ title: "Extension Without Schema Dialect Explosion"
 date: 2026-09-21
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/extension-without-schema-dialect-explosion.png
 description: >-
   Offer optional object add-ins in one schema and let each instance opt in with
   $uses, without minting a new schema dialect.
 ---
 
-An address sometimes needs delivery instructions. Giving every address an
-`instructions` property overstates the base contract; publishing another
-address schema for that one property starts a dialect collection.
+Delivery instructions do not belong in every address. Adding an `instructions`
+property to the base type overstates that contract. Publishing another address
+schema for one property creates a separate dialect to maintain.
 
 JSON Structure calls this optional extension an add-in. The schema advertises
 an abstract add-in through [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword). An instance that needs the extra contract
@@ -114,12 +115,12 @@ the concrete schema type it augments. When selected, the resulting composite
 replaces that base type in the instance's effective type model. The base schema
 stays unchanged, while the instance records the optional contract it selected.
 
-The current core draft contradicts itself here. The add-in section and its
-normative example allow an abstract add-in to [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) a concrete type, as
-`DeliveryInstructions` does above. The general [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) rules require every
-pointer to target an abstract type. Implementations need to recognize the
-add-in case described by its dedicated section. The draft needs an explicit
-exception so these rules agree.
+The current core draft contains two conflicting rules. The add-in section and
+its normative example allow an abstract add-in to [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) a concrete type, as
+`DeliveryInstructions` does above. The general [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword) rules say that every
+pointer targets an abstract type. Implementations need to recognize the add-in
+case described by its dedicated section. My recommendation for the draft is an
+explicit exception that makes the two rules agree.
 
 ## No unadvertised add-ins
 
@@ -131,6 +132,6 @@ schema document.
 The base type defines what every instance has. [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) publishes the supported
 extensions, and [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) records what one instance activated. A consumer can
 distinguish a declared optional feature from an unknown property without
-assuming that every optional field belongs to every address. Producers also
-avoid minting a schema URI for every combination of add-ins, which is how the
-dialect collection gets stopped before it starts.
+assuming that every optional field belongs to every address. A producer can
+keep one base schema URI instead of publishing one URI for each supported
+combination of add-ins.

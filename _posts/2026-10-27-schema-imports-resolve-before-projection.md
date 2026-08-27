@@ -4,19 +4,21 @@ title: "Schema Imports Resolve Before Projection"
 date: 2026-10-27
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Import companion specification.
+uses_structurize: true
 image: /social-cards/schema-imports-resolve-before-projection.png
 description: >-
   Resolve JSON Structure imports into one closed type graph before projecting
   that graph into a target schema or generated program.
 ---
 
-A converter cannot project a type it has not loaded. If a JSON Structure
+A converter can project only the types it has loaded. If a JSON Structure
 document refers to definitions supplied through `$import` or `$importdefs`, the
 converter needs the resolved type graph, not a promise that another document
 exists somewhere.
 
-That ordering matters today because Structurize does not process either import
-keyword. Its JSON Structure converters resolve local references, but they do not
+That ordering matters for the Structurize 3.9.0 setup tested here because it
+does not process either import keyword. Its JSON Structure converters resolve local references, but they do not
 fetch imported documents, copy their definitions, rewrite their internal
 pointers, or apply import shadowing. The correct pipeline therefore has two
 processors: first resolve and flatten imports with a conforming JSON Structure
@@ -24,20 +26,11 @@ processor; then pass the closed schema to an `s2...` converter.
 
 Do not pretend the second processor performed the first one's job.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## The source graph comes first
@@ -137,6 +130,19 @@ structurize s2pq order.resolved.struct.json `
   --out generated/order.parquet.schema.json
 ```
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>order.sql</code></summary>
+
+```sql
+CREATE TABLE "OrderDocument" (
+    "orderId" VARCHAR(512),
+    "shipTo" VARCHAR(512),
+    PRIMARY KEY ("orderId", "shipTo")
+);
+```
+
+</details>
+
 The first command projects the closed JSON Structure graph into PostgreSQL DDL.
 The second command does not complete in Structurize 3.9.0: the nested reference
 reaches a converter path that fails with `unhashable type: 'dict'`. Closure
@@ -144,7 +150,8 @@ removes the import dependency, but it does not guarantee that every target
 converter supports the resulting local-reference shape. Keep this command as a
 capability test and do not claim a Parquet artifact when it fails.
 
-The unresolved source is a dangerous negative test. Structurize 3.9.0 does not
+The unresolved source is a useful negative test. In the tested setup,
+Structurize 3.9.0 does not
 reject it: `s2sql` exits successfully and emits `shipTo VARCHAR(512)`. The
 missing `PostalAddress` type has disappeared rather than producing an import or
 reference error. Validate closure before conversion; converter success does not
@@ -157,10 +164,10 @@ projection diff then answers a narrower question: what did the target mapping
 change? Without that boundary, an import update and a converter update become
 one undifferentiated surprise.
 
-The pinned Structurize implementation makes the current boundary visible in its
+The Structurize implementation makes the current boundary visible in its
 [`commands.json`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json)
 and JSON Structure converter modules at the
-[`8dbb19a` source tree](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76).
+[linked source tree](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76).
 They accept a schema file and resolve references from the loaded document. They
 contain no implementation of the import draft's retrieval and copying
 algorithm.
@@ -187,8 +194,9 @@ The safe pipeline is deliberately boring:
 4. Give that graph to Structurize for projection.
 5. Inspect the target artifacts and any target-native imports it emits.
 
-A resolver should fail with the source URI and unresolved pointer when it cannot
-achieve closure. It should also record redirects, cached representations, and
+The recommendation is to fail resolution with the source URI and unresolved
+pointer when it cannot
+achieve closure. Record redirects, cached representations, and
 cycle or depth failures. Those diagnostics explain why the authoritative graph
 could not be assembled. Passing a partly resolved document downstream merely
 trades a precise import error for a misleading converter failure.

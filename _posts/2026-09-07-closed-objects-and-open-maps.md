@@ -4,6 +4,7 @@ title: "Closed Objects and Open Maps Are Different Things"
 date: 2026-09-07
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/closed-objects-and-open-maps.png
 description: >-
   Close the record when its fields are fixed, and put runtime-defined labels in
@@ -101,7 +102,7 @@ properties with individual schemas. A map has dynamic keys and one value schema.
 Those contracts produce different generated types and different expectations
 for consumers.
 
-The core draft makes [`additionalProperties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) optional but states no default for
+The [core draft](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword) makes `additionalProperties` optional but states no default for
 its absence. A closed record must therefore say [`"additionalProperties": false`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword)
 explicitly. Processor assumptions are a poor compatibility policy.
 
@@ -139,8 +140,8 @@ points such as `xs:any`. A repeated key/value element is the usual dictionary
 shape. As with JSON Structure, a wildcard inside the record and a contained map
 are not equivalent evolution strategies.
 
-Should `sensor.vendor` become a declared field tomorrow? Its location answers
-the question. At the top level, that change requires a schema revision. Inside
+If `sensor.vendor` becomes a declared field, its location answers the
+compatibility question. At the top level, that change requires a schema revision. Inside
 `labels`, it is another runtime key governed by the existing string value
 schema. Mixing the namespaces throws away that answer and waits for a collision
 to settle it.

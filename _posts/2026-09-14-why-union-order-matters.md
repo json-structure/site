@@ -4,6 +4,7 @@ title: "Why Union Order Matters"
 date: 2026-09-14
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/why-union-order-matters.png
 description: >-
   Non-discriminated unions use first-match semantics, so branch order is part
@@ -45,7 +46,8 @@ must not define an object inline, so compound branches belong under
 This schema lets the root value be a pickup point or a street address. Both
 branches require `locationId` and `label`; an object containing only their
 shared requirements matches both. `PickupPoint` comes first because this model
-wants that interpretation to win.
+wants that interpretation to win. Both branches explicitly permit additional
+properties, so the overlap does not depend on a processor default.
 
 ```json
 {
@@ -60,7 +62,8 @@ wants that interpretation to win.
         "label": { "type": "string" },
         "lockerBank": { "type": "string" }
       },
-      "required": ["locationId", "label"]
+      "required": ["locationId", "label"],
+      "additionalProperties": true
     },
     "StreetAddress": {
       "type": "object",
@@ -70,7 +73,8 @@ wants that interpretation to win.
         "street": { "type": "string" },
         "city": { "type": "string" }
       },
-      "required": ["locationId", "label"]
+      "required": ["locationId", "label"],
+      "additionalProperties": true
     },
     "DeliveryDestination": {
       "type": [
@@ -124,7 +128,7 @@ The key under [`definitions`](https://json-structure.github.io/core/draft-vaster
 [`$root`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#root-keyword) something to point at. It remains a union of referenced or primitive
 types, not a new compound type category.
 
-## Choose the precedence before publishing
+## Set the precedence before publishing
 
 Put the branch with the narrower or more useful domain interpretation before a
 branch that accepts more values. A processor will not rank them for you.

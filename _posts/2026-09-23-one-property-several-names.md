@@ -4,17 +4,18 @@ title: "One Property, Several Names"
 date: 2026-09-23
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Alternate Names companion specification.
 image: /social-cards/one-property-several-names.png
 description: >-
   Keep one stable property in the schema while mapping it to JSON, database,
   Protobuf-style, and localized names with altnames and descriptions.
 ---
 
-A property should have one stable identity in a schema, even when every system
-around it insists on spelling that identity differently.
+Keep one stable property identity in the schema, even when surrounding systems
+spell it differently.
 
 JSON likes `customer_id`. A database inherited `CUST_ID`. A Protobuf API uses
-`customerId`. A German form should say `Kundennummer`. Renaming the schema
+`customerId`. A German form can show `Kundennummer`. Renaming the schema
 property for each destination would create four schemas for one fact.
 
 The alternate-names extension keeps the schema name separate from those

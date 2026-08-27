@@ -4,6 +4,7 @@ title: "Required, but in Which Combination?"
 date: 2026-09-04
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/required-but-in-which-combination.png
 description: >-
   JSON Structure can require one complete property set from several mutually
@@ -11,8 +12,8 @@ description: >-
 ---
 
 A contact must provide an email address or a phone number, but not both. Making
-both properties optional does not express that rule. Making both required
-expresses the opposite rule.
+both properties optional permits neither. Making both required demands both.
+Neither declaration expresses the contract.
 
 JSON Structure puts the combination directly in [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword). A flat array names
 one required set. An array of arrays names alternative required sets, and
@@ -140,10 +141,10 @@ elements while JSON object properties are unordered.
 ## Presence says nothing about usability
 
 The schema above requires the presence of `email` or `phone`; it cannot prove
-that the string is a deliverable address or a dialable number. Core types and
-property combinations establish structure. Pattern, format, and length checks
-belong to validation constraints. Real-world reachability requires sending a
-message or placing a call.
+that the string reaches its intended recipient. Core types and property
+combinations establish structure. Pattern, format, and length checks belong to
+validation constraints. Reachability needs an operational check, such as a
+verification message or call.
 
 Here, [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) answers one question: which properties must occur together? It
 does not answer whether the values will work once you try to use them.

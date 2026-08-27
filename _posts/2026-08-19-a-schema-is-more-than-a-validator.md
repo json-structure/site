@@ -4,6 +4,7 @@ title: "A Schema Is More Than a Validator"
 date: 2026-08-19
 published: true
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/a-schema-is-more-than-a-validator.png
 description: >-
   JSON Structure defines the data model behind a JSON document, so the same
@@ -75,14 +76,14 @@ encoding:
 ```
 
 The quoted credit limit is deliberate. [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) is a base-10 type represented
-by a JSON string, preserving a value that should not silently become an IEEE 754
+by a JSON string, preserving a value without first converting it to an IEEE 754
 binary floating-point approximation. Likewise, [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime) means RFC 3339 date
 and time with an offset. Those are type semantics, not naming conventions.
 
 ## Validation describes a set
 
-JSON Schema is exceptionally good at describing sets of acceptable JSON
-instances. Its vocabulary combines assertions such as [`required`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.5.3),
+JSON Schema describes sets of acceptable JSON instances. Its vocabulary
+combines assertions such as [`required`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.5.3),
 [`additionalProperties`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.2.3), and numeric bounds with applicators such as [`allOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.1),
 [`anyOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.2), and conditional subschemas. That model supports sophisticated
 validation precisely because schemas can be composed as constraints.
@@ -128,13 +129,15 @@ also be [`null`](https://json-structure.github.io/core/draft-vasters-json-struct
 
 ## One declaration, several consumers
 
-A validator checks the object shape, required properties, UUID syntax, timestamp
-syntax, decimal representation, precision, scale, and unknown properties. Other
-consumers read the same declaration without reverse-engineering conventions:
+A conforming JSON Structure validator checks the object shape, required
+properties, UUID syntax, timestamp syntax, decimal representation, precision,
+scale, and unknown properties. Other consumers can read the same declarations
+without reconstructing them from property names:
 
-- A generator can choose a UUID type instead of a generic string.
-- A database tool can provision a decimal column with known precision and scale.
-- An API binding can require an offset-aware timestamp.
+- A generator has enough information to choose a UUID type instead of a generic
+  string, subject to the target language's type system.
+- A database projection has declared decimal precision and scale available.
+- An API binding can preserve the requirement for an offset-aware timestamp.
 - Documentation can explain the contract using the schema's own vocabulary.
 
 JSON Structure does not try to outgrow JSON Schema's validation model with a

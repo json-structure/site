@@ -5,6 +5,7 @@ display_title: "[`if`](https://json-structure.github.io/conditional-composition/
 date: 2026-10-21
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Validation and Conditional Composition companion specifications.
 image: /social-cards/if-then-else-without-changing-the-type.png
 description: >-
   Keep one stable address type and apply country-specific postal-code rules as
@@ -114,9 +115,9 @@ The conditional-composition draft calls its feature
 repository spelling by default, so the example needs no explicit [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword)
 entry.
 
-Core defines [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword), and the validation add-in defines [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern). The remaining
-problem sits in the composition add-in, whose member shapes differ from the
-draft's array-versus-single-schema requirements. The JSON is syntactically
-valid and follows the draft's evaluation model. Validation against the current
-meta-schema may nevertheless fail on those shapes before it ever examines an
-address instance.
+Core defines [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword), and the validation add-in defines [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern). As checked on
+25 August 2026, the `CompositionObjectAddIn` in
+`meta/extended/v0/index.json` does not admit the no-type object schemas used
+for these branches. The JSON is syntactically valid and follows the draft's
+evaluation model. Meta-schema validation can therefore fail before it examines
+an address instance.

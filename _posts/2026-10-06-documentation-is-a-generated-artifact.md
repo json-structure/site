@@ -4,43 +4,37 @@ title: "Documentation Is a Generated Artifact"
 date: 2026-10-06
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Alternate Names, Units, and Validation companion specifications.
+uses_structurize: true
 image: /social-cards/documentation-is-a-generated-artifact.png
 description: >-
   Generate reference documentation from JSON Structure while keeping the
   schema, not the rendered page, authoritative.
 ---
 
-Reference documentation drifts when people maintain it beside the schema. A
-field changes, the generated class follows, and the property table quietly
-describes yesterday's contract. Every artifact still looks respectable. That
-is the dangerous part.
+Generate reference documentation from the schema. When people maintain a
+property table beside the schema, a field can change while the table continues
+to describe the old contract. Both files still look valid, so review alone may
+not expose the difference.
 
 A rendered page cannot recover declarations that were never copied into it.
 JSON Structure keeps names, descriptions, required properties, choices,
 constraints, units, alternate names, defaults, and examples with the types they
 qualify.
 
-Structurize's `s2md` converter reads those declarations and renders the
-supported subset as Markdown. It preserves reader-facing descriptions and type
-details, transforms the schema graph into property lists and sections, and
-omits some root metadata as well as workflow rationale. Regenerate that
-reference with every contract change; write operational guidance around it
-rather than into it.
+Structurize's `s2md` converter reads those declarations and renders its
+supported subset as Markdown. In the pinned version tested below, it preserves
+reader-facing descriptions and type details, transforms the schema graph into
+property lists and sections, and omits the root `name` and `$root`. It cannot
+derive workflow rationale from type declarations. Regenerate the reference
+with every contract change, and write operational guidance around it rather
+than into it.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## Start with the fulfillment contract
@@ -108,9 +102,10 @@ next to the declarations they qualify. A reviewer can discuss one change in one
 place.
 
 That concentration matters. If `packageWeight` changes from kilograms to grams,
-the type might remain `double` while the meaning changes by a factor of one
-thousand. A hand-maintained type table can remain syntactically correct and
-operationally disastrous. The schema records both facts together.
+the type can remain `double` while the scale changes from one kilogram to one
+gram, a factor of 1,000. A hand-maintained table that records only `double`
+remains syntactically correct but no longer states the same unit. The schema
+records the type and unit together.
 
 ## Render the page with `s2md`
 
@@ -131,6 +126,43 @@ contains `unit: kg`, `examples: [1.25]`, `default: 0`, and `minimum: 0`; the
 postal-code entry contains its alternate name. References appear as literal
 dictionaries such as `{'$ref': '#/definitions/Address'}` rather than linked
 type names. The output omits the root `name` and `$root`.
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>fulfillment-order.md</code></summary>
+
+```markdown
+# fulfillment-order.struct
+**Schema ID:** `https://schemas.example.com/fulfillment-order`
+**Uses Extensions:** JSONStructureAlternateNames, JSONStructureUnits, JSONStructureValidation
+## Definitions
+
+### Address
+
+A postal delivery address.
+**Properties:**
+- **street** (required): `string`
+- **city** (required): `string`
+- **postalCode** (required): `string`
+  - Extensions: altnames: {warehouseCsv: postal_code}
+
+### Delivery
+
+**Choices:**
+- **ship**: `{'$ref': '#/definitions/Address'}`
+- **collectAt**: `string`
+
+### FulfillmentOrder
+
+An order released to fulfillment.
+**Properties:**
+- **orderId** (required): `uuid`
+- **delivery** (required): `{'$ref': '#/definitions/Delivery'}`
+- **packageWeight**: `double`
+  - Extensions: unit: kg, examples: [1.25], default: 0
+  - Constraints: minimum: 0
+```
+
+</details>
 
 The directory component in the output path is intentional. With this release,
 `--out fulfillment-order.md` fails on Windows with `The system cannot find the

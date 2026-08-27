@@ -4,6 +4,7 @@ title: "Tagged Unions Without Guesswork"
 date: 2026-09-09
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/tagged-unions-without-guesswork.png
 description: >-
   A JSON Structure tagged choice puts the selected payment method in the one
@@ -98,8 +99,8 @@ The consumer dispatches on one key and validates one value.
 The tag separates branch selection from the incidental shape of each variant.
 
 Imagine that bank transfers later gain a `token` issued by a payment provider.
-A shape-inferred union may now confuse the branches, depending on its matching
-rules. `bankTransfer` still selects `BankTransferPayment`, even if the two
+A shape-inferred union can no longer distinguish the branches by the presence
+of `token`. `bankTransfer` still selects `BankTransferPayment`, even if the two
 object types eventually share every property name.
 
 Renaming a choice key is therefore a wire-format change, not a cosmetic schema
@@ -114,9 +115,9 @@ one subschema to validate, but it does not prescribe a tag representation. A
 schema may add a [`const`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.3) discriminator property to each branch, use an enclosing
 single-property object, or rely entirely on mutually exclusive shapes.
 
-Some tooling recognizes OpenAPI's `discriminator`, but that keyword belongs to
-the OpenAPI Schema Object and carries tooling-specific mapping behavior; it is
-not a general JSON Schema keyword that changes [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3) evaluation. A careful
+[OpenAPI's `discriminator`](https://spec.openapis.org/oas/v3.1.1.html#discriminator-object)
+belongs to the OpenAPI Schema Object and carries OpenAPI mapping behavior; it
+is not a general JSON Schema keyword that changes [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3) evaluation. A
 conversion must preserve the actual wrapper shape shown here. Adding a
 discriminator annotation alone does not do that.
 

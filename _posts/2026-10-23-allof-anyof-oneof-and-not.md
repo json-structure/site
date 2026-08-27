@@ -1,20 +1,22 @@
 ---
 layout: post
-title: "Four Ways to Combine Constraints"
+title: "Composition Combines Evaluation Results, Not Property Maps"
 date: 2026-10-23
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Validation and Conditional Composition companion specifications.
 image: /social-cards/allof-anyof-oneof-and-not.png
 description: >-
   Compare allOf, anyOf, oneOf, and not precisely through one complete access
   request schema and the match counts each operator requires.
 ---
 
-Composition keywords combine evaluation results, not property maps. Each
-subschema evaluates independently against the same current JSON node. The
-operator then reduces those Boolean results with a precise rule.
+Composition evaluates one complete instance against each branch. It does not
+merge the branches into one property map. Treating it as a merge changes the
+policy being expressed.
 
-One access request is enough to show all four operators at work.
+The composition operator combines the true-or-false results. One
+access request is enough to show how [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf), [`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf), [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf), and [`not`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#not) reduce those results.
 
 ## A complete policy
 
@@ -103,7 +105,7 @@ A write request satisfying the policy is:
 
 ## Read the match counts
 
-[`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) requires every member to evaluate true. Here the subject exclusion, the
+[`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) requires every member to evaluate true. Here all three members, the subject exclusion, the
 strong-authentication rule, and the action rule must all pass. [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) does not
 merge the members before evaluation; contradictory members simply make the
 combined constraint impossible to satisfy.
@@ -125,7 +127,7 @@ affirmative shape; it only excludes a matching region.
 The base object owns [`additionalProperties: false`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#additionalproperties-keyword). Putting a closed-object
 rule into each partial branch would make sibling properties appear illegal.
 Composition evaluates complete instances against each member, so partial
-policy overlays should generally remain open while the stable structural schema
+policy overlays remain open in this pattern. The stable structural schema
 defines the closed member set.
 
 The draft requires non-empty type-union arrays for [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf), [`anyOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#anyOf), and

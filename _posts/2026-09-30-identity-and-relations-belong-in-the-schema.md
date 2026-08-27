@@ -4,6 +4,7 @@ title: "Identity and Relations Belong in the Schema"
 date: 2026-09-30
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Relations companion specification.
 image: /social-cards/identity-and-relations-belong-in-the-schema.png
 description: >-
   Declare object identity and typed relations with target types, cardinality,
@@ -97,7 +98,7 @@ A corresponding document contains the relation as an ordinary JSON property:
   "orders": [
     {
       "id": "O-9001",
-      "total": 149.50,
+      "total": "149.50",
       "customer": { "identity": "C-1042" }
     }
   ]

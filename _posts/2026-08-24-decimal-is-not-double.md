@@ -4,14 +4,15 @@ title: "Decimal Is Not Double"
 date: 2026-08-24
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/decimal-is-not-double.png
 description: >-
   JSON Structure separates exact base-10 decimal values from binary floating
   point and carries precision and scale in the data definition.
 ---
 
-Three units at 19.95 should produce 59.85 because the amount belongs to a
-base-10 value domain. Calling it a [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double) and printing two fractional digits
+In exact base-10 arithmetic, three units at 19.95 produce 59.85. The amount
+belongs to a base-10 value domain. Calling it a [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double) and printing two fractional digits
 does not create that domain; it only hides the approximation on display. JSON
 Structure therefore declares [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) separately from [`float`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#float) and [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double) and
 carries its value through JSON as a string.
@@ -19,8 +20,12 @@ carries its value through JSON as a string.
 ## Model the amount you mean
 
 Take a simple invoice line: three units at 19.95, producing a line amount of
-59.85. The schema can define both the representation and the intended decimal
-capacity:
+59.85. I chose these values because they make the representation problem
+visible without a contrived calculation: binary64 evaluates `19.95 * 3` as
+`59.849999999999994`, while formatting that result to two fractional digits
+prints `59.85`. The displayed price looks exact even though the stored result
+is an approximation. The schema can define both the representation and the
+intended decimal capacity:
 
 ```json
 {
@@ -80,19 +85,17 @@ and seven fractional digits when the schema does not override them.
 ## Binary floating point solves another problem
 
 [`float`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#float) and [`double`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#double) model IEEE 754 binary32 and binary64 values. They are useful
-for measurements, simulation, graphics, statistics, and the enormous body of
-software built around hardware floating-point arithmetic.
+for domains that use hardware floating-point arithmetic, including measurements,
+simulation, graphics, and statistics.
 
-They are base-2 types. Most finite decimal fractions have no finite base-2
-representation. The usual example, 0.1 plus 0.2, is not a parser bug; it is the
-expected result of mapping decimal source text into binary fractions and then
-rounding.
+They are base-2 types. Decimal fractions such as 0.1 and 19.95 have no finite
+base-2 representation. Their binary floating-point values are rounded
+approximations; that is a property of the representation, not a parser bug.
 
 Money gets no special exemption from binary arithmetic. An application can use
-binary floating point if every operation applies an explicit rounding policy at
-the correct boundary. The policy then lives in application code rather than in
-the type, and repeated multiplication, tax allocation, currency conversion, or
-aggregation will eventually expose any accidental policy.
+binary floating point with an explicit rounding policy. The policy then lives in
+application code rather than in the type, and each multiplication, allocation,
+conversion, or aggregation must apply the intended domain rules.
 
 [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) makes the base-10 intent explicit before any arithmetic begins. A
 binding can select a decimal arithmetic type, a database tool can select a
@@ -103,16 +106,14 @@ fractional digits.
 
 JSON encodes numbers as decimal character sequences. It does not encode them as
 IEEE 754 binary64 and does not prescribe an in-memory numeric type. The problem
-arises in implementations: JSON parsers commonly materialize a number as a
-binary64 `double`. Binary64 is the standard 64-bit floating-point format used
-by the `double` type in many languages. It stores a sign, a binary exponent, and
-53 bits of significant precision. Because it represents values in base 2,
-familiar decimal fractions such as 0.1 and 19.95 usually have no exact binary64
-representation. The parser therefore rounds the decimal sequence before a
-schema-aware layer sees it. At that point, the exact decimal value and its
-original number of digits may already be gone.
+arises when an implementation materializes a JSON number as a binary64
+`double`. Binary64 stores a sign, a binary exponent, and 53 bits of significand
+precision. Because it represents values in base 2, decimal fractions such as
+0.1 and 19.95 have no exact binary64 representation. Such a parser rounds the
+decimal sequence before a schema-aware layer sees it. At that point, the exact
+decimal value and its original digits are not available from that value alone.
 
-Representing a [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) as a JSON string prevents that common parser conversion. A
+Representing a [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal) as a JSON string prevents that numeric conversion. A
 schema-aware binding can read the preserved lexical value directly into a
 base-10 decimal type instead of receiving a value that the parser has already
 converted to binary floating point. The string is not arbitrary text: the
@@ -130,9 +131,9 @@ as [`multipleOf`](https://json-schema.org/draft/2020-12/json-schema-validation.h
 range. That is useful validation, but it does not declare a decimal arithmetic
 type or protect the instance from a binary64 parser.
 
-A string plus a pattern can preserve decimal text, but every tool then needs to
-recognize the convention. JSON Structure gives that convention a core type name
-and standardized annotations.
+A string plus a pattern can preserve decimal text, but the pattern does not
+declare a decimal arithmetic type. JSON Structure gives that intent a core type
+name and standardized precision and scale annotations.
 
 ## Avro uses an unscaled integer
 

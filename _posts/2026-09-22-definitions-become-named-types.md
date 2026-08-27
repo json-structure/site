@@ -4,6 +4,8 @@ title: "Compound Definitions Can Become Named Types"
 date: 2026-09-22
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Validation companion specification.
+uses_structurize: true
 image: /social-cards/definitions-become-named-types.png
 description: >-
   Inspect how each Structurize target handles local compound-definition
@@ -27,24 +29,15 @@ reference.
 
 Target naming rules may change the package, module, case, or legal identifier.
 Whether the referenced identity survives is a converter behavior to test, not
-a guarantee to infer from the source `$ref`. Primitive references fare worse in
-this example and become `object`, `Object`, `interface{}`, or
+a guarantee to infer from the source `$ref`. In this tested input, primitive
+references become `object`, `Object`, `interface{}`, or
 `serde_json::Value` rather than constrained strings.
 
-> [Structurize](https://pypi.org/project/structurize/3.9.0/) is the JSON
-> Structure-focused command-line interface from the
-> [Avrotize project](https://github.com/clemensv/avrotize). The 3.9.0 wheel
-> omits templates and other assets required by most converters. The examples
-> here were tested on Python 3.12.10 with the wheel's dependencies and entry
-> point, but with the complete pinned source tree on `PYTHONPATH`:
+> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
+> Install the pinned release from PyPI:
 >
 > ```powershell
-> py -3.12 -m venv .venv
-> .\.venv\Scripts\Activate.ps1
 > python -m pip install structurize==3.9.0
-> git clone https://github.com/clemensv/avrotize.git structurize-source
-> git -C structurize-source checkout 8dbb19a3a48239679f0df097399c5ddc8cd48c76
-> $env:PYTHONPATH = (Resolve-Path .\structurize-source).Path
 > ```
 
 ## Reuse is visible in the source
@@ -116,8 +109,13 @@ structurize s2go fulfillment-event.struct.json --out generated/go
 structurize s2rust fulfillment-event.struct.json --out generated/rust
 ```
 
-Those commands are defined in the pinned
+Those commands are defined in the
 [Avrotize command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+For a complete multi-file code-generation example, the prebuilt Avrotize
+[Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/)
+shows its source schema and output tree. The disclosures below use the small
+article-specific schema and one representative file per target.
+
 The generated files give a mixed answer. Java declares
 `private java.common.Parcel parcel;`, Go declares `Parcel CommonParcel`, and
 Rust declares `pub parcel: crate::common::parcel::Parcel`. Those three use sites
@@ -130,6 +128,93 @@ declaration. The same source identity therefore survives in three targets,
 degrades in one, and disappears in another. The command list alone does not
 promise more.
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>ShipmentDispatched.cs</code></summary>
+
+```csharp
+/// <summary>
+/// trackingCode
+/// </summary>
+public required object trackingCode { get; set; }
+
+/// <summary>
+/// parcel
+/// </summary>
+public required object parcel { get; set; }
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>ShipmentDispatched.java</code></summary>
+
+```java
+/** trackingCode */
+private Object trackingCode;
+public Object getTrackingCode() { return trackingCode; }
+public void setTrackingCode(Object trackingCode) { this.trackingCode = trackingCode; }
+
+/** parcel */
+private java.common.Parcel parcel;
+public java.common.Parcel getParcel() { return parcel; }
+public void setParcel(java.common.Parcel parcel) { this.parcel = parcel; }
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>EventsShipmentDispatched.go</code></summary>
+
+```go
+// ShipmentDispatched
+type EventsShipmentDispatched struct {
+  FulfillmentId string
+  TrackingCode interface{}
+  Parcel CommonParcel
+}
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>shipmentdispatched.rs</code></summary>
+
+```rust
+/// ShipmentDispatched
+#[derive(Debug, PartialEq, Clone, Default)]
+pub struct ShipmentDispatched {
+  pub fulfillment_id: uuid::Uuid,
+  pub tracking_code: serde_json::Value,
+  pub parcel: crate::common::parcel::Parcel,
+}
+```
+
+</details>
+
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>Events.ts</code></summary>
+
+```typescript
+/** A Events class. */
+export class Events {
+
+  constructor(
+  ) {
+  }
+
+  /**
+   * Creates an instance of Events with sample data for testing.
+   * @returns A new Events instance with sample values.
+   */
+  public static createInstance(): Events {
+    return new Events(
+    );
+  }
+}
+```
+
+</details>
+
 `TrackingCode` marks a broader current limitation. It becomes `object` in C#,
 `Object` in Java, `interface{}` in Go, and `serde_json::Value` in Rust; no
 generated wrapper carries the string pattern. Keep constraints such as the
@@ -141,7 +226,7 @@ before treating primitive definitions as domain types.
 package spelling. C# may use namespaces, Java packages, TypeScript modules,
 Go packages, and Rust modules, but their rules and generator layouts differ.
 Some generators flatten part of the hierarchy; others preserve more of it.
-The [pinned implementation tree](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize)
+The [implementation tree](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize)
 is authoritative for the current projection, not an imagined cross-language
 namespace rule.
 
@@ -171,11 +256,11 @@ This transformation is necessary, but it creates two identities to track:
 - The schema path identifies the contract declaration.
 - The generated identifier identifies its projection in one target.
 
-Generated code should make that mapping deterministic and serializer metadata
-should preserve the wire spelling where needed. Renaming a generated class by
-hand is fragile because regeneration will repeat the generator's policy. If a
-target name matters, treat the generator configuration and version as part of
-the build, and test the public generated surface.
+My recommendation is to require a deterministic mapping and serializer metadata
+that preserves the wire spelling. A manual rename is temporary because
+regeneration applies the generator's policy again. When a target name matters,
+record the generator configuration and version in the build, then test the
+public generated surface.
 
 ## Identity outranks shape
 
