@@ -2,7 +2,7 @@
 layout: post
 title: "Binary Data Has a Shape Too"
 date: 2026-08-28
-published: false
+published: true
 author: Clemens Vasters
 image: /social-cards/binary-data-has-a-shape-too.png
 description: >-
