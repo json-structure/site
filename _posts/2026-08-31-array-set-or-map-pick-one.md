@@ -2,7 +2,7 @@
 layout: post
 title: "Array, Set, or Map? Pick One"
 date: 2026-08-31
-published: false
+published: true
 author: Clemens Vasters
 image: /social-cards/array-set-or-map-pick-one.png
 description: >-
