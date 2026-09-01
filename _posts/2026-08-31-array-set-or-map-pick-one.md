@@ -11,6 +11,10 @@ description: >-
   shows how order, uniqueness, and dynamic keys belong in the type.
 ---
 
+JSON Schema can describe a map, but it cannot bring itself to call one a map.
+You assemble one from object keywords and leave tools to infer that the object
+is meant to be a dictionary.
+
 A JSON array may be a sequence or a set. A JSON object may be a record or a
 dictionary. You cannot tell which contract applies by looking at the brackets.
 
