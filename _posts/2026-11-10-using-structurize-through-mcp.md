@@ -220,7 +220,7 @@ agent must avoid claiming evidence that the tests do not provide. Use an
 explicit output directory, inspect the generated tree, and run the target
 language's formatter, compiler, and tests where available.
 
-The same honesty applies to imports. The Structurize 3.9.0 converters tested here do not
+The same evidence boundary applies to imports. The Structurize 3.9.0 converters tested here do not
 process JSON Structure `$import` or `$importdefs`; they resolve local references
 only. An agent must first invoke a conforming import resolver and produce a
 closed schema, then call `s2...` on that artifact. It must not silently fetch a
@@ -254,8 +254,8 @@ My recommendation is that the agent report four things:
 - The source constraints that the target cannot express or that converter
   policy changes into target-specific constructs.
 
-It should never repair a surprising output by quietly synthesizing a different
-schema from memory. Re-run with corrected options, apply an explicit
+It must not synthesize a replacement schema from memory. Re-run with corrected
+options, apply an explicit
 target-specific overlay, or file a converter defect.
 
 Keep the deterministic artifact and the explanation connected.

@@ -96,7 +96,7 @@ The same rule applies to composition. The draft's [`unit`](https://json-structur
 multiplication with `*`, division with `/`, and exponentiation with `^`, such
 as `m/s^2`. Its UCUM example writes acceleration as `m/s2`. A processor should
 parse each notation according to its own grammar, not transform one with a few
-string replacements and hope.
+string replacements because the two grammars have different semantics.
 
 ## Processor behavior is deliberately asymmetric
 

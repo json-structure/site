@@ -27,8 +27,8 @@ before it is applied to a database.
 
 That behavior illustrates the larger rule. A table has columns. A JSON
 Structure model has named types, arrays, sets, maps, tuples, and choices.
-Converting the latter into the former applies target policy; it does not reveal
-that the source was secretly a table all along.
+Converting the latter into the former applies target policy; the projection does
+not make the source model relational.
 
 > The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
 > Install the pinned release from PyPI:
@@ -39,7 +39,8 @@ that the source was secretly a table all along.
 
 ## One fulfillment model, several table shapes
 
-This order type contains the awkward parts on purpose:
+This order type includes sets, maps, and choices so their target mappings can be
+compared:
 
 ```json
 {
@@ -130,9 +131,9 @@ COMMENT ON COLUMN "Order"."destination" IS '{"schema": {"type": "choice", "name"
 
 </details>
 
-This point is not pedantry. Presence and identity answer different questions.
-Conflating them can produce a technically valid composite key that no one
-intended to operate.
+Presence and identity answer different questions. Conflating them can produce a
+composite key derived from required presence rather than declared relational
+identity.
 
 ## Kusto, Parquet, and Iceberg make different compromises
 
@@ -238,7 +239,9 @@ The generated Parquet inspection JSON makes those mappings explicit:
 
 Iceberg renders the same choice as a required outer struct containing optional
 `postal` and `pickupPoint` fields. That output preserves neither exclusivity nor
-the requirement that one alternative be present:
+the requirement that one alternative be present. The following excerpt omits
+the nested `address` and `locationId` fields to focus on the outer choice
+structure:
 
 ```json
 {
@@ -255,14 +258,9 @@ the requirement that one alternative be present:
 }
 ```
 
-The empty nested `fields` arrays above are an editorial abbreviation; the
-generated file contains required `address` and `locationId` fields inside the
-respective structs.
-
 ## Review the projection as an artifact
 
-A useful review does not ask whether the generated table is equivalent in some
-vague sense. It asks concrete questions:
+Review projection fidelity with these concrete questions:
 
 - Which source constraints survive in the physical schema?
 - Which collections become opaque JSON, and which become typed lists?
@@ -273,9 +271,9 @@ vague sense. It asks concrete questions:
 
 Keep the answers beside the generated files. If a team modifies generated SQL
 to choose `orderId` as the sole primary key, record that as a target-specific
-overlay or post-processing step. Do not backfill a relational key fiction into
-the JSON Structure model unless identity is genuinely part of the shared
-contract and represented with the appropriate JSON Structure facilities.
+overlay or post-processing step. Add relational-key semantics to the JSON
+Structure model only when identity is part of the shared contract and is
+represented with the appropriate JSON Structure facilities.
 
 Each target serves a different workload. SQL DDL prepares an operational or
 warehouse database. Kusto commands prepare an ingestion and query surface.

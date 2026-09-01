@@ -32,8 +32,8 @@ The value must conform to at least one member. When it conforms to several, it
 is considered to have the type of the first matching member. There is no
 "narrowest," "most specific," or "best" branch calculation after the fact.
 
-Primitive branches often make the outcome obvious. Object types overlap more
-easily: they may share required properties, and they may permit additional
+Primitive branches often have non-overlapping validation rules. Object types
+overlap more easily: they may share required properties, and they may permit additional
 ones. If one object fits both branches, their order decides its interpreted
 type.
 

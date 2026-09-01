@@ -99,7 +99,7 @@ In the [Avrotize implementation](https://github.com/clemensv/avrotize/tree/8dbb1
 the five language commands used here are registered as `s2cs`, `s2java`,
 `s2ts`, `s2go`, and `s2rust` in the
 [command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
-The invocation is intentionally unsurprising:
+Run the five registered language commands:
 
 ```bash
 structurize s2cs fulfillment-event.struct.json --out generated/csharp
@@ -285,5 +285,5 @@ Review generated output by asking one question: which values can this artifact
 represent that the JSON Structure contract forbids? If the answer is "both
 alternatives," "no alternative," or "anything at all," put the missing check
 at that boundary. Do not weaken the source schema to make the generated shape
-look more honest. Keep the choice in the contract, where every projection can
-return to it.
+match a less restrictive projection. Keep the choice in the contract, where
+every projection can return to it.

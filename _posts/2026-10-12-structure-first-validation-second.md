@@ -115,7 +115,6 @@ processor may enforce it, but the schema has stated the requirement.
 Policy can be every bit as important as representation, but the two change for
 different reasons. Put the facts needed to represent the document in core. Put
 the warehouse's current acceptance rules in the validation companion. Then a
-capacity change remains a policy edit instead of pretending to be a new integer
-type.
+capacity change remains a policy edit and does not require a new integer type.
 
 [validation]: https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html

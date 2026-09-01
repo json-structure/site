@@ -239,8 +239,8 @@ Everything else is ordinary JSON Structure.</p>
 **The hazard: three components whose names invite three wrong readings.**
 
 The GOES spacecraft magnetometers publish three components named `hp`, `he`, and
-`hn`. Read those letters the obvious way and you get all three wrong. `hp` is
-northward. `he` is *earthward*. `hn` is eastward, and the `n` is for *normal*.
+`hn`. In the EPN frame, `hp` is northward, `he` is *earthward*, and `hn` is
+eastward; the `n` is for *normal*.
 
 They are one vector resolved in a spacecraft-local frame that no register
 serves, so the frame is written out in the schema as a meta-type and cited by
@@ -335,8 +335,8 @@ But look at where it is *not*. `total` is absent from the [`components`](https:/
 [`vectorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#vector-reference-frames), and that absence is the annotation. `hp`, `he` and `hn`
 are resolved in a spacecraft-local frame, so their numbers mean nothing outside
 it. A magnitude is frame-invariant. **`total` is therefore the member that may
-be compared across two spacecraft, and `hp` is not.** Try guessing that from the
-field names.
+be compared across two spacecraft, and `hp` is not.** The field names alone do
+not encode that distinction.
 
 And `arcjet_flag` is [`resultQuality`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#result-quality). When the electric thrusters fire they
 generate a field at the sensor that looks exactly like a geophysical signal.
@@ -424,8 +424,9 @@ against tables it can go and fetch.
 
 Both fields carry [`kind: "icao"`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coded-values-reference-and-kind), because ICAO is the register model behind them.
 But they draw from two different lists, and it is [`reference`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#coded-values-reference-and-kind) that says which.
-Confusing the two is the easiest mistake to make with this keyword, which is why
-this sample exists.
+`kind` identifies the registry model, while `reference` identifies the specific
+list. This sample shows both fields because each carries a separate part of the
+contract.
 
 ## Sample: which number is the latitude?
 

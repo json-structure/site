@@ -171,8 +171,8 @@ path specified: ''`; `generated/fulfillment-order.md` succeeds once
 
 Check the generated file into a documentation site if that makes reviews and
 publishing easier, or build it on demand. Either policy works as long as the
-build can reproduce the page and detects stale output. A simple check for a
-repository that commits generated Markdown looks like this:
+build can reproduce the page and detects stale output. For a repository that
+commits generated Markdown, use this check:
 
 ```powershell
 New-Item -ItemType Directory -Force docs/reference | Out-Null

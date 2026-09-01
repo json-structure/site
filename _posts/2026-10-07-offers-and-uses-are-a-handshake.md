@@ -136,7 +136,7 @@ is a schema or meta-schema document. For an application add-in, it is the
 application instance. Treating [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as globally "data-only" would reject the
 project's own meta-schemas.
 
-This mechanism rejects wishful extension. A consumer cannot select an
+This mechanism rejects undeclared extensions. A consumer cannot select an
 unadvertised name, and an offer cannot point vaguely outside its defining
 document. If a processor accepts either case, it is inventing vocabulary rather
 than implementing the declared one.

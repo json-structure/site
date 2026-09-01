@@ -130,8 +130,8 @@ member name must be followed by a ',', '=', or '}'`. The intended `Set<T>`
 shape is visible in the generated source, but TypeScript cannot enforce it
 until the generator produces legal enum identifiers.
 
-A native set also denies accidental positional APIs. Code cannot honestly ask
-for "the first handling tag" unless it first creates an ordering policy. That
+A native set also denies accidental positional APIs. Code cannot ask for "the
+first handling tag" unless it first creates an ordering policy. That
 friction is useful. The source contract never defined a first tag.
 
 ## JSON preserves values, not set behavior

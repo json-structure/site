@@ -99,8 +99,8 @@ Here [`$schema`](https://json-structure.github.io/core/draft-vasters-json-struct
 offers. [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) is a set of names, so an instance may select several compatible
 add-ins.
 
-There is one wrinkle. A schema document may itself be an instance of a
-meta-schema, in which case [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) applies at that level. In ordinary use, the
+A schema document may itself be an instance of a meta-schema, in which case
+[`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) applies at that level. In ordinary use, the
 document receiving optional members carries [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword).
 
 ## The unusual direction of [`$extends`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#extends-keyword)

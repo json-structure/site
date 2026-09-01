@@ -132,12 +132,12 @@ if errors:
 
 This gate catches two classes of failure. `json.load` catches broken JSON
 syntax; `SchemaValidator` catches a JSON document that does not satisfy the
-schema language. There is no invented `structurize` schema-validation command
-in the sequence. The API owns this job.
+schema language. `structurize` has no schema-validation command, so this gate
+uses the SDK API.
 
 Use the validator options required by the contract. For example, a schema using
 imports needs the SDK's import configuration and resolvable imported schemas.
-Do not enable features merely to make an unexplained keyword disappear.
+Enable only the features required by the schema contract.
 
 ## Reject malformed and empty JSON Lines
 
@@ -178,11 +178,10 @@ if failed or records == 0:
     raise SystemExit(1)
 ```
 
-Why bother when the instance validator already parses input? Because the
+Syntax preflight is required because the
 [`validate.py` implementation](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/validate.py)
 silently skips malformed JSON Lines. If all lines are malformed, no instance is
-checked and the command can still return zero. That behavior makes syntax
-preflight a required build step, not optional tidiness.
+checked and the command can still return zero.
 
 ## Run instance validation last
 
@@ -271,7 +270,8 @@ of the three implies either of the others.
 The distinction pays off when a build fails. A malformed line points to an
 input producer. A schema error points to the contract change. An invalid
 instance points to a disagreement between data and contract. One red light with
-three possible causes saves a line of YAML and wastes an afternoon.
+three possible causes does not identify which contract failed. Report each gate
+separately.
 
 Validation belongs in the build because contracts become useful only when
 violations stop delivery. Validate the schema, reject malformed or empty input,

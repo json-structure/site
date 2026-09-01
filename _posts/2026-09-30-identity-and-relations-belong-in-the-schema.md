@@ -164,8 +164,7 @@ validator necessarily enforce uniqueness across a collection or dereference an
 external service. A relations-aware processor has to perform those semantic
 checks.
 
-That leaves less room for wishful readings of `customerId`. The relation is no
-longer hidden in a string property's spelling; its declaration records the
-target, cardinality, and scope.
+The relation is no longer inferred from the spelling of `customerId`; its
+declaration records the target, cardinality, and scope.
 
 [relations]: https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html

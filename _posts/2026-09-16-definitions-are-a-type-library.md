@@ -122,8 +122,8 @@ the same type:
 
 Only the first exists in the example. A registry, generator, or target language
 that folds case can collapse types the schema keeps distinct. Such a tool needs
-an explicit collision policy; it cannot reinterpret the source names and
-pretend nothing happened.
+an explicit collision policy that defines how case-folded names are
+disambiguated.
 
 Identifiers are constrained as well: property and type names begin with a
 letter or underscore and continue with letters, digits, or underscores. A

@@ -95,8 +95,8 @@ The instance above makes the issue visible. `9007199254740993` is one greater
 than the largest exactly interoperable integer. Parsing it through binary64 as a
 JSON number can change it. Parsing the quoted representation as [`uint64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint64) cannot.
 
-The instance representation therefore changes at 64 bits. Slightly untidy? Yes.
-It is preferable to delivering a nearby integer with no warning.
+The instance representation therefore changes at 64 bits. That change prevents
+a parser from delivering a nearby integer with no warning.
 
 ## Bounds do not name a machine type
 

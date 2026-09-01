@@ -121,7 +121,7 @@ value used above. The draft's enabling prose once says
 [`JSONStructureAlternateNames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#enabling-the-annotations). That is an inconsistency, not an alias. Current
 schemas should follow the offered key in the meta-schema.
 
-Do not confuse [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) with [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) or [`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword). [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) maps members
+[`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword), [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword), and [`symbol`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#symbol-keyword) serve different purposes. [`altenums`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altenums-keyword) maps members
 of an enumeration, while unit symbols annotate the presentation of measured
 values. Neither supplies another name for a property.
 

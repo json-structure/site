@@ -24,7 +24,7 @@ pointers, or apply import shadowing. The correct pipeline therefore has two
 processors: first resolve and flatten imports with a conforming JSON Structure
 processor; then pass the closed schema to an `s2...` converter.
 
-Do not pretend the second processor performed the first one's job.
+The second processor does not perform import resolution.
 
 > The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
 > Install the pinned release from PyPI:

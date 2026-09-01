@@ -227,8 +227,8 @@ package spelling. C# may use namespaces, Java packages, TypeScript modules,
 Go packages, and Rust modules, but their rules and generator layouts differ.
 Some generators flatten part of the hierarchy; others preserve more of it.
 The [implementation tree](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize)
-is authoritative for the current projection, not an imagined cross-language
-namespace rule.
+defines the current projection; JSON Structure defines no single namespace
+mapping across these languages.
 
 That difference becomes visible when two schema namespaces each contain a
 `Parcel`. The schema can distinguish them by full pointer:

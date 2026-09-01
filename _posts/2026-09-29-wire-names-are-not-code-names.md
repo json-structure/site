@@ -115,7 +115,8 @@ in the [command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a482
 The underscore spelling of `--system_text_json_annotation` is exact.
 Without the serializer mode, a generator may still produce legal code names,
 but the generated serializer has no obligation to emit the alternate JSON key.
-That difference belongs in build configuration, not in tribal memory.
+Record that difference in build configuration instead of relying on
+undocumented team knowledge.
 
 For a complete multi-file code-generation example, the prebuilt Avrotize
 [Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/)
