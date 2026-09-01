@@ -5,6 +5,7 @@ display_title: "[`contains`](https://json-structure.github.io/validation/draft-v
 date: 2026-10-14
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Validation companion specification.
 image: /social-cards/contains-is-not-an-item-type.png
 description: >-
   Use items to type every array member and contains to count members matching
@@ -95,7 +96,7 @@ three matches:
 }
 ```
 
-A useful batch with two alarms satisfies the schema:
+A batch with two alarms satisfies the one-to-three alarm rule:
 
 ```json
 [
@@ -147,7 +148,7 @@ the batch actually contains an alarm, much less bound the alarm count.
 
 For this batch, every element must satisfy [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword), and between one and three of
 those elements must also satisfy [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains). Remove either clause and the rule
-changes. That is why treating [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) as an item type is not a harmless
-shorthand; it accepts data the schema author probably meant to reject.
+changes. Treating [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) as an item type is therefore not shorthand;
+it leaves every nonmatching element without an item-type constraint.
 
 [validation]: https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html

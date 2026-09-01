@@ -4,6 +4,7 @@ title: "Enums Need Translation Too"
 date: 2026-09-25
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Alternate Names and Units companion specifications.
 image: /social-cards/enums-need-translation-too.png
 description: >-
   Keep enum values stable while mapping them to external codes and localized
@@ -145,7 +146,7 @@ from `lang:de-CH` to `lang:de`. It does not say whether an ERP adapter is allowe
 to accept both `30` and `SHIPPED`. Those are processor and application policies.
 
 Nor does it turn labels into identities. Localized text can change for editorial
-reasons. Canonical enum values should change only when the contract changes.
+reasons. Treat a canonical enum value change as a contract change.
 
 One enum can serve a UI and several external systems without giving any of them
 ownership of its canonical values.

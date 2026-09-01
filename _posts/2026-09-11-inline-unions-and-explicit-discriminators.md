@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "Inline Unions and Explicit Discriminators"
+title: "Inline Unions Need Explicit Discriminators"
 date: 2026-09-11
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/inline-unions-and-explicit-discriminators.png
 description: >-
   Model one object shape with several concrete variants by combining an
@@ -11,9 +12,9 @@ description: >-
 ---
 
 Consider an address object with `city`, `state`, and `zip`. It may also carry a
-street, or it may carry a post office box number. Looking at those optional
-properties to identify the address variant works until an object has both, or
-until the model acquires another overlapping variant.
+street, or it may carry a post office box number. Those optional properties do
+not state which variant the producer selected. An object can contain both, and
+a later variant can overlap with either shape.
 
 An inline [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) puts the decision in the data. Its variants share an
 abstract base, and a string property in the object names the selected variant.
@@ -109,8 +110,8 @@ selector can: the processor validates the named branch and has no reason to
 rank the two shapes.
 
 The selector may shadow a property from the base, but only when that inherited
-property is a [`string`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#string). Usually there is no reason to declare it in the base:
-the inline choice injects it.
+property is a [`string`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#string). Do not declare it in the base unless the base itself needs
+that string property; the inline choice injects the selector.
 
 Choice names and selector values are case-sensitive. `streetAddress` does not
 select `StreetAddress`.

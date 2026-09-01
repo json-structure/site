@@ -1,26 +1,41 @@
 ---
 layout: post
-title: "Welcome to JSON Structure"
+title: "JSON Structure Defines Data Models"
 date: 2026-02-04
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/welcome-to-json-structure.png
 description: >-
   JSON Structure is a strongly typed schema language for data models that map
   cleanly to programming languages, databases, APIs, and JSON.
 ---
 
-JSON Structure is a strongly typed schema language for data models that must
-work consistently across code, databases, APIs, and JSON.
+A data model often gets defined several times: once in application code, again
+in database columns, again in an API description, and once more in validation
+rules. Those definitions drift because each tool sees only its own part of the
+contract.
+
+JSON Structure puts the type model in one schema. Code, databases, APIs, and
+validators can then consume the same declaration instead of reconstructing it
+from neighboring artifacts.
 
 ## What JSON Structure is
 
-JSON Structure is a schema language designed to describe data types and structures that map cleanly to programming language types, database constructs, and the ubiquitous JSON data encoding. If you've worked with JSON Schema, the syntax will feel familiar – but the philosophy is different.
+JSON Structure is a schema language for data types that need to cross
+programming languages, databases, APIs, and JSON documents. Its object and
+array syntax will look familiar if you know JSON Schema, but its primary job is
+different.
 
-Where JSON Schema focuses primarily on document validation (asking "does this JSON document conform to these rules?"), JSON Structure focuses on being a strong **data definition language**. It's about defining types that your code, your databases, and your APIs can share and understand consistently.
+[JSON Schema](https://json-schema.org/specification) defines constraints for
+JSON documents. JSON Structure defines a strongly typed data model from which
+tools can derive validators, code, database definitions, and API artifacts.
+Validation remains part of the model, but it is not the only consumer.
 
 ## Why another schema language?
 
-Data definition is split across specialized tools. You have Protocol Buffers for efficient binary serialization, Avro for Hadoop ecosystems, JSON Schema for validation, OpenAPI for API definitions, and countless language-specific type systems. Each serves its purpose, but none combines the following properties:
+Data definition is split across specialized tools such as Protocol Buffers,
+Apache Avro, JSON Schema, OpenAPI, and language-specific type systems. JSON
+Structure makes a different set of design choices:
 
 - **Clear mapping to programming language types** – Your schema types should translate directly to [`string`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#string), [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32), [`decimal`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#decimal), [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime), and so on in your favorite language. No ambiguity about what "number" means.
 
@@ -34,7 +49,10 @@ Data definition is split across specialized tools. You have Protocol Buffers for
 
 ## The core philosophy
 
-JSON Structure schemas are deterministic. Given a schema, there's exactly one way to interpret it. This might sound obvious, but it's a departure from JSON Schema's flexibility, where the same data might validate differently depending on interpretation.
+JSON Structure defines explicit types and processing rules so that conforming
+implementations can derive the same data model from the same schema. The
+[Core Specification](https://json-structure.github.io/core/draft-vasters-json-structure-core.html)
+is the authority for those rules.
 
 The type system is designed to be **generative** – you can generate code, database schemas, API documentation, and validation logic from a single source of truth. The schema is both a validation artifact and the canonical definition of the data model.
 
@@ -52,4 +70,7 @@ This blog exists to go beyond the specification. While the [Core Specification](
 
 If you're new to JSON Structure, start with the [Primer](/json-structure-primer.html) for a high-level overview, then dive into the [Core Specification](https://json-structure.github.io/core) when you're ready for the details.
 
-The official SDKs are available for all major languages – check the [homepage](/) for installation instructions. Each SDK provides schema validation and instance validation, with consistent behavior across platforms.
+The project publishes SDKs for C, .NET, Go, Java, Perl, PHP, Python, R, Ruby,
+Rust, Swift, TypeScript, and Visual Studio Code. The [homepage](/) links to the
+available packages and installation instructions. Consult each SDK's status
+and documentation before selecting it for a production build.

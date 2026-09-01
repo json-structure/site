@@ -4,13 +4,16 @@ title: "Scope and Qualifiers Make Links Precise"
 date: 2026-11-04
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Relations companion specification.
 image: /social-cards/scope-and-qualifiers-make-links-precise.png
 description: >-
   Resolve relations against explicit in-document collections and attach
   version, locale, channel, and validity facts to the link where they belong.
 ---
 
-A product identity alone does not tell a resolver which catalog collection to
+Use [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) to say where a relation resolves, and use
+[`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) to describe the link. A product identity alone does not tell a
+resolver which catalog collection to
 search, nor does it record the dates or sales channel for a storefront listing.
 The relations extension uses [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) to bound resolution and [`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) to
 describe the listing itself. Those qualifier values do not become properties
@@ -137,7 +140,7 @@ The relation instance carries the composite identity and a separate qualifier:
 
 ## Scope is a schema pointer
 
-The [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) value is an RFC 6901 JSON Pointer to a schema location, not a JSON
+The [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) value is an [RFC 6901 JSON Pointer](https://www.rfc-editor.org/rfc/rfc6901) to a schema location, not a JSON
 Path query over the instance. The pointed-to property must hold an [`array`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#array),
 [`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set), or [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) compatible with [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword). For maps, resolution searches the
 values rather than treating map keys as target identities.

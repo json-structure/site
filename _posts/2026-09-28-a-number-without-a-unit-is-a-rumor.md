@@ -4,6 +4,7 @@ title: "A Number Without a Unit Is a Rumor"
 date: 2026-09-28
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Units companion specification.
 image: /social-cards/a-number-without-a-unit-is-a-rumor.png
 description: >-
   Attach scientific units, UCUM codes, display symbols, SI prefixes, and
@@ -78,12 +79,12 @@ A useful instance is pleasantly uneventful:
   "measuredAt": "2026-10-22T08:15:00Z",
   "temperature": 4.2,
   "linePressure": 245.0,
-  "replacementCost": 1899.50
+  "replacementCost": "1899.50"
 }
 ```
 
 The instance stays compact. Its schema says that `4.2` is degrees Celsius,
-`245.0` is kilopascals, and `1899.50` is euros. A consumer no longer has to
+`245.0` is kilopascals, and `"1899.50"` is euros. The cost is a JSON string
 infer units from property names or documentation parked elsewhere.
 
 ## [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) overlap on purpose
@@ -94,8 +95,8 @@ for exponentiation; acceleration, for example, is `m/s^2`.
 
 [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) carries a case-sensitive UCUM expression. UCUM supports computation
 and conversion rather than display alone. A schema may include both annotations.
-When it does, they should denote the same physical quantity and unit, and a
-system that supports UCUM should prefer [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) for conversion.
+When both appear, the draft recommends that they denote the same physical
+quantity and that a UCUM-aware system prefer [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) for conversion.
 
 That is why Celsius appears as `°C` under [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and `Cel` under [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword).
 They are two notations for the same unit, serving different consumers. A

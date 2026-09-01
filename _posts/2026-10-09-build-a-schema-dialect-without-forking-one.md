@@ -4,16 +4,17 @@ title: "Build a Schema Dialect Without Forking One"
 date: 2026-10-09
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Import, Units, and Validation companion specifications.
 image: /social-cards/build-a-schema-dialect-without-forking-one.png
 description: >-
   Compose a custom JSON Structure meta-schema from named add-ins and give
   processors an explicit, resolvable vocabulary contract.
 ---
 
-Suppose a telemetry project needs units and validation, but has no use for
-alternate names or conditional composition. Copying the extended meta-schema
-would work. It would also leave the project maintaining a private copy of a
-specification it did not mean to change.
+A telemetry project may need units and validation without alternate names or
+conditional composition. Copying the extended meta-schema would leave that
+project maintaining a private copy of definitions it does not intend to
+change.
 
 Composition records the smaller decision directly. Import the base definitions,
 select the offered add-ins, and publish the result under a new identifier. A

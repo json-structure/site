@@ -4,15 +4,17 @@ title: "Structure First, Validation Second"
 date: 2026-10-12
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Validation companion specification.
 image: /social-cards/structure-first-validation-second.png
 description: >-
   Separate stable structural and generative facts from validation policies
   that constrain otherwise well-shaped data.
 ---
 
-[`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) tells a processor how to represent a value and which machine-level value
-space it occupies. [`minimum: 0`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum) rejects part of that space for one application.
-A generator needs the first fact; it may have no use for the second.
+[`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) defines a signed 32-bit value represented as a JSON number.
+[`minimum: 0`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum) rejects the negative part of that value space for one application. A
+generator needs the type fact to choose a target type; range enforcement is a
+separate job.
 
 JSON Structure keeps the foundation structural and makes validation a
 companion vocabulary. That boundary is useful for validators, but it matters
@@ -96,7 +98,8 @@ satisfy those structural rules.
 
 For example, `"itemCount": 12.5` violates the structural integer contract.
 `"itemCount": 6000` is structurally a valid [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) but violates warehouse
-policy. The distinction produces better diagnostics and cleaner tooling.
+policy. This distinction lets a tool report whether the value has the wrong
+representation or falls outside an application rule.
 
 ## The companion must be declared
 
@@ -112,7 +115,6 @@ processor may enforce it, but the schema has stated the requirement.
 Policy can be every bit as important as representation, but the two change for
 different reasons. Put the facts needed to represent the document in core. Put
 the warehouse's current acceptance rules in the validation companion. Then a
-capacity change remains a policy edit instead of pretending to be a new integer
-type.
+capacity change remains a policy edit and does not require a new integer type.
 
 [validation]: https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html

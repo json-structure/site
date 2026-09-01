@@ -4,13 +4,15 @@ title: "Cardinality Belongs on the Relation"
 date: 2026-11-02
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Relations companion specification.
 image: /social-cards/cardinality-belongs-on-the-relation.png
 description: >-
   Put target type, identity, and single-or-multiple shape on relation
   declarations instead of inferring them from plural names or foreign keys.
 ---
 
-`orders` sounds like a collection and `customer` sounds singular. A processor
+Declare relation cardinality. Do not infer it from a name. `orders` sounds like a collection and `customer` sounds singular. A
+processor
 cannot derive an instance shape from either spelling. The relations extension
 declares that shape with [`cardinality`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword), next to the [`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword) it qualifies.
 
@@ -110,12 +112,12 @@ The instance shape follows the declarations:
   "orders": [
     {
       "orderNumber": "O-9001",
-      "total": 149.50,
+      "total": "149.50",
       "customer": { "identity": "C-1042" }
     },
     {
       "orderNumber": "O-9002",
-      "total": 87.25,
+      "total": "87.25",
       "customer": { "identity": "C-1042" }
     }
   ]

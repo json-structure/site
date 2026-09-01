@@ -4,13 +4,15 @@ title: "Three Clocks in One Observation"
 date: 2026-11-06
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Units and Semantic Annotations companion specifications.
 image: /social-cards/three-clocks-in-one-observation.png
 description: >-
   Separate phenomenon, result, and ingestion time in telemetry so event-time
   analysis, production latency, and pipeline latency remain distinguishable.
 ---
 
-A weather observation may carry three timestamps for three different events:
+Keep separate timestamps for separate events. A weather observation can carry three:
+
 [`phenomenonTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#phenomenon-time) says when the value applied to the world, [`resultTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#result-time) says
 when the result became available, and [`ingestionTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#ingestion-time) says when a declared
 receiving system accepted the record. The values may be close or even equal,
@@ -85,9 +87,8 @@ The corresponding record makes the timing visible:
 }
 ```
 
-The temperature applies at 06:15:00. Sensor processing and quality checks make
-the result available four seconds later; network transit and gateway work add
-another fifteen seconds before acceptance.
+In this example, the temperature applies at 06:15:00. Sensor processing and quality checks
+make the result available 4 seconds later, at 06:15:04. Network transit and gateway work add 15 seconds before acceptance at 06:15:19.
 
 ## Phenomenon time is the analytical axis
 

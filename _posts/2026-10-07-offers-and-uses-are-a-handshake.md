@@ -5,18 +5,21 @@ display_title: "[`$offers`](https://json-structure.github.io/core/draft-vasters-
 date: 2026-10-07
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Units and Validation companion specifications.
 image: /social-cards/offers-and-uses-are-a-handshake.png
 description: >-
   See how a meta-schema advertises named vocabulary add-ins and a schema
   document explicitly selects only the features it uses.
 ---
 
-Optional vocabulary needs two declarations. A meta-schema publishes named
-feature bundles through [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword); a document checked by that meta-schema
-selects bundles through [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) at its own root.
+A processor needs to distinguish features a meta-schema makes available from
+features one schema actually uses. Without both declarations, availability
+looks like activation and processors must guess which optional vocabulary a
+document intended to select.
 
-Neither declaration substitutes for the other. An offer says what can be
-selected. A use says what this document actually selected.
+[`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) publishes the available feature bundles. [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) records the bundles selected by a
+document checked against that meta-schema. The two declarations form a
+handshake; neither substitutes for the other.
 
 ## Extended publishes real feature names
 
@@ -120,12 +123,12 @@ an optional type augmentation such as delivery instructions, and an application
 instance can select it with [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword). In that case [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) belongs to the data
 instance, not to the schema.
 
-The layers are consistent: a schema document is an instance when a meta-schema
-checks it. The current core draft's wording is not as tidy. Its normative rules
-say [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) "MUST only" occur in instance documents, while the same section says
-it may occur in a meta-schema that references a parent schema. The core
-meta-schema includes [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as a `SchemaDocument` property, and the published
-extended and validation meta-schemas use it at their roots.
+A schema document is itself an instance when a meta-schema checks it. The
+current core draft is inconsistent at this point. One normative rule says
+[`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) "MUST only" occur in instance documents, while the preceding text
+allows it in a meta-schema that references a parent schema. The core
+meta-schema includes [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as a `SchemaDocument` property, and the published extended and
+validation meta-schemas use it at their roots.
 
 The interoperable reading is therefore concrete: [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) occurs at the root of
 the document receiving the add-ins. For vocabulary composition, that receiver
@@ -133,7 +136,7 @@ is a schema or meta-schema document. For an application add-in, it is the
 application instance. Treating [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as globally "data-only" would reject the
 project's own meta-schemas.
 
-This mechanism rejects wishful extension. A consumer cannot select an
+This mechanism rejects undeclared extensions. A consumer cannot select an
 unadvertised name, and an offer cannot point vaguely outside its defining
 document. If a processor accepts either case, it is inventing vocabulary rather
 than implementing the declared one.

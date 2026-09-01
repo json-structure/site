@@ -444,6 +444,62 @@ body {
   background: transparent;
 }
 
+.generated-output {
+  margin: 18px 0;
+  border: 1px solid #c9d6e2;
+  border-radius: 4px;
+  background: #f8fafc;
+}
+
+.generated-output summary {
+  position: relative;
+  padding: 11px 42px 11px 14px;
+  color: #294f73;
+  background: #edf4fa;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.45;
+  list-style: none;
+}
+
+.generated-output summary::-webkit-details-marker {
+  display: none;
+}
+
+.generated-output summary::after {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #4078c0;
+  border-bottom: 2px solid #4078c0;
+  content: "";
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.generated-output[open] summary {
+  border-bottom: 1px solid #c9d6e2;
+}
+
+.generated-output[open] summary::after {
+  transform: translateY(-30%) rotate(225deg);
+}
+
+.blog-post .post-content .generated-output pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0 0 3px 3px;
+  background: #fff;
+}
+
+.generated-output summary:focus-visible {
+  outline: 3px solid rgba(64, 120, 192, 0.35);
+  outline-offset: 2px;
+}
+
 .blog-post .post-content blockquote {
   border-left: 4px solid #4078c0;
   margin: 20px 0;

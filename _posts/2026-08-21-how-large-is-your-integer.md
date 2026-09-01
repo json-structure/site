@@ -4,6 +4,7 @@ title: "How Large Is Your Integer?"
 date: 2026-08-21
 published: true
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/how-large-is-your-integer.png
 description: >-
   JSON Structure gives integers an explicit width and signedness, from int8 to
@@ -79,10 +80,11 @@ Notice where the quotes begin. They are part of the type contract.
 
 ## The 53-bit boundary
 
-JSON's grammar permits arbitrarily long numeric literals. Interoperable software
-often does not. RFC 8259 identifies the integer range from &minus;(2<sup>53</sup>)+1 through
-2<sup>53</sup>&minus;1 as exactly interoperable when implementations use IEEE 754 binary64,
-as JavaScript and many general JSON stacks do.
+JSON's grammar permits numeric literals beyond the exact integer range of IEEE
+754 binary64. [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259#section-6) states that integers in the inclusive range
+&minus;(2<sup>53</sup>&minus;1) through 2<sup>53</sup>&minus;1 are interoperable in the sense that
+implementations agree exactly on their numeric values. That statement assumes
+the limits of binary64 implementations.
 
 That is why [`int8`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int8) through [`uint32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint32) use unquoted JSON numbers, while [`int64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int64),
 [`uint64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint64), [`int128`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int128), and [`uint128`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint128) use strings. The string syntax follows the
@@ -93,8 +95,8 @@ The instance above makes the issue visible. `9007199254740993` is one greater
 than the largest exactly interoperable integer. Parsing it through binary64 as a
 JSON number can change it. Parsing the quoted representation as [`uint64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint64) cannot.
 
-The instance representation therefore changes at 64 bits. Slightly untidy? Yes.
-It is preferable to delivering a nearby integer with no warning.
+The instance representation therefore changes at 64 bits. That change prevents
+a parser from delivering a nearby integer with no warning.
 
 ## Bounds do not name a machine type
 
@@ -126,11 +128,11 @@ XML Schema starts from a different numeric foundation. `xs:integer` has
 arbitrary precision, and derived types include `xs:byte`, `xs:short`, `xs:int`,
 `xs:long`, plus unsigned variants. Facets can define further ranges.
 
-That family is closer to JSON Structure's explicitness than JSON Schema's lone
-[`integer`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#integer). The practical difference is the carrier: XML text naturally holds
+That family declares more integer categories than JSON Schema's single
+[`integer`](https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6.1.1) type. The practical difference is the carrier: XML text holds
 the lexical form for every integer, while JSON distinguishes number and string
-nodes. JSON Structure uses number nodes where the common JSON ecosystem can
-preserve them and string nodes where it cannot.
+nodes. JSON Structure uses number nodes through `uint32` and string nodes for
+the 64-bit and 128-bit integer types.
 
 For the example above, `nextSequence` is a [`uint64`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uint64) all the way from JSON text to
 generated code and storage. No consumer has to reconstruct that decision from a

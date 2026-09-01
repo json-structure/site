@@ -1,22 +1,23 @@
 ---
 layout: post
-title: "Importing Types Without Copying Them"
+title: "Imported Types Become Local Types"
 date: 2026-09-18
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Import companion specification.
 image: /social-cards/importing-types-without-copying-them.png
 description: >-
   Share a postal-address schema with $import or $importdefs while preserving
   local namespaces, URI rules, and explicit shadowing.
 ---
 
-The title needs a qualification. The author does not copy a shared type, but a
-JSON Structure processor does. It fetches the external schema, copies its types
-into the importing document's [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword), and treats the result as local.
+An imported declaration does not remain a live cross-document reference. A
+JSON Structure processor fetches the external schema, copies its types into the
+importing document's [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword), rewrites their internal references, and treats the result as local.
 
-This is deliberate copy semantics, not a live cross-document reference. The
-maintained declaration still has one source; consumers of the processed schema
-see a self-contained type library.
+The published declaration remains the source that authors maintain. Consumers
+of the processed schema see a local type library with deterministic names. The
+processor, not the schema author, performs the copy and reference rewriting.
 
 ## Start with the published type
 
@@ -107,17 +108,17 @@ external root type.
 Choose [`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) when the published root belongs in the local contract. Choose
 [`$importdefs`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#importdefs-keyword) when only the external type library is relevant.
 
-## The URI is the identity
+## The URI is the import reference
 
 The values of [`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) and [`$importdefs`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#importdefs-keyword) must be absolute URIs. Processors
-resolve them according to RFC 3986 and RFC 3987. The import specification adds
-no package-name search, filesystem convention, registry protocol, or fallback
-rule.
+resolve those URIs. The import specification defines no package-name search,
+filesystem convention, registry protocol, or fallback rule.
 
 A processor must resolve the URI and verify that the result is a schema
-document. Implementations should cache remote documents, use secure transport,
-and detect circular or excessively deep import chains. A local cache may satisfy
-the request; it does not replace the URI as the schema's identity.
+document. The specification's security considerations recommend caching remote
+documents and using secure transport. They require processors to detect and
+mitigate circular or excessively deep import chains. A local cache may satisfy
+the request, but the schema still contains the same import URI.
 
 ## Shadowing replaces; it does not merge
 

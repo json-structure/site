@@ -4,11 +4,16 @@ title: "Array, Set, or Map? Pick One"
 date: 2026-08-31
 published: true
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/array-set-or-map-pick-one.png
 description: >-
   Array, set, and map encode different collection contracts. One playlist schema
   shows how order, uniqueness, and dynamic keys belong in the type.
 ---
+
+JSON Schema can describe a map, but it cannot bring itself to call one a map.
+You assemble one from object keywords and leave tools to infer that the object
+is meant to be a dictionary.
 
 A JSON array may be a sequence or a set. A JSON object may be a record or a
 dictionary. You cannot tell which contract applies by looking at the brackets.
@@ -104,30 +109,34 @@ constrain dictionary values. A tool must interpret the combination of keywords
 to recover the intended collection model. JSON Structure declares that model as
 the type.
 
-Avro draws a similar line between arrays and maps, but it has no native set.
-Uniqueness is consequently an application convention when an Avro array carries
-set-like data. JSON Structure puts that convention into the type.
+The [Avro specification](https://avro.apache.org/docs/1.12.0/specification/#schema-declaration) defines array and map schemas but no set schema.
+When an Avro array represents set-like data, uniqueness is an application-level
+rule. JSON Structure puts that rule into the declared `set` type.
 
-XML Schema has sequences and repeated elements, while uniqueness constraints
-can identify distinct values. Map-shaped data generally needs an explicit entry
-element with key and value children. The dictionary is a convention built from
-those elements rather than a named collection type.
+[XML Schema](https://www.w3.org/TR/xmlschema11-1/) has model groups, repeated elements, and identity
+constraints. It has no built-in map datatype. A schema can model map-shaped
+data with repeated entry elements containing keys and values.
 
 ## Start with the allowed operations
 
-Ask what consumers may do. The sample JSON is liable to mislead you.
+Choose the type from the operations the contract permits, not from the JSON
+syntax used to carry it.
 
-- Use [`array`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#array) when position, insertion order, or repetition matters.
-- Use [`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set) when membership matters, duplicates are invalid, and order does not.
-- Use [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) when keys are data discovered at runtime and all values share one
-  schema.
+- Choose [`array`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#array) if a consumer may address an element by position, insert it at a
+  position, or retain the same value more than once. Those are queue operations.
+- Choose [`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set) if a consumer may test membership, add a value, or remove a value,
+  but may not assign that value a position. Those are territory-list operations.
+- Choose [`map`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#map) if a consumer may get, put, or remove a value by a key supplied as
+  data. Those are per-device-setting operations.
 
-Do not use a map merely to get fast lookup when the keys are fixed fields. That
-model is an object. Likewise, today's duplicate-free sample does not turn an
-array into a set.
+An [`object`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#object) answers a different question. Its property names are part of the type,
+so consumers work with declared fields such as `title`. A map's keys are part of
+the instance, so consumers work with entries such as `"kitchen"` and
+`"headphones"` that appear at runtime.
 
-There is no promise about a map's iteration order. JSON objects are unordered in
-the JSON data model, and JSON Structure defines a map as dynamic key-value
-pairs, not as a sorted or insertion-ordered dictionary. If an API returns a map
-and the UI happens to display its entries in insertion order, that behavior is
-an accident. If order matters, carry an array.
+The current contents do not decide the type. A queue containing no duplicate
+tracks is still an array. A territory set happens to have an array-shaped JSON
+encoding, but consumers cannot use its element positions as part of the
+contract. A device map may be emitted in a stable order by one implementation,
+but consumers cannot rely on that order. If the contract permits positional
+operations, model an array.

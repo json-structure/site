@@ -4,6 +4,7 @@ title: "The Tuple Deserves a Name"
 date: 2026-09-02
 published: false
 author: Clemens Vasters
+specification_scope: Core only.
 image: /social-cards/the-tuple-deserves-a-name.png
 description: >-
   A tuple is more than a fixed-length array. JSON Structure names each position
@@ -13,7 +14,7 @@ description: >-
 `[13.405, 52.52]` is compact, valid JSON, and a trap. Longitude then latitude?
 Latitude then longitude? Perhaps two unrelated measurements?
 
-A tuple needs order and names. In JSON Structure, [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) defines the named
+The contract needs order and names. In JSON Structure, [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) defines the named
 positions and their types, while [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword) fixes those names in wire order. The
 instance stays an array.
 
@@ -65,7 +66,7 @@ Swap the names in the [`tuple`](https://json-structure.github.io/core/draft-vast
 the two instance values and the JSON remains structurally valid, because both
 positions are doubles, but the point moves. A schema cannot detect a plausible
 number placed in the wrong same-typed position. Naming the positions makes the
-contract reviewable and gives generated APIs better names than `item0` and
+contract reviewable and lets generated APIs use domain names instead of `item0` and
 `item1`.
 
 ## The length is fixed
@@ -104,8 +105,8 @@ An object would be clearer on the wire:
 ```
 
 Use that shape when readers should see the names on the wire. Choose the tuple
-when an existing format is positional, when the size difference is material at
-the scale involved, or when an external contract demands coordinate arrays.
+when an existing format is positional, when measured payload or storage cost
+justifies the positional form, or when an external contract demands coordinate arrays.
 The schema and generated code retain names either way.
 
 ## Nearby models, different tradeoffs

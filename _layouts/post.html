@@ -122,6 +122,14 @@
           </header>
 
           <div class="post-content">
+            {% if page.specification_scope %}
+            <blockquote class="specification-scope">
+              <p><strong>Specification scope:</strong> {{ page.specification_scope }}</p>
+            </blockquote>
+            {% endif %}
+            {% if page.uses_structurize %}
+            <p class="tool-introduction"><strong>Tool:</strong> <a href="https://pypi.org/project/structurize/3.9.0/">Structurize</a> is the JSON Structure-focused command-line interface and conversion toolkit from the <a href="https://github.com/clemensv/avrotize">Avrotize project</a>.</p>
+            {% endif %}
             {{ content }}
           </div>
         </article>

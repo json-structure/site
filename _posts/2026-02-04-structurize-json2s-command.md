@@ -1,17 +1,24 @@
 ---
 layout: post
-title: "Inferring JSON Structure Schemas from Your Data with Structurize"
+title: "Structurize Turns Sample JSON into Typed Schemas"
 date: 2026-02-04
 author: Clemens Vasters
+specification_scope: Core only.
+uses_structurize: true
 image: /social-cards/structurize-json2s-command.png
 description: >-
   Structurize's json2s command infers JSON Structure schemas from JSON and
   JSONL samples for validation, code generation, and documentation.
 ---
 
-The new **Structurize** `json2s` command infers a valid JSON Structure schema
-from JSON files for validation, code generation, or documentation. It analyzes
-the samples and determines the types they contain.
+Sample JSON shows the values that happened to occur. It does not give those
+values stable names, declare their intended types, or turn repeated shapes into
+a reusable contract.
+
+**Structurize** closes that first gap. Its `json2s` command analyzes JSON and
+JSONL samples and produces a JSON Structure schema for review, validation, code
+generation, and documentation. The result is an informed proposal, not proof of
+the producer's intent. Review it before treating it as a contract.
 
 ## What Structurize is
 
@@ -97,6 +104,9 @@ structurize json2s events.jsonl --out events.jstruct.json --type-name DomainEven
 
 Produces a single object type with all fields merged:
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>events.jstruct.json</code></summary>
+
 ```json
 {
   "$schema": "https://json-structure.org/meta/core/v0/#",
@@ -104,20 +114,60 @@ Produces a single object type with all fields merged:
   "type": "object",
   "name": "DomainEvent",
   "properties": {
-    "event_type": { "type": "string" },
-    "user_id": { "type": "string" },
-    "email": { "type": "string" },
-    "created_at": { "type": "string" },
-    "order_id": { "type": "string" },
-    "total": { "type": "double" },
-    "items": { "type": "array", "items": { ... } },
-    "payment_id": { "type": "string" },
-    "amount": { "type": "double" },
-    "method": { "type": "string" }
+    "amount": {
+      "type": "double"
+    },
+    "created_at": {
+      "type": "datetime"
+    },
+    "email": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "name": "DomainEvent_items",
+        "properties": {
+          "qty": {
+            "type": "integer"
+          },
+          "sku": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "qty",
+          "sku"
+        ]
+      }
+    },
+    "method": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "payment_id": {
+      "type": "string"
+    },
+    "total": {
+      "type": "double"
+    },
+    "user_id": {
+      "type": "string"
+    }
   },
-  "required": ["event_type"]
+  "required": [
+    "event_type"
+  ]
 }
 ```
+
+</details>
 
 This works, but it loses the structure: `email` only makes sense for
 `user_created` events, [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) only for `order_placed`, and so on. All fields
@@ -136,18 +186,33 @@ Now the inferrer detects that `event_type` is a **discriminator** whose values
 correlate with distinct field signatures. It produces a JSON Structure
 [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) type — an inline union:
 
+<details class="generated-output" markdown="1">
+<summary>Generated output: <code>events.jstruct.json</code></summary>
+
 ```json
 {
   "$schema": "https://json-structure.org/meta/core/v0/#",
-  "$id": "https://example.com/schemas/DomainEvent",
+  "$id": "https://example.com/DomainEvent",
   "type": "choice",
   "name": "DomainEvent",
   "$extends": "#/definitions/DomainEventBase",
   "selector": "event_type",
   "choices": {
-    "order_placed": { "type": { "$ref": "#/definitions/OrderPlaced" } },
-    "payment_received": { "type": { "$ref": "#/definitions/PaymentReceived" } },
-    "user_created": { "type": { "$ref": "#/definitions/UserCreated" } }
+    "order_placed": {
+      "type": {
+        "$ref": "#/definitions/order_placed"
+      }
+    },
+    "payment_received": {
+      "type": {
+        "$ref": "#/definitions/payment_received"
+      }
+    },
+    "user_created": {
+      "type": {
+        "$ref": "#/definitions/user_created"
+      }
+    }
   },
   "definitions": {
     "DomainEventBase": {
@@ -155,47 +220,103 @@ correlate with distinct field signatures. It produces a JSON Structure
       "type": "object",
       "name": "DomainEventBase",
       "properties": {
-        "event_type": { "type": "string" }
+        "event_type": {
+          "type": "string"
+        }
       }
     },
-    "OrderPlaced": {
+    "order_placed": {
       "type": "object",
-      "name": "OrderPlaced",
+      "name": "order_placed",
       "$extends": "#/definitions/DomainEventBase",
       "properties": {
-        "items": { "type": "array", "items": { ... } },
-        "order_id": { "type": "string" },
-        "total": { "type": "double" },
-        "user_id": { "type": "string" }
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "name": "DomainEvent_items",
+            "properties": {
+              "qty": {
+                "type": "integer"
+              },
+              "sku": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "qty",
+              "sku"
+            ]
+          }
+        },
+        "order_id": {
+          "type": "string"
+        },
+        "total": {
+          "type": "double"
+        },
+        "user_id": {
+          "type": "string"
+        }
       },
-      "required": ["items", "order_id", "total", "user_id"]
+      "required": [
+        "items",
+        "order_id",
+        "total",
+        "user_id"
+      ]
     },
-    "PaymentReceived": {
+    "payment_received": {
       "type": "object",
-      "name": "PaymentReceived",
+      "name": "payment_received",
       "$extends": "#/definitions/DomainEventBase",
       "properties": {
-        "amount": { "type": "double" },
-        "method": { "type": "string" },
-        "order_id": { "type": "string" },
-        "payment_id": { "type": "string" }
+        "amount": {
+          "type": "double"
+        },
+        "method": {
+          "type": "string"
+        },
+        "order_id": {
+          "type": "string"
+        },
+        "payment_id": {
+          "type": "string"
+        }
       },
-      "required": ["amount", "method", "order_id", "payment_id"]
+      "required": [
+        "amount",
+        "method",
+        "order_id",
+        "payment_id"
+      ]
     },
-    "UserCreated": {
+    "user_created": {
       "type": "object",
-      "name": "UserCreated",
+      "name": "user_created",
       "$extends": "#/definitions/DomainEventBase",
       "properties": {
-        "created_at": { "type": "string" },
-        "email": { "type": "string" },
-        "user_id": { "type": "string" }
+        "created_at": {
+          "type": "datetime"
+        },
+        "email": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        }
       },
-      "required": ["created_at", "email", "user_id"]
+      "required": [
+        "created_at",
+        "email",
+        "user_id"
+      ]
     }
   }
 }
 ```
+
+</details>
 
 This is a proper inline union:
 

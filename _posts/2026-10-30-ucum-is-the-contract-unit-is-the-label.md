@@ -5,17 +5,23 @@ display_title: "UCUM Is the Contract; [`unit`](https://json-structure.github.io/
 date: 2026-10-30
 published: false
 author: Clemens Vasters
+specification_scope: Core with the Units companion specification.
 image: /social-cards/ucum-is-the-contract-unit-is-the-label.png
 description: >-
   Pair readable unit notation with case-sensitive UCUM expressions so people
   get a useful label and processors get a computational contract.
 ---
 
-[`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) may describe the same measurement, but processors use
-them differently. [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) carries scientific notation for recognition and
-display; [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) carries a case-sensitive UCUM expression for computation
-and conversion. A schema may include either keyword. When it includes both,
-the values must denote the same physical quantity and unit.
+Use [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) for readable notation and
+[`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) for computation. A label such as `°C` is useful to a reader, but
+it is not the case-sensitive UCUM code for Celsius. Treating display notation
+as computational syntax makes case, prefixes, typography, and composition
+rules depend on guesswork.
+
+The two annotations separate those jobs. [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) carries notation for recognition and display;
+[`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) carries a case-sensitive UCUM expression for computation and conversion. A
+schema may include either keyword. When it includes both, the values must denote
+the same physical quantity and unit.
 
 ## One pressure, two compatible notations
 
@@ -76,8 +82,9 @@ look alike to remain compatible.
 
 There is no `prefix` keyword. In `kPa`, lowercase `k` is the kilo prefix and
 scales pascals by 10<sup>3</sup>. In `mPa`, lowercase `m` means milli and scales them by
-10<sup>&minus;3</sup>. `MPa` uses uppercase `M` for mega. Those three pressures differ by
-orders of magnitude.
+10<sup>&minus;3</sup>. `MPa` uses uppercase `M` for mega. For the same numeric value, `kPa` denotes one million times the pressure
+denoted by `mPa`. `MPa` denotes one billion times the pressure denoted by
+`mPa`.
 
 UCUM requires its case-sensitive variant, so case changes the expression's
 meaning. A processor must not lowercase a code, title-case it, replace `u` with
@@ -89,7 +96,7 @@ The same rule applies to composition. The draft's [`unit`](https://json-structur
 multiplication with `*`, division with `/`, and exponentiation with `^`, such
 as `m/s^2`. Its UCUM example writes acceleration as `m/s2`. A processor should
 parse each notation according to its own grammar, not transform one with a few
-string replacements and hope.
+string replacements because the two grammars have different semantics.
 
 ## Processor behavior is deliberately asymmetric
 
