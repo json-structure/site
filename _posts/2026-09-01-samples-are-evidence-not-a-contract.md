@@ -2,7 +2,7 @@
 layout: post
 title: "Samples Are Evidence, Not a Contract"
 date: 2026-09-01
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 uses_structurize: true

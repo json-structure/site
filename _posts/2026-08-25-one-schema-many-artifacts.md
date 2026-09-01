@@ -2,7 +2,7 @@
 layout: post
 title: "One Schema, Many Artifacts"
 date: 2026-08-25
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 uses_structurize: true
