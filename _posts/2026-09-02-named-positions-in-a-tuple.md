@@ -2,7 +2,7 @@
 layout: post
 title: "Named Positions in a Tuple"
 date: 2026-09-02
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/named-positions-in-a-tuple.png
