@@ -4,7 +4,7 @@ title: "Samples Are Evidence, Not a Contract"
 date: 2026-09-01
 published: true
 author: Clemens Vasters
-specification_scope: Core only.
+specification_scope: Core with the Units and Semantic Annotations companion specifications.
 uses_structurize: true
 image: /social-cards/samples-are-evidence-not-a-contract.png
 description: >-
@@ -14,20 +14,24 @@ description: >-
 
 The earlier post, [Structurize Turns Sample JSON into Typed Schemas]({% post_url 2026-02-04-structurize-json2s-command %}),
 shows how the `json2s` command turns JSON and JSONL samples into a useful JSON
-Structure draft. This article starts with that result and examines the next
-step: refining an inferred schema into a durable contract.
+Structure draft. Turning that draft into a reviewed contract requires decisions
+that no collection of samples can make.
 
 The draft describes the evidence in the sample set. A week of shipment records,
 for example, may contain `carrierService` in every row and only three status
-values. Structurize can faithfully capture both observations. The next step is
-to add what the records cannot contain: whether the producer guarantees the
-field, whether the three states are the complete lifecycle, and which future
-changes consumers must accept.
+values. Structurize can capture both observations. It cannot determine whether
+the producer guarantees the field, whether the three states are the complete
+lifecycle, what the fields mean, or which future changes consumers must accept.
 
-That refinement turns an inferred schema into an owned contract. Reviewers add
-domain types, presence rules, complete value domains, and compatibility policy;
-Structurize can then project the result into documentation and code. Sampling
-provides the productive starting point, and domain knowledge completes it.
+Contract owners must supply those facts. At minimum, add a
+[`description`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#description-keyword)
+to each type and property so that readers know what it represents. Add the
+[Units](https://json-structure.github.io/units/draft-vasters-json-structure-units.html)
+companion when numbers represent measurements or money. Add the
+[Semantic and Reference-System Annotations](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html)
+companion when consumers need machine-readable concepts, observation roles,
+time semantics, code-list identities, or reference systems. Structurize can
+then project the reviewed contract into documentation and code.
 
 > The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
 > Install the pinned release from PyPI:
@@ -123,8 +127,8 @@ In the three records above, `orderId`, `status`, `carrierService`, and `contact`
 are always present. `dispatchAt` is absent once. The sample therefore supports
 a presence distinction, but it provides no reason for that distinction.
 Perhaps `dispatchAt` is valid only after dispatch. Perhaps one producer omitted
-a mandatory value. Perhaps carrier assignment will become asynchronous next
-month, making `carrierService` temporarily unavailable.
+a mandatory value. If carrier assignment becomes asynchronous,
+`carrierService` may be temporarily unavailable.
 
 Review each inferred [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) entry against a lifecycle rule or an API
 guarantee. Also review every omission. Frequency tells you where to ask; domain
@@ -133,9 +137,10 @@ policy supplies the answer.
 ## Strings conceal several decisions
 
 UUID-, URI-, email-, and Base64-like values remain strings during inference.
-That restraint is valuable. A string that happens to parse as a UUID in the
-sample may be an opaque identifier whose future syntax is wider. An email-like
-contact may permit a queue name later. Base64-looking text may simply be text.
+Leaving those values as strings avoids turning coincidental spelling into a
+contract. A string that happens to parse as a UUID in the sample may be an
+opaque identifier whose future syntax is wider. An email-like contact may
+permit a queue name later. Base64-looking text may simply be text.
 
 When the domain guarantee is real, promote the declaration deliberately:
 
@@ -160,19 +165,23 @@ The same review applies to binary data. Declaring [`binary`](https://json-struct
 and annotations such as [`contentEncoding`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#contentencoding-keyword) describe a processing contract. A
 run of plausible characters does not establish either one.
 
-## Temporal shape needs a promise
+## Review inferred date and time types
 
-Temporal inference requires all observed non-null values for the field to be
-strings. It selects `datetime`, `date`, or `time` when at least 80% of those
-strings match that one temporal shape; otherwise, absent enum inference, the
-field remains a string.
+Structurize considers temporal types only when all observed non-null values for
+a field are strings. If it does not infer an enum first, it selects `datetime`,
+`date`, or `time` when at least 80% of those strings match its pattern for that
+type. These patterns are inference heuristics, not complete RFC 3339 validators.
 
-A threshold protects the analysis from treating every date-like accident as a
-type declaration, but it cannot answer the domain question. `dispatchAt` can be
-a [`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime) only if the producer promises an RFC 3339 date-time with an offset.
-Historical consistency is evidence for that promise, not the promise itself.
+Check every inferred temporal type before retaining it. JSON Structure requires
+[`datetime`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#datetime),
+[`date`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#date),
+and [`time`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#time)
+values to use their corresponding RFC 3339 forms. The two observed
+`dispatchAt` values end in `Z`, so `datetime` describes them. Keep that type
+only if all valid future values will also satisfy the Core definition.
 
-This edit makes the commitment explicit:
+The type still does not say what instant the field represents. Add that meaning
+in a description:
 
 ```jsonc
 "dispatchAt": {
@@ -181,8 +190,11 @@ This edit makes the commitment explicit:
 }
 ```
 
-The missing third value still requires a presence decision. Type and
-requiredness answer different questions.
+The missing third value still requires a presence decision. The type controls
+the value's representation, `required` controls its presence, and the
+description states its meaning for readers. If software must distinguish an
+event time from a result or ingestion time, use the Semantic Annotations
+companion to state that role in machine-readable form.
 
 ## Small value sets are not automatically enums
 
@@ -219,11 +231,13 @@ A practical inference workflow has distinct stages:
    options with the review.
 2. Compare inferred presence, primitive types, temporal candidates, enums, and
    choices with producer guarantees and consumer requirements.
-3. Add stable names, descriptions, constraints, and domain types that the data
-   alone cannot establish.
-4. Validate the source samples against the edited schema. Passing confirms
+3. Add a description to every type and property. Add constraints and domain
+  types that the data alone cannot establish.
+4. Add units to measurements and monetary values. Add semantic annotations
+  where consumers need machine-readable meaning or reference systems.
+5. Validate the source samples against the edited schema. Passing confirms
    coverage of those observations; it says nothing about unobserved valid cases.
-5. Publish the reviewed JSON Structure document as the source contract, with
+6. Publish the reviewed JSON Structure document as the source contract, with
    normal versioning and ownership.
 
 Then project artifacts from that contract:
@@ -310,5 +324,6 @@ namespace Csharp
 
 </details>
 
-Samples record observed values. Inference summarizes those observations. Only
-the reviewed schema states what producers may send and consumers must accept.
+Publish the schema only after its owners have confirmed the producer guarantees
+and added the descriptions, units, and semantic annotations that its consumers
+need.

@@ -453,7 +453,7 @@ body {
 
 .generated-output summary {
   position: relative;
-  padding: 11px 42px 11px 14px;
+  padding: 11px 14px 29px;
   color: #294f73;
   background: #edf4fa;
   cursor: pointer;
@@ -469,15 +469,29 @@ body {
 
 .generated-output summary::after {
   position: absolute;
-  top: 50%;
-  right: 15px;
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid #4078c0;
-  border-bottom: 2px solid #4078c0;
-  content: "";
-  transform: translateY(-70%) rotate(45deg);
-  transition: transform 0.15s ease;
+  bottom: 7px;
+  left: 50%;
+  color: #4078c0;
+  content: "\2304\A\2304";
+  font-size: 17px;
+  line-height: 0.45;
+  white-space: pre;
+  transform: translateX(-50%);
+  animation: generated-output-cue 2.2s ease-in-out infinite;
+}
+
+@keyframes generated-output-cue {
+  0%,
+  70%,
+  100% {
+    opacity: 0.7;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  82% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(3px);
+  }
 }
 
 .generated-output[open] summary {
@@ -485,7 +499,9 @@ body {
 }
 
 .generated-output[open] summary::after {
-  transform: translateY(-30%) rotate(225deg);
+  content: "\2303\A\2303";
+  transform: translateX(-50%);
+  animation: none;
 }
 
 .blog-post .post-content .generated-output pre {
@@ -1010,6 +1026,10 @@ section table {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
+  .generated-output summary::after {
+    animation: none;
+  }
+
   .sdk-card,
   .skip-link {
     transition: none;
