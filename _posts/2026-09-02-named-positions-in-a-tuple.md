@@ -1,10 +1,10 @@
 ---
 layout: post
+uses_structurize: true
 title: "Named Positions in a Tuple"
 date: 2026-09-02
 published: true
 author: Clemens Vasters
-specification_scope: Core only.
 image: /social-cards/named-positions-in-a-tuple.png
 description: >-
   Named tuple positions preserve longitude and latitude in generated APIs while
@@ -65,6 +65,46 @@ schema is the property named `longitude`. The second number is `latitude` for
 the same reason.
 
 Swap the names in the [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword) array and you change the wire contract. Swap only
+## Generated code keeps the names
+
+The Structurize TypeScript generator maps the tuple to a class with named
+properties:
+
+```bash
+structurize s2ts wgs84-position.struct.json --out generated/typescript
+```
+
+For the `GeographicPoint` tuple above, it generates this class:
+
+```typescript
+/** Longitude followed by latitude, in decimal degrees. */
+export class GeographicPoint {
+    constructor(
+        public longitude: number,
+    public latitude: number
+    ) {}
+
+    public toJSON(): [number, number] {
+        return [this.longitude, this.latitude];
+    }
+
+    public static fromJSON(json: string): GeographicPoint {
+        const value: unknown = JSON.parse(json);
+        if (!Array.isArray(value) || value.length !== 2) {
+            throw new Error('Expected a GeographicPoint JSON array with 2 elements');
+        }
+        return new GeographicPoint(
+            value[0] as number,
+          value[1] as number
+        );
+    }
+}
+```
+
+Application code therefore reads `point.longitude` and `point.latitude`.
+`JSON.stringify(point)` calls `toJSON()` and emits `[13.405,52.52]`, preserving
+the tuple's positional wire contract. `GeographicPoint.fromJSON()` performs the
+reverse mapping from the JSON array to the named properties.
 the two instance values and the JSON remains structurally valid, because both
 positions are doubles, but the point moves. A schema cannot detect a plausible
 number placed in the wrong same-typed position. Naming the positions makes the
