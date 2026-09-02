@@ -54,6 +54,7 @@ Its JSON instance remains an array:
 
 ```json
 {
+  "$schema": "https://example.com/schemas/wgs84-position",
   "stationId": "berlin-alexanderplatz",
   "position": [13.405, 52.52]
 }
@@ -80,6 +81,7 @@ That means this is invalid:
 
 ```json
 {
+  "$schema": "https://example.com/schemas/wgs84-position",
   "stationId": "berlin-alexanderplatz",
   "position": [13.405]
 }
