@@ -1,22 +1,23 @@
 ---
 layout: post
-title: "The Tuple Deserves a Name"
+title: "Named Positions in a Tuple"
 date: 2026-09-02
 published: false
 author: Clemens Vasters
 specification_scope: Core only.
-image: /social-cards/the-tuple-deserves-a-name.png
+image: /social-cards/named-positions-in-a-tuple.png
 description: >-
-  A tuple is more than a fixed-length array. JSON Structure names each position
-  so a geographic point keeps its coordinate order and application meaning.
+  Named tuple positions preserve longitude and latitude in generated APIs while
+  the JSON wire format remains an array.
 ---
 
-`[13.405, 52.52]` is compact, valid JSON, and a trap. Longitude then latitude?
-Latitude then longitude? Perhaps two unrelated measurements?
+`[13.405, 52.52]` is a JSON array, but the array does not identify its
+positions. It does not say whether longitude or latitude comes first, or
+whether the numbers are coordinates at all.
 
-The contract needs order and names. In JSON Structure, [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) defines the named
-positions and their types, while [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword) fixes those names in wire order. The
-instance stays an array.
+In JSON Structure, [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword) defines the names and types of the
+positions. [`tuple`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#tuple-keyword) lists those names in wire order. The instance remains an
+array.
 
 ## A point with named positions
 
@@ -109,7 +110,7 @@ when an existing format is positional, when measured payload or storage cost
 justifies the positional form, or when an external contract demands coordinate arrays.
 The schema and generated code retain names either way.
 
-## Nearby models, different tradeoffs
+## How Other Schema Systems Model Positional Data
 
 JSON Schema Draft 2020-12 models positional arrays with [`prefixItems`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.3.1.1). Each
 position gets a schema, but the positions themselves have no standard names.

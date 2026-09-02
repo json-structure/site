@@ -8,8 +8,8 @@ specification_scope: Core with the Validation companion specification.
 uses_structurize: true
 image: /social-cards/definitions-become-named-types.png
 description: >-
-  Inspect how each Structurize target handles local compound-definition
-  references; some preserve named types while others currently erase them.
+  Structurize preserves local compound-definition references in Java, Go, and
+  Rust, while C# and TypeScript lose part or all of that type identity.
 ---
 
 Two properties can contain objects with identical members and still denote
@@ -21,7 +21,7 @@ JSON Structure assigns compound declarations stable locations under
 [`definitions`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#definitions-keyword)
 and connects use sites with local
 [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword)
-values. Structurize 3.9.0 emits named declarations for the example in several
+values. Structurize emits named declarations for the example in several
 targets, but it does not make every generated property refer to them. Java, Go,
 and Rust preserve the `Parcel` property type. C# emits `Parcel.cs` yet types the
 property as `object`; TypeScript emits neither a `Parcel` class nor a useful
@@ -32,13 +32,6 @@ Whether the referenced identity survives is a converter behavior to test, not
 a guarantee to infer from the source `$ref`. In this tested input, primitive
 references become `object`, `Object`, `interface{}`, or
 `serde_json::Value` rather than constrained strings.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
 
 ## Reuse is visible in the source
 
@@ -94,8 +87,9 @@ The paths identify `Common/TrackingCode` and `Common/Parcel`, distinguish them
 from declarations in other namespaces, and give every use site one stable
 destination. The earlier article
 [Definitions Are a Type Library]({% post_url 2026-09-16-definitions-are-a-type-library %})
-explains those schema semantics. The generated-artifact question is what
-happens after a language cannot use the JSON Pointer as a type name.
+explains those schema semantics. The remaining question is how a generator
+preserves those identities when a target language cannot use JSON Pointers as
+type names.
 
 ## A compound reference may become a target-language reference
 
@@ -110,7 +104,7 @@ structurize s2rust fulfillment-event.struct.json --out generated/rust
 ```
 
 Those commands are defined in the
-[Avrotize command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+[Avrotize command registry](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json).
 For a complete multi-file code-generation example, the prebuilt Avrotize
 [Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/)
 shows its source schema and output tree. The disclosures below use the small
@@ -226,12 +220,12 @@ before treating primitive definitions as domain types.
 package spelling. C# may use namespaces, Java packages, TypeScript modules,
 Go packages, and Rust modules, but their rules and generator layouts differ.
 Some generators flatten part of the hierarchy; others preserve more of it.
-The [implementation tree](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize)
+The [implementation tree](https://github.com/clemensv/avrotize/tree/main/avrotize)
 defines the current projection; JSON Structure defines no single namespace
 mapping across these languages.
 
-That difference becomes visible when two schema namespaces each contain a
-`Parcel`. The schema can distinguish them by full pointer:
+Give two schema namespaces their own `Parcel` definition. The schema
+distinguishes them by full pointer:
 
 ```text
 #/definitions/Inbound/Parcel
@@ -262,16 +256,13 @@ regeneration applies the generator's policy again. When a target name matters,
 record the generator configuration and version in the build, then test the
 public generated surface.
 
-## Identity outranks shape
+## Verify every generated reference
 
 A useful review starts from references, not files. For each local `$ref`, find
 the corresponding generated declaration and verify that all use sites point to
 it. Then check namespace collisions, case conversion, reserved words, and the
 constraints that a target type cannot express.
 
-The generated declaration may move between packages or acquire a sanitized
-name as tooling evolves. The source identity does not move with it:
-`#/definitions/Common/Parcel` still means the declaration at that pointer.
-That stable center is why definitions are worth preserving as named types. A
-generator can adapt a supported compound name to a language without dissolving
-the concept.
+Generated declarations may move between packages or acquire sanitized names as
+tooling evolves. `#/definitions/Common/Parcel` remains the contract identity.
+Test that every generated use site maps back to that declaration.

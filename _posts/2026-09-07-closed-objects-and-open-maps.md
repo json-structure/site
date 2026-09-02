@@ -1,14 +1,15 @@
 ---
 layout: post
-title: "Closed Objects and Open Maps Are Different Things"
+title: "Closed Objects and Open Maps"
 date: 2026-09-07
 published: false
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/closed-objects-and-open-maps.png
 description: >-
-  Close the record when its fields are fixed, and put runtime-defined labels in
-  a separate map. The two kinds of extensibility have different contracts.
+  Use a closed object for schema-defined fields and a separate map for
+  runtime-defined keys. A new object field requires a schema revision; a new
+  map key does not.
 ---
 
 A record with fixed fields and a dictionary with unknown keys are both JSON
@@ -82,9 +83,9 @@ Now misspell a fixed field:
 }
 ```
 
-This instance fails twice. The required `labels` property is absent, and the
-undeclared `lables` property is forbidden. The error lands on the misspelling
-instead of letting it masquerade as an extension.
+This instance fails twice. The required `labels` property is absent, and
+validation rejects `lables` as an undeclared property. The misspelling cannot
+be accepted as an extension.
 
 If the outer object were open, `lables` could pass as an additional property
 while the missing required `labels` would still fail. With an optional field,
@@ -140,8 +141,8 @@ points such as `xs:any`. A repeated key/value element is the usual dictionary
 shape. As with JSON Structure, a wildcard inside the record and a contained map
 are not equivalent evolution strategies.
 
-If `sensor.vendor` becomes a declared field, its location answers the
-compatibility question. At the top level, that change requires a schema revision. Inside
-`labels`, it is another runtime key governed by the existing string value
-schema. Mixing the namespaces throws away that answer and waits for a collision
-to settle it.
+`sensor.vendor` has different compatibility rules in the two namespaces. As a
+new top-level field, it requires a schema revision. As a key inside `labels`,
+it requires no schema revision, and its value must satisfy the existing string
+schema. Keeping the namespaces separate prevents future object fields from
+colliding with existing label keys.

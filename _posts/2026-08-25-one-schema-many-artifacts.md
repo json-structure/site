@@ -21,19 +21,12 @@ consumer.
 
 JSON Structure provides that target-independent definition. It records the
 intended types, presence rules, and collection semantics once, before any
-language, protocol, or database narrows them. In the Structurize version pinned
-below, the listed commands read that schema and project it into target
-artifacts. A target may preserve a declaration, translate it into a native
+language, protocol, or database narrows them. The listed Structurize commands
+read that schema and project it into target artifacts. A target may preserve a
+declaration, translate it into a native
 type, or represent it more weakly; that result describes the projection, not a
 revision of the model. The generated outputs remain useful, but the JSON
 Structure schema is the contract from which they can be rebuilt.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
 
 ## Put the decisions in the contract
 
@@ -114,9 +107,9 @@ text.
 
 ## Project views, do not maintain copies
 
-[Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/) exposes the
-direct JSON Structure projections used here. The commands and options are defined in the
-[3.9.0 CLI manifest](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+Structurize exposes the direct JSON Structure projections used here. The
+commands and options are defined in the
+[CLI manifest](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json).
 From the same `shipment-plan.struct.json`, a build can produce several views:
 
 ```powershell

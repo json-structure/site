@@ -7,8 +7,9 @@ author: Clemens Vasters
 specification_scope: Core with the Relations companion specification.
 image: /social-cards/cardinality-belongs-on-the-relation.png
 description: >-
-  Put target type, identity, and single-or-multiple shape on relation
-  declarations instead of inferring them from plural names or foreign keys.
+  Declare `targettype` and `cardinality` on each relation, and declare
+  `identity` on the target type instead of inferring any of them from names or
+  foreign keys.
 ---
 
 Declare relation cardinality. Do not infer it from a name. `orders` sounds like a collection and `customer` sounds singular. A
@@ -22,7 +23,7 @@ Every relation names a [`targettype`](https://json-structure.github.io/relations
 The identity is an ordered array of property names. One name produces a scalar
 relation identity. Several names produce an array in the declared order.
 
-This customer and order book declares both directions and makes each shape
+This order book model declares relations in both directions and makes each shape
 explicit:
 
 ```json
@@ -124,7 +125,7 @@ The instance shape follows the declarations:
 }
 ```
 
-## [`single`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) and [`multiple`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) choose different JSON shapes
+## [`single`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) and [`multiple`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) use different JSON shapes
 
 [`"cardinality": "single"`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) means exactly one target and uses one relation
 object, rather than an array of length one. [`"cardinality": "multiple"`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#cardinality-keyword) means
@@ -147,12 +148,11 @@ Without the shared namespace, a `customer` property containing an object and a
 `customer` relation containing an identity would compete for the same JSON
 member.
 
-## Scope completes the reference
+## Scope identifies the target collection
 
-[`targettype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#targettype-keyword) says what kind of thing is referenced. [`identity`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#identity-keyword) says which
-values identify one. [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) says where candidates are found in this document.
-The resolver follows the schema pointer to an array, set, or map, then searches
-its elements or map values for the matching identity.
+[`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) identifies the array, set, or map that contains candidate targets.
+The resolver searches its elements or map values for a target whose declared
+identity matches the relation object.
 
 Cardinality does not establish uniqueness. The target's identity values must be
 unique within the relevant identity scope, and a relations-aware processor must

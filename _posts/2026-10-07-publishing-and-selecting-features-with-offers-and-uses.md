@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "$offers and $uses Are a Handshake"
-display_title: "[`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) and [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) Are a Handshake"
+title: "Publishing and Selecting Features with $offers and $uses"
+display_title: "Publishing and Selecting Features with [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) and [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword)"
 date: 2026-10-07
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Units and Validation companion specifications.
-image: /social-cards/offers-and-uses-are-a-handshake.png
+image: /social-cards/publishing-and-selecting-features-with-offers-and-uses.png
 description: >-
-  See how a meta-schema advertises named vocabulary add-ins and a schema
-  document explicitly selects only the features it uses.
+  A meta-schema advertises named vocabulary add-ins, and a schema document
+  selects only the features it uses.
 ---
 
 A processor needs to distinguish features a meta-schema makes available from
@@ -18,10 +18,10 @@ looks like activation and processors must guess which optional vocabulary a
 document intended to select.
 
 [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) publishes the available feature bundles. [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) records the bundles selected by a
-document checked against that meta-schema. The two declarations form a
-handshake; neither substitutes for the other.
+document checked against that meta-schema. Neither declaration substitutes for
+the other.
 
-## Extended publishes real feature names
+## The extended meta-schema publishes named bundles
 
 The extended v0 meta-schema offers five named bundles:
 
@@ -34,10 +34,10 @@ The extended v0 meta-schema offers five named bundles:
 An offer may point to one add-in definition or to an array of them. The
 validation offer, for example, selects five add-ins together:
 [`NumberValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), [`StringValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), [`StringFormatAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions),
-[`ArrayValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), and [`ObjectValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). The public name is the
-stable choice; the pointers describe the concrete additions it activates.
+[`ArrayValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), and [`ObjectValidationAddIn`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). A schema selects the public
+name; the pointers identify the add-ins behind that name.
 
-This is a fragment of the actual shape:
+The relevant `$offers` fragment is:
 
 ```json
 {
@@ -112,7 +112,7 @@ add-ins from the application schema:
 }
 ```
 
-The instance simply obeys the resulting schema. The schema document is where
+The instance is validated against the resulting schema. The schema document is where
 [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword), [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern), [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), and [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum) had to be admitted into the schema
 vocabulary.
 
@@ -130,7 +130,7 @@ allows it in a meta-schema that references a parent schema. The core
 meta-schema includes [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as a `SchemaDocument` property, and the published extended and
 validation meta-schemas use it at their roots.
 
-The interoperable reading is therefore concrete: [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) occurs at the root of
+The project's own meta-schemas support this reading: [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) occurs at the root of
 the document receiving the add-ins. For vocabulary composition, that receiver
 is a schema or meta-schema document. For an application add-in, it is the
 application instance. Treating [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) as globally "data-only" would reject the

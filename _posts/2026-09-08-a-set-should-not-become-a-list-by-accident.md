@@ -8,8 +8,9 @@ specification_scope: Core only.
 uses_structurize: true
 image: /social-cards/a-set-should-not-become-a-list-by-accident.png
 description: >-
-  Follow a JSON Structure set through generated code and serialization targets,
-  preserving uniqueness where possible and making semantic loss explicit.
+  A JSON Structure set maps to native set-like types in several generated
+  targets. Other projections require explicit uniqueness checks and an ordering
+  policy when byte order matters.
 ---
 
 Suppose a shipment acquires the handling tag `fragile` twice: once from the
@@ -18,22 +19,15 @@ exposes their positions. Code can then start counting tags or depending on
 arrival order, even though neither behavior belongs to the fulfillment
 contract.
 
-JSON alone cannot distinguish that list from a collection in which membership
-is unique and order is meaningless; both appear as arrays. JSON Structure can:
-it declares `handlingTags` as a [`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set).
+JSON uses an array for both collections, so the value alone does not distinguish
+a list from a set. JSON Structure declares `handlingTags` as a [`set`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#set);
+that schema requires unique elements and treats their order as insignificant.
 
-The Structurize 3.9.0 outputs tested below map that declaration to set-like
+The Structurize outputs tested below map that declaration to set-like
 collections in five language targets. Protocol Buffers and an unconstrained
 SQL table can carry the values but do not enforce uniqueness. A projection must
 either preserve the set semantics or identify the boundary where validation
 restores them.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
 
 ## Declare membership at the source
 
@@ -83,11 +77,11 @@ operations belong to the model.
 Structurize's code generators can carry a JSON Structure set into native
 collection types. For this property, the relevant mappings are:
 
-- C#: `HashSet<T>` ([converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretocsharp.py#L318-L326), [tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretocsharp.py#L664-L705)
-- Java: `Set<T>` ([converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretojava.py#L312-L314))
-- TypeScript: `Set<T>` ([converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretots.py#L317-L321))
-- Rust: `HashSet<T>` ([converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretorust.py#L254-L257))
-- Go: `map[T]bool` ([converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretogo.py#L257-L264))
+- C#: `HashSet<T>` ([converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretocsharp.py#L318-L326), [tests](https://github.com/clemensv/avrotize/blob/main/test/test_structuretocsharp.py#L664-L705))
+- Java: `Set<T>` ([converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretojava.py#L312-L314))
+- TypeScript: `Set<T>` ([converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretots.py#L317-L321))
+- Rust: `HashSet<T>` ([converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretorust.py#L254-L257))
+- Go: `map[T]bool` ([converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretogo.py#L257-L264))
 
 Generate those bindings from the same source contract:
 ```bash
@@ -130,9 +124,9 @@ member name must be followed by a ',', '=', or '}'`. The intended `Set<T>`
 shape is visible in the generated source, but TypeScript cannot enforce it
 until the generator produces legal enum identifiers.
 
-A native set also denies accidental positional APIs. Code cannot ask for "the
-first handling tag" unless it first creates an ordering policy. That
-friction is useful. The source contract never defined a first tag.
+Native set APIs also omit positional access. Code must define an ordering before
+it can ask for "the first handling tag," because the source contract defines no
+first tag.
 
 ## JSON preserves values, not set behavior
 
@@ -201,7 +195,7 @@ message ShipmentPlan {
 
 </details>
 
-This is the exact Structurize 3.9.0 fragment, and it has a second defect:
+This is the exact generated fragment, and it has a second defect:
 `grpc_tools.protoc` rejects the two hyphenated enum members with `Missing
 numeric value for enum constant`. The source-to-Proto command succeeds, but
 the emitted schema does not compile for these enum values.
@@ -238,7 +232,7 @@ instance.
 Proto repeated fields and unconstrained SQL rows do not preserve set
 uniqueness. Enforce it at those boundaries or record the loss.
 
-## Test behavior at every boundary
+## Test uniqueness and order at each boundary
 
 A set projection review answers four questions:
 
@@ -256,8 +250,8 @@ insertion orders and avoid asserting incidental byte order unless the protocol
 defines one. Insert duplicate membership into the storage projection and verify
 the selected database policy.
 
-A list is not a harmless implementation substitute for a set. It adds position
-and repetition, then invites application code to depend on both. Keep
-`handlingTags` as a set in the JSON Structure source, use native sets where the
-target offers them, and mark every narrower projection as a deliberate policy
-boundary. Accidents make poor contracts.
+Replacing a set with a list adds position and permits duplicate values.
+Application code can then depend on behavior that the source contract does not
+define. Keep `handlingTags` as a set where the target supports one. For targets
+that do not preserve set semantics, enforce uniqueness at the boundary and
+document any ordering required by the surrounding protocol.

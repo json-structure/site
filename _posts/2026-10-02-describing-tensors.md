@@ -7,19 +7,19 @@ author: Clemens Vasters
 specification_scope: Core with the Units, Validation, and Semantic Annotations companion specifications.
 image: /social-cards/describing-tensors.png
 description: >-
-  Describe a tensor's frame, index binding, variance, and symmetry in the schema
-  so a small grid of numbers carries more than shape alone.
+  Bind tensor indices to reference frames and declare component layout,
+  variance, and rank-2 symmetry in the schema.
 ---
 
-Nine doubles in a 3x3 may be a stress tensor, a rotation matrix, or a
-covariance. Shape alone cannot tell you which.
+Nine doubles in a 3-by-3 array may represent a stress tensor, a rotation matrix,
+or a covariance matrix. Shape alone cannot tell you which.
 
 A tensor gets its meaning from the range of each index and from how its
 components respond when the frame changes. Without this annotation, a consumer must find that information in a
 format manual or a variable name. [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames) records it in the
 schema.
 
-## Shape is only the first layer
+## Bind each index to a frame
 
 A rank-2 tensor is nested two levels deep. With the validation extension,
 [`minItems`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minItems) and [`maxItems`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maxItems) can fix each extent. The innermost schema gives the
@@ -39,9 +39,10 @@ column 2 means.
 
 ## Six values can determine nine
 
-The Global CMT earthquake catalogue publishes a symmetric seismic moment tensor
-as six scalars. The following complete schema assigns each scalar to an index in
-a spherical frame ordered as up, south, east.
+The [Global CMT earthquake catalogue](https://www.ldeo.columbia.edu/~gcmt/projects/CMT/catalog/allorder.ndk_explained)
+publishes a symmetric seismic moment tensor as six scalars. The following
+complete schema assigns each scalar to an index in a spherical frame ordered as
+up, south, east.
 
 ```json
 {
@@ -125,9 +126,8 @@ determines row 2, column 1. The six carried numbers determine all nine
 components only after the schema states the frame, each index, and the
 symmetry.
 
-Every scalar declares its own index, so the processor does not need a separate
-packing-order convention. That removes the guesswork among the several
-Voigt-style orders in circulation.
+Each `components` entry declares the index of one scalar, so the schema does not
+rely on a separate Voigt packing-order convention.
 
 ## Variance changes the interpretation
 
@@ -154,16 +154,19 @@ must equal the rank, and each level must have the extent of the corresponding
 frame. In that form a symmetric tensor is still written out in full because the
 nested value carries every position.
 
-## Where the annotation stops
+## Limits of tensor reference frames
 
 Higher-rank symmetries, including the minor and major symmetries of an elastic
-stiffness tensor, are not expressible. A rank-2 object that represents a
+stiffness tensor, are not expressible. A rank-2 quantity that represents a
 transformation is a different case. The draft recommends [`frameTransforms`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#frame-transforms)
-its indices range over, not that the numbers perform a transformation.
+for it. [`tensorReferenceFrames`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#tensor-reference-frames)
+says only which frame each index ranges over; it does not say that the numbers
+perform a transformation.
 
-Large machine-learning tensors can be carried as binary data with
-shape metadata. An opaque payload gives up schema-level shape validation. Its
-size and processing cost depend on the chosen encoding and workload. For six
-out the components also carries the frame that gives them meaning.
+Large machine-learning tensors may instead use binary data plus shape metadata.
+A schema cannot validate the shape hidden inside an opaque payload; size and
+processing cost depend on the encoding and workload. For the six values above,
+named scalar properties let `tensorReferenceFrames` state each index binding
+explicitly.
 
 [semantic-annotations]: https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-semantic-annotations.html

@@ -123,7 +123,7 @@ for localized alternatives. Their suffixes are language tags. Other keys, such
 as `erp`, are permitted custom purposes, but the draft assigns no standard
 behavior to them.
 
-This arrangement avoids translating the wire value itself. The user may see
+The mapping leaves the canonical value unchanged. The user may see
 `Versandt`, while business logic continues to compare `SHIPPED`. Editors can
 change the translation without changing the schema contract.
 

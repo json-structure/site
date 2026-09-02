@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "Structure First, Validation Second"
+title: "Separate Structure from Validation Policy"
 date: 2026-10-12
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
-image: /social-cards/structure-first-validation-second.png
+image: /social-cards/separate-structure-from-validation-policy.png
 description: >-
-  Separate stable structural and generative facts from validation policies
-  that constrain otherwise well-shaped data.
+  Separate structural facts used by generators from validation policies that
+  narrow the accepted values.
 ---
 
 [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) defines a signed 32-bit value represented as a JSON number.
@@ -16,10 +16,10 @@ description: >-
 generator needs the type fact to choose a target type; range enforcement is a
 separate job.
 
-JSON Structure keeps the foundation structural and makes validation a
-companion vocabulary. That boundary is useful for validators, but it matters
-just as much to code generators, serializers, database mappers, and interface
-description tools.
+JSON Structure defines structure in Core and validation rules in a companion
+vocabulary. Code generators, serializers, database mappers, and interface
+description tools can consume the Core model without implementing the
+validation vocabulary.
 
 ## Structure determines the shape
 
@@ -76,7 +76,7 @@ This instance satisfies both layers:
 }
 ```
 
-## Validation narrows valid values
+## Validation narrows the value space
 
 The object declaration, its properties, [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword), and [`int32`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#int32) remain true if
 the warehouse later raises capacity from 5,000 to 8,000. They describe the data
@@ -104,7 +104,7 @@ representation or falls outside an application rule.
 ## The companion must be declared
 
 The validation keywords are not harmless annotations. A schema using
-[`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum), or [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern) needs a meta-schema contract that admits and
+[`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum), [`maximum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maximum), or [`pattern`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#pattern) needs a meta-schema that permits and
 defines them. The published validation meta-schema composes the extended
 feature offers and selects [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions).
 

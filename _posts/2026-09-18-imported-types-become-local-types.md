@@ -5,10 +5,10 @@ date: 2026-09-18
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Import companion specification.
-image: /social-cards/importing-types-without-copying-them.png
+image: /social-cards/imported-types-become-local-types.png
 description: >-
-  Share a postal-address schema with $import or $importdefs while preserving
-  local namespaces, URI rules, and explicit shadowing.
+  Use $import or $importdefs to copy published types into a local namespace,
+  with absolute import URIs and explicit shadowing.
 ---
 
 An imported declaration does not remain a live cross-document reference. A

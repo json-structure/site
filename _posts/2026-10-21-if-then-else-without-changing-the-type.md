@@ -107,7 +107,7 @@ Use a core [`choice`](https://json-structure.github.io/core/draft-vasters-json-s
 structures selected by a discriminator. Use conditional composition when one
 stable type carries policies that depend on its values or property presence.
 
-## Which vocabulary the example uses
+## Where the draft and meta-schema differ
 
 The conditional-composition draft calls its feature
 [`JSONSchemaConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions); the extended meta-schema offers

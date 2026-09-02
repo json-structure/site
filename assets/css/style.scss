@@ -348,6 +348,7 @@ body {
 
 .share-links {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 7px;
   margin-top: 16px;
@@ -471,26 +472,31 @@ body {
   position: absolute;
   bottom: 7px;
   left: 50%;
-  color: #4078c0;
-  content: "\2304\A\2304";
-  font-size: 17px;
-  line-height: 0.45;
-  white-space: pre;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(
+    180deg,
+    #4078c0 0%,
+    #4078c0 38%,
+    #79a9d4 48%,
+    #4078c0 58%,
+    #4078c0 100%
+  );
+  background-size: 100% 300%;
+  content: "";
+  -webkit-mask: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.5 3A2.5 2.5 0 0 0 3 5.5v13A2.5 2.5 0 0 0 5.5 21h13a2.5 2.5 0 0 0 2.5-2.5v-13A2.5 2.5 0 0 0 18.5 3h-13Zm11.03 8.72a.75.75 0 0 1 .073.977l-.073.084-4 4a.75.75 0 0 1-.977.073l-.084-.072-4-4.002a.75.75 0 0 1 .976-1.133l.085.073 2.72 2.722V7.75a.75.75 0 0 1 .648-.743L12 7a.75.75 0 0 1 .743.648l.007.102v6.69l2.72-2.72a.75.75 0 0 1 .976-.072l.084.072Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.5 3A2.5 2.5 0 0 0 3 5.5v13A2.5 2.5 0 0 0 5.5 21h13a2.5 2.5 0 0 0 2.5-2.5v-13A2.5 2.5 0 0 0 18.5 3h-13Zm11.03 8.72a.75.75 0 0 1 .073.977l-.073.084-4 4a.75.75 0 0 1-.977.073l-.084-.072-4-4.002a.75.75 0 0 1 .976-1.133l.085.073 2.72 2.722V7.75a.75.75 0 0 1 .648-.743L12 7a.75.75 0 0 1 .743.648l.007.102v6.69l2.72-2.72a.75.75 0 0 1 .976-.072l.084.072Z'/%3E%3C/svg%3E") center / contain no-repeat;
   transform: translateX(-50%);
-  animation: generated-output-cue 2.2s ease-in-out infinite;
+  animation: generated-output-cue 2.8s linear infinite;
 }
 
 @keyframes generated-output-cue {
-  0%,
-  70%,
-  100% {
-    opacity: 0.7;
-    transform: translateX(-50%) translateY(0);
+  0% {
+    background-position: 50% 100%;
   }
 
-  82% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(3px);
+  100% {
+    background-position: 50% 0%;
   }
 }
 
@@ -499,8 +505,8 @@ body {
 }
 
 .generated-output[open] summary::after {
-  content: "\2303\A\2303";
-  transform: translateX(-50%);
+  background: #4078c0;
+  transform: translateX(-50%) rotate(180deg);
   animation: none;
 }
 
@@ -1026,10 +1032,6 @@ section table {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .generated-output summary::after {
-    animation: none;
-  }
-
   .sdk-card,
   .skip-link {
     transition: none;

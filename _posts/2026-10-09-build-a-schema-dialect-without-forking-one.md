@@ -16,11 +16,12 @@ conditional composition. Copying the extended meta-schema would leave that
 project maintaining a private copy of definitions it does not intend to
 change.
 
-Composition records the smaller decision directly. Import the base definitions,
-select the offered add-ins, and publish the result under a new identifier. A
-processor resolves that URI to find the vocabulary permitted by the project.
+Composition records the selection without a manually maintained copy of the
+parent definitions. Import processing copies the selected base definitions,
+selects the offered add-ins, and publishes the result under a new identifier.
+A processor resolves that URI to find the vocabulary permitted by the project.
 
-## Start with the offering meta-schema
+## Start with the extended meta-schema
 
 The extended v0 meta-schema advertises optional bundles through [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword). A
 derived meta-schema references extended with [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword), imports its definitions,
@@ -53,8 +54,8 @@ definitions.
 [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) and [`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) do different jobs. [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) says which meta-schema
 checks this custom meta-schema. [`$import`](https://json-structure.github.io/import/draft-vasters-json-structure-import.html#import-keyword) brings the parent's definitions into
 the new document so `#/definitions/SchemaDocument` resolves locally after
-processing. Conflating those operations would make a declaration accidentally
-depend on validator magic.
+processing. Treating `$schema` as an implicit import would make the document
+depend on processor behavior it never declares.
 
 ## Schemas name the dialect they obey
 
@@ -110,7 +111,7 @@ admitted those vocabularies. An unknown keyword is therefore an error, not an
 invitation for a processor to guess whether it is an annotation, a typo, or a
 private extension.
 
-## The URI is the vocabulary contract
+## The URI identifies the vocabulary
 
 The custom meta-schema's [`$id`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#id-keyword) is not decorative branding. It gives the exact
 combination a stable identity. Schema registries can cache it, generators can
@@ -121,12 +122,12 @@ The URI identifies a narrower language than "extended JSON Structure." Telemetry
 schemas may describe units and impose validation policy; they do not thereby
 pick up every other extension in the extended vocabulary.
 
-The present drafts leave one edge slightly rough: core says [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) is
+The present drafts contain one inconsistency: core says [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword) is
 instance-only while its own `SchemaDocument` meta-definition allows the
 property, and the published meta-schemas rely on root-level [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword). A schema or
 meta-schema is the instance at this layer, so the examples follow the shipped
-meta-schema behavior. Processors implementing only the prose's narrowest
-reading will not compose these documents correctly.
+meta-schema behavior. Processors that interpret `instance documents` as
+`application data only` will reject the project's published meta-schemas.
 
 Fork the language when you intend to change its rules. Selecting vocabulary that
 the language already offers is composition, and giving that selection a URI

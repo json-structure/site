@@ -15,7 +15,7 @@ A misspelled schema keyword can affect every instance checked against it.
 If a processor overlooks it, every document checked afterward may receive the
 wrong verdict.
 
-JSON Structure can catch that error before the schema reaches application data.
+JSON Structure can catch that error before the schema is used to validate application data.
 A schema document is itself an instance, checked by a meta-schema. Its root
 [`$schema`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#schema-keyword) identifies the language it claims to use, and a processor can test
 that claim before generating code or validating a business document.
@@ -85,7 +85,8 @@ meta-schema. Where that meta-schema exposes optional add-ins, the schema selects
 the relevant names through root-level [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword).
 
 This separation means that [`minimum`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minimum) is not silently accepted by a core-only
-processor. The schema must enter a vocabulary contract that defines it.
+processor. The schema must reference a meta-schema and select the vocabulary
+that defines the keyword.
 
 ## Bad schemas fail before bad instances
 
@@ -106,12 +107,13 @@ array does not become acceptable because its contents look plausible. The
 meta-schema rejects the fragment at the schema layer.
 
 Without meta-validation, the result is tool-specific. A tool may ignore the
-an empty object, or fail later with a tool-specific error. Meta-validation gives
-one useful answer immediately: this schema document violates its declared
+invalid declaration or fail later with a tool-specific error. Meta-validation
+gives one useful answer immediately: this schema document violates its declared
 language.
 
 It cannot prove that the author modeled the business correctly. No meta-schema
 can tell us whether `pump-17` ought to be a device reading. It can stop us from
-asking that question of a malformed schema. Rejecting it at the schema layer also gives the author a direct error.
+asking that question of a malformed schema. The resulting error points directly
+to the malformed schema.
 
 [core]: https://json-structure.github.io/core/draft-vasters-json-structure-core.html

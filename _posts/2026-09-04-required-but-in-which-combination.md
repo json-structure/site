@@ -7,8 +7,8 @@ author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/required-but-in-which-combination.png
 description: >-
-  JSON Structure can require one complete property set from several mutually
-  exclusive alternatives. A contact record shows the exact nested-array rule.
+  The nested-array form of `required` selects exactly one complete property
+  set. A contact record shows how JSON Structure evaluates the alternatives.
 ---
 
 A contact must provide an email address or a phone number, but not both. Making
@@ -66,7 +66,7 @@ A phone-only contact is equally valid:
 }
 ```
 
-## AND inside, exclusive choice outside
+## How Alternative Required Sets Are Evaluated
 
 The outer array means "choose exactly one required-property set." Each inner
 array is one complete set whose property names are combined with AND.

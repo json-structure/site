@@ -7,8 +7,8 @@ author: Clemens Vasters
 specification_scope: Core with the Alternate Names and Units companion specifications.
 image: /social-cards/names-have-purposes.png
 description: >-
-  Use altnames purpose keys to map one stable schema property into JSON,
-  storage, tooling, and localized contexts without multiplying contracts.
+  Use altnames purpose keys to give one canonical property distinct names for
+  JSON, storage, generated code, and localized display.
 ---
 
 Keep one canonical schema name and label each alternate name with its purpose.

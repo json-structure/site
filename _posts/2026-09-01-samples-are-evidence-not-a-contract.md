@@ -33,13 +33,6 @@ companion when consumers need machine-readable concepts, observation roles,
 time semantics, code-list identities, or reference systems. Structurize can
 then project the reviewed contract into documentation and code.
 
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
-
 ## Begin with what happened
 
 Assume a fulfillment team has collected newline-delimited JSON from a dispatch
@@ -51,9 +44,8 @@ feed:
 {"orderId":"dd4e44b5-aae8-4c40-8c57-5535d66e7b9d","status":"allocated","carrierService":"economy","contact":"night@example.com"}
 ```
 
-[Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/) can infer a
-JSON Structure schema from JSON or JSONL. Its
-[CLI definition](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json)
+Structurize can infer a JSON Structure schema from JSON or JSONL. Its
+[CLI definition](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json)
 lists the controls for input scope and inference:
 
 ```bash
@@ -71,7 +63,7 @@ inference from observed value cardinality. For heterogeneous documents,
 change the analysis. They do not turn the resulting file into an approved
 contract.
 
-For these three records, Structurize 3.9.0 emits this schema:
+For these three records, Structurize emits this schema:
 
 <details class="generated-output" markdown="1">
 <summary>Generated output: <code>shipment-observed.struct.json</code></summary>

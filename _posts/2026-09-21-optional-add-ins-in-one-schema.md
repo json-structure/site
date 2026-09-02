@@ -1,19 +1,19 @@
 ---
 layout: post
-title: "Extension Without Schema Dialect Explosion"
+title: "Optional Add-ins in One Schema"
 date: 2026-09-21
 published: false
 author: Clemens Vasters
 specification_scope: Core only.
-image: /social-cards/extension-without-schema-dialect-explosion.png
+image: /social-cards/optional-add-ins-in-one-schema.png
 description: >-
-  Offer optional object add-ins in one schema and let each instance opt in with
-  $uses, without minting a new schema dialect.
+  Declare optional object add-ins with $offers; each instance selects the
+  add-ins it uses with $uses.
 ---
 
 Delivery instructions do not belong in every address. Adding an `instructions`
 property to the base type overstates that contract. Publishing another address
-schema for one property creates a separate dialect to maintain.
+schema for one optional property creates a second contract to maintain.
 
 JSON Structure calls this optional extension an add-in. The schema advertises
 an abstract add-in through [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword). An instance that needs the extra contract
@@ -67,7 +67,7 @@ The add-in is [`abstract`](https://json-structure.github.io/core/draft-vasters-j
 address type. In the add-in model, it extends the object it augments and is
 injected into that type when selected.
 
-## The instance accepts
+## The instance opts in
 
 A normal instance does not mention the add-in:
 

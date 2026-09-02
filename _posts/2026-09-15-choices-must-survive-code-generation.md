@@ -8,8 +8,8 @@ specification_scope: Core only.
 uses_structurize: true
 image: /social-cards/choices-must-survive-code-generation.png
 description: >-
-  Code generation should preserve a JSON Structure choice as an explicit sum
-  type, and make any weaker projection visible.
+  Code generation adapts a JSON Structure choice to the type system,
+  serialization model, and artifact boundaries of each target.
 ---
 
 A fulfillment event permits exactly one outcome: a shipment was dispatched, or
@@ -19,22 +19,19 @@ contract before application logic has done any useful work.
 
 JSON Structure represents the event as a
 [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice)
-with a closed set of named alternatives. The declaration carries the
-exclusivity that a bag of optional fields cannot recover from its own shape.
+with a closed set of named alternatives. The declaration makes the alternatives
+mutually exclusive; optional fields do not.
 
-Structurize 3.9.0 does not project this root choice consistently. Rust emits an
-enum and Java emits a class hierarchy. C# emits two nullable `object` members.
-TypeScript and Go emit the branch types but no root choice declaration, while
-the Protocol Buffers converter emits the branch messages without a `oneof`.
-ASN.1 does emit `CHOICE`. Those differences are observable output, not a survey
-of what the target languages could express.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
+Structurize adapts this root `choice` to the idioms and artifact boundaries of
+each target. Rust uses a data-carrying enum, Java a Jackson-compatible class
+hierarchy, C# a serializer-oriented wrapper, and ASN.1 its native `CHOICE`.
+For a root choice, TypeScript, Go, and Protocol Buffers emit the branch
+declarations rather than synthesizing a root envelope, while Parquet and
+Iceberg require an object-shaped root. Each mapping follows the target's type
+system, serialization model, or document shape. The declarations are therefore
+expected to differ. The sections below show which commands produce a complete
+root representation and which produce components for an application-defined
+root.
 
 ## One event, two possible outcomes
 
@@ -90,15 +87,14 @@ The JSON value makes the branch explicit:
 }
 ```
 
-This is not merely an object with two possible property names. It is one value
-whose type is the selected alternative.
+The object represents one value whose type is the selected alternative.
 
 ## Sum types have several dialects
 
-In the [Avrotize implementation](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76),
+In the [Avrotize implementation](https://github.com/clemensv/avrotize),
 the five language commands used here are registered as `s2cs`, `s2java`,
 `s2ts`, `s2go`, and `s2rust` in the
-[command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+[command registry](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json).
 Run the five registered language commands:
 
 ```bash
@@ -109,21 +105,21 @@ structurize s2go fulfillment-event.struct.json --out generated/go
 structurize s2rust fulfillment-event.struct.json --out generated/rust
 ```
 
-The interesting part is the resulting type shape. The C#
-[converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretocsharp.py#L960-L1110)
+Compare the resulting type shapes. The C#
+[converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretocsharp.py#L960-L1110)
 projects the choice as a wrapper with nullable `object` members.
-Java's [choice template](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretojava/choice_core.jinja)
+Java's [choice template](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretojava/choice_core.jinja)
 uses nested alternative classes named after the branches. The TypeScript
-[converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretots.py)
-can return a union expression while resolving a choice, but this root-choice
-command emits only `ShipmentDispatched.ts` and `PickupReady.ts`. Rust's
-[converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretorust.py)
+[converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretots.py)
+can return a union expression while resolving a choice. For this root choice,
+the command emits `ShipmentDispatched.ts` and `PickupReady.ts`. Rust's
+[converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretorust.py)
 emits enum variants.
 
 For a complete multi-file code-generation example, the prebuilt Avrotize
 [Inventory to C# gallery example](https://avrotize.com/gallery/struct-to-csharp-stjson/)
 shows its source schema and output tree. For the small schema here, each
-disclosure shows one representative generated file.
+expandable section shows one representative generated file.
 
 These excerpts come from the generated C#, Java, and Rust files:
 
@@ -201,41 +197,42 @@ pub enum FulfillmentEvent {
 
 </details>
 
-Rust expresses exclusivity in the type itself, and Java encodes the branch set
-through a class hierarchy. TypeScript produces no `FulfillmentEvent.ts` or
-named alias for this input. Go similarly writes the two branch structs but no
-root choice declaration. Treating an internal converter type expression or a
-hypothetical envelope as generated output would overstate what the commands
-produced.
+Each generator exposes the choice through conventions appropriate to its
+target. Rust materializes the root as an enum and Java as a Jackson hierarchy.
+C# uses a mutable wrapper, while TypeScript and Go emit reusable branch types
+without synthesizing a root declaration. The first group provides a root API;
+the second provides the branch components from which an application can define
+one according to its serialization conventions.
 
-The [Java tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretojava.py),
-[TypeScript tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretots.py), and
-[Rust tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretorust.py)
+The [Java tests](https://github.com/clemensv/avrotize/blob/main/test/test_structuretojava.py),
+[TypeScript tests](https://github.com/clemensv/avrotize/blob/main/test/test_structuretots.py), and
+[Rust tests](https://github.com/clemensv/avrotize/blob/main/test/test_structuretorust.py)
 exercise those generators.
 
 The C# wrapper itself permits both members or neither. Its reader loops over
 properties and can accept more than one recognized branch. Its writer chooses
 the first non-null branch in generated branch order. The
-[C# tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretocsharp.py)
-cover the generator, but the schema remains the stronger exclusivity statement.
-The generated project also fails `dotnet build`: because both branch payloads
-become `object`, the class contains `FulfillmentEvent(object
-shipmentdispatched)` and `FulfillmentEvent(object pickupready)`. Parameter names
-do not distinguish constructor signatures, so the compiler reports `CS0111`.
-The wrapper above is generated output, not a claim that this release emits a
-buildable C# choice type.
+[C# tests](https://github.com/clemensv/avrotize/blob/main/test/test_structuretocsharp.py)
+cover the generator, but the schema still forbids states that the generated
+class permits.
+In this example, both C# branch payloads resolve to `object`. The generated
+overloads `FulfillmentEvent(object shipmentdispatched)` and
+`FulfillmentEvent(object pickupready)` therefore have the same CLR signature;
+parameter names do not distinguish overloads. A C# integration can use the
+mutable properties directly or introduce distinct payload types so that the
+constructor signatures differ. This constraint is separate from the decision
+to represent the choice as a serializer-oriented wrapper.
 
-## Some projections weaken the choice
+## Root choices across target formats
 
-The absence of a root declaration in the TypeScript and Go output is stronger
-than a weak representation: callers receive no generated type for the choice
-at all. Generated adapters must recover the root contract from the source
-schema.
+TypeScript and Go emit the branch declarations without synthesizing a root
+envelope. An application that needs such an envelope can define one according
+to its serialization and validation conventions.
 
 Protocol Buffers has a `oneof` construct, but the
-[`structuretoproto.py` converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoproto.py)
-does not emit one for this root choice. The generated `.proto` contains only
-the two branch messages:
+[`structuretoproto.py` converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretoproto.py)
+emits the two branch messages for this root choice rather than synthesizing an
+enclosing `oneof`:
 
 <details class="generated-output" markdown="1">
 <summary>Generated output: <code>proto.proto</code></summary>
@@ -254,8 +251,8 @@ message PickupReady {
 
 </details>
 
-ASN.1 does preserve the root branch set with
-[`CHOICE`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoasn1.py):
+ASN.1 represents the root branch set with
+[`CHOICE`](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretoasn1.py):
 
 <details class="generated-output" markdown="1">
 <summary>Generated output: <code>fulfillment-event.asn</code></summary>
@@ -266,24 +263,19 @@ FulfillmentEvent ::= CHOICE { shipmentDispatched ShipmentDispatched, pickupReady
 
 </details>
 
-The Parquet and Iceberg commands do not produce a storage shape for this input.
-Both reject it with `Expected a JSON Structure schema with type 'object' at the
-top level`. Their internal choice mapping is therefore not evidence of an
-artifact generated from this root-choice schema. Wrap the choice in a root
-object before evaluating those projections, then inspect the result rather
-than inferring one from converter code.
+The Parquet and Iceberg converters require an object-shaped row root. For this
+input, both report `Expected a JSON Structure schema with type 'object' at the
+top level`. Wrap the choice in a root object when evaluating their nested-choice
+mapping.
 
-## Keep the loss at the boundary
+## Evaluate each target contract
 
-In these tested Structurize 3.9.0 outputs, the Rust enum and ASN.1 `CHOICE`
-preserve the branch set, Java provides a hierarchy, C# weakens branch values to
-`object`, and three commands omit or reject the root choice. Those observations
-describe this implementation; they do not limit what the target
-languages or formats can express.
+The Rust enum, Java hierarchy, C# wrapper, and ASN.1 `CHOICE` are
+target-specific root representations. The TypeScript, Go, and Protocol Buffers
+outputs provide branch declarations for a target-specific root defined by the
+application. Review each result for its intended wire behavior, construction
+rules, and tooling integration.
 
-Review generated output by asking one question: which values can this artifact
-represent that the JSON Structure contract forbids? If the answer is "both
-alternatives," "no alternative," or "anything at all," put the missing check
-at that boundary. Do not weaken the source schema to make the generated shape
-match a less restrictive projection. Keep the choice in the contract, where
-every projection can return to it.
+The JSON Structure declaration remains the common contract. Target-specific
+code can enforce additional construction rules or supply an envelope where the
+target integration requires one, without changing the source choice.

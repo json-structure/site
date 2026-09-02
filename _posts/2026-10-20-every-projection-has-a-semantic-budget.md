@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Every Target Format Has a Semantic Budget"
+title: "Every Projection Has a Semantic Budget"
 date: 2026-10-20
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Units and Validation companion specifications.
 uses_structurize: true
-image: /social-cards/every-target-format-has-a-semantic-budget.png
+image: /social-cards/every-projection-has-a-semantic-budget.png
 description: >-
   Treat Protocol Buffers, XSD, and ASN.1 outputs as format-specific projections
   whose preserved semantics must be tested explicitly.
@@ -20,22 +20,16 @@ JSON Structure distinguishes set uniqueness, choice alternatives, numeric
 bounds and units, and tuple positions. Structurize reads those declarations and
 projects them through a target-specific mapping.
 
-The Structurize 3.9.0 converters make concrete compromises and expose defects. Protocol
-Buffers produces no artifact for the complete schema below; it exits with
+With this schema, Structurize exposes semantic losses and converter
+defects. The Protocol Buffers converter produces no artifact for the complete schema below; it exits with
 `unhashable type: 'dict'`. XSD emits `xs:choice`, but writes a Python dictionary
 as one alternative's `type` attribute, which an independent XSD reader rejects.
 ASN.1 preserves `SET OF`, `CHOICE`, and tuple structure and compiles with
 `asn1tools`, but it does not carry the `double` range into the generated module.
 
-That preserved and discarded meaning is the target's semantic budget. Review
-it before treating a successful compile as evidence of equivalence.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
+Together, the target format and converter determine the projection's semantic
+budget. Review it before treating a successful compile as evidence of
+equivalence.
 
 ## One order, three projections
 
@@ -108,16 +102,16 @@ structurize s2asn fulfillment-order.struct.json --out fulfillment-order.asn
 ```
 
 The command names and options are defined in
-[`commands.json`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+[`commands.json`](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json).
 Running all three commands does not promise three semantically identical
-contracts. It asks three converters to spend three different budgets.
+contracts. Each converter preserves a different subset of the source contract.
 
 For complex multi-file code-generation examples, use the prebuilt Avrotize
 [Structurize gallery](https://avrotize.com/gallery/#structurize), which shows
 source schemas beside complete generated output trees. The evidence below uses
 the article-specific schema above and single-file schema projections.
 
-## Protocol Buffers fails before spending uniqueness
+## The Protocol Buffers converter fails before producing output
 
 Protocol Buffers does not have a native set whose type promises uniqueness, and
 the converter maps simpler sets to `repeated`. That mapping is not the result of
@@ -156,7 +150,7 @@ carry different business meaning in an order workflow.
 
 XSD is not Protocol Buffers with angle brackets. It models XML elements,
 attributes, complex types, sequences, choices, and occurrence constraints. The
-[`structuretoxsd.py` converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoxsd.py)
+[`structuretoxsd.py` converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretoxsd.py)
 must place JSON-shaped declarations into that structure.
 
 The converter emits `xs:choice` for the tagged `delivery` choice,
@@ -238,7 +232,7 @@ only that a file was written.
 ## ASN.1 preserves a different subset
 
 ASN.1 has its own structural vocabulary and encoding ecosystem. The
-[`structuretoasn1.py` converter](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoasn1.py)
+[`structuretoasn1.py` converter](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretoasn1.py)
 can map `SET OF`, `CHOICE`, enumerations, tuples, and references into ASN.1
 constructs. The converter does not apply `minimum` and `maximum` bounds
 to a `double`, so the package-weight range is not present in that projection.
@@ -298,8 +292,6 @@ four columns: source construct, target representation, preserved meaning, and
 compensating check. Keep it beside the generator version and command line. That
 turns an implicit assumption into a reviewable engineering decision.
 
-JSON Structure gives the system one authoritative contract. Generators make
-that contract useful in ecosystems with different strengths, but they do not
-erase those differences. Know each target's semantic budget, test the meanings
-you spend, and treat a clean compile as the beginning of evidence rather than
-the end.
+JSON Structure gives the system one authoritative contract. For each generated
+projection, record what the converter preserves and what it drops. A clean
+compile proves syntax, not equivalence.

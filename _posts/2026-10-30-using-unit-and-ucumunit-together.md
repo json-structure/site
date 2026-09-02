@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "UCUM Is the Contract; unit Is the Label"
-display_title: "UCUM Is the Contract; [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) Is the Label"
+title: "Using the unit and ucumUnit Keywords Together"
+display_title: "Using the [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) Keywords Together"
 date: 2026-10-30
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Units companion specification.
-image: /social-cards/ucum-is-the-contract-unit-is-the-label.png
+image: /social-cards/using-unit-and-ucumunit-together.png
 description: >-
-  Pair readable unit notation with case-sensitive UCUM expressions so people
-  get a useful label and processors get a computational contract.
+  Use `unit` for readable notation and `ucumUnit` for the case-sensitive UCUM
+  expression used in computation and conversion.
 ---
 
 Use [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) for readable notation and
@@ -78,7 +78,7 @@ The distinction becomes visible with Celsius: the draft shows `°C` for [`unit`]
 and `Cel` for case-sensitive UCUM. Typography and computational syntax need not
 look alike to remain compatible.
 
-## Prefixes live inside the expression
+## Prefixes are part of the expression
 
 There is no `prefix` keyword. In `kPa`, lowercase `k` is the kilo prefix and
 scales pascals by 10<sup>3</sup>. In `mPa`, lowercase `m` means milli and scales them by
@@ -98,7 +98,7 @@ as `m/s^2`. Its UCUM example writes acceleration as `m/s2`. A processor should
 parse each notation according to its own grammar, not transform one with a few
 string replacements because the two grammars have different semantics.
 
-## Processor behavior is deliberately asymmetric
+## Processors use the annotations differently
 
 When both annotations appear, the draft says UCUM-aware systems should prefer
 [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) for computation and conversion. They may still use [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) for

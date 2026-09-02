@@ -112,7 +112,7 @@ precedence if both appear. A supporting encoder or decoder chooses the mapped
 representation consistently. A validator that does not support the extension
 ignores the annotations.
 
-That limit matters. [`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) records mappings; it does not invent a universal
+[`altnames`](https://json-structure.github.io/alternate-names/draft-vasters-json-structure-alternate-names.html#the-altnames-keyword) records mappings; it does not invent a universal
 name-resolution protocol for databases, IDLs, or user interfaces.
 
 ## Names and descriptions do different work

@@ -26,15 +26,8 @@ published wire key.
 Structurize sanitizes and case-converts identifiers for each language. With the
 target's serializer annotations enabled, it binds those identifiers back to
 the declared JSON name. The code spelling changes while the wire spelling
-survives. In the tested outputs, that mapping is absent without the generated
-boundary.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
+survives. In the tested outputs, generators omit that mapping unless serializer
+annotations are enabled.
 
 ## The wire already has a spelling
 
@@ -93,7 +86,7 @@ been adapted to a programming language.
 
 ## Annotation flags carry the mapping
 
-The [alternate-name tests](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structure_altnames.py)
+The [alternate-name tests](https://github.com/clemensv/avrotize/blob/main/test/test_structure_altnames.py)
 cover JSON wire names for C#, Java, TypeScript, Go, and Rust when their
 serializer annotations are enabled, including nested collection values. The
 relevant CLI forms are:
@@ -111,7 +104,7 @@ structurize s2rust fulfillment-event.struct.json --out generated/rust \
 ```
 
 Java uses Jackson by default in this converter. The switches are recorded
-in the [command registry](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+in the [command registry](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json).
 The underscore spelling of `--system_text_json_annotation` is exact.
 Without the serializer mode, a generator may still produce legal code names,
 but the generated serializer has no obligation to emit the alternate JSON key.
@@ -178,7 +171,7 @@ The Rust output has no rename attribute because its snake-case identifier is
 already the declared wire spelling. C#, Java, TypeScript, and Go carry explicit
 metadata because their member identifiers differ. The current TypeScript
 template passes the wire name through TypedJSON's `name` option, and the
-[Go template](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretogo/go_struct.jinja)
+[Go template](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretogo/go_struct.jinja)
 puts it in a `json` struct tag.
 
 ## Sanitization is not a contract rename
@@ -189,17 +182,17 @@ case letter. Rust commonly uses snake case. Reserved words and otherwise
 illegal identifiers need sanitization. Those transformations create usable
 source code; they do not authorize a serializer to improvise a new JSON key.
 
-This distinction matters in reviews. A diff from `fulfillmentId` to
-`FulfillmentId` in generated C# may be a harmless projection. A wire diff from
-`fulfillment_id` to `FulfillmentId` is an interoperability break unless the
-contract changed. Looking only at the class declaration hides that difference;
-look at the annotation and serialized output as well.
+In generated C#, changing the member from `fulfillmentId` to `FulfillmentId`
+may be harmless. Changing the wire key from `fulfillment_id` to
+`FulfillmentId` breaks interoperability unless the contract changed. Looking
+only at the class declaration hides that difference; inspect the annotation and
+serialized output as well.
 
-The reverse path matters just as much. Deserialization must accept the declared
-wire name and populate the generated member. A round-trip test that serializes
-and then deserializes its own output is useful, but insufficient: both halves
-can agree on the same wrong spelling. Include a fixture written directly from
-the JSON Structure contract.
+Test deserialization separately. It must accept the declared wire name and
+populate the generated member. A round-trip test that serializes and then
+deserializes its own output is useful, but insufficient: both halves can agree
+on the same wrong spelling. Include a fixture written directly from the JSON
+Structure contract.
 
 ## Purpose keys are not universal generator switches
 
@@ -215,7 +208,7 @@ JSON wire name. A custom purpose needs a policy that defines its meaning and a
 tool that implements that policy; the purpose-key name alone is not a storage
 contract.
 
-## Test the boundary, retain the source
+## Test the serialized contract
 
 For each generated language, keep a small contract fixture and assert the exact
 JSON keys. Also inspect the generated identifier, because sanitization can

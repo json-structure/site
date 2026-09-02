@@ -1,20 +1,18 @@
 ---
 layout: post
-title: "A Number Without a Unit Is a Rumor"
+title: "Units Give Numeric Values Meaning"
 date: 2026-09-28
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Units companion specification.
-image: /social-cards/a-number-without-a-unit-is-a-rumor.png
+image: /social-cards/units-give-numeric-values-meaning.png
 description: >-
   Attach scientific units, UCUM codes, display symbols, SI prefixes, and
   currencies to numeric schemas so values can be interpreted correctly.
 ---
 
-A number without a unit is not a measurement. It is a rumor about a
-measurement.
-
-`22.5` may be a comfortable room temperature in degrees Celsius, a pressure in
+`22.5` is not a measurement until its unit is known. It may be a comfortable
+room temperature in degrees Celsius, a pressure in
 kilopascals, or an amount in euros. The JSON number carries none of that. A
 numeric type and range can reject malformed values while still accepting a
 perfectly formed misunderstanding.
@@ -25,8 +23,8 @@ The units extension supplies that missing contract through [`unit`](https://json
 ## The JSON type is not the quantity
 
 This schema describes a commercial refrigeration reading. Temperature and
-pressure are physical quantities. Replacement cost is money. They therefore use
-different annotations even though all three values are JSON numbers.
+pressure are physical quantities; replacement cost is money. All three
+properties have numeric schema types, but they require different annotations.
 
 ```json
 {
@@ -85,7 +83,9 @@ A useful instance is pleasantly uneventful:
 
 The instance stays compact. Its schema says that `4.2` is degrees Celsius,
 `245.0` is kilopascals, and `"1899.50"` is euros. The cost is a JSON string
-infer units from property names or documentation parked elsewhere.
+because JSON Structure represents `decimal` values as strings. An
+extension-aware consumer does not have to infer units or currencies from
+property names or separate documentation.
 
 ## [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) overlap on purpose
 

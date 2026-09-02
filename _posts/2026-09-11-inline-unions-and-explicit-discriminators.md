@@ -7,14 +7,14 @@ author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/inline-unions-and-explicit-discriminators.png
 description: >-
-  Model one object shape with several concrete variants by combining an
-  abstract base, $extends, and an explicit selector.
+  Model several concrete object variants that share an abstract base through
+  $extends and use an explicit selector.
 ---
 
 Consider an address object with `city`, `state`, and `zip`. It may also carry a
 street, or it may carry a post office box number. Those optional properties do
-not state which variant the producer selected. An object can contain both, and
-a later variant can overlap with either shape.
+not state which variant the producer selected. An object can contain both
+properties, and a future variant may overlap with either existing shape.
 
 An inline [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) puts the decision in the data. Its variants share an
 abstract base, and a string property in the object names the selected variant.
@@ -106,8 +106,8 @@ a key in [`choices`](https://json-structure.github.io/core/draft-vasters-json-st
 
 Suppose an object contains `city`, `state`, `zip`, `street`, and `poBox`.
 Property inspection cannot tell you which variant the producer meant. The
-selector can: the processor validates the named branch and has no reason to
-rank the two shapes.
+selector names the branch to validate, so the processor does not rank the two
+shapes.
 
 The selector may shadow a property from the base, but only when that inherited
 property is a [`string`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#string). Do not declare it in the base unless the base itself needs

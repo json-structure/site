@@ -7,17 +7,18 @@ author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/tagged-unions-without-guesswork.png
 description: >-
-  A JSON Structure tagged choice puts the selected payment method in the one
-  property name that wraps its value. Consumers never infer a variant by shape.
+  In a JSON Structure tagged choice, a one-property wrapper names the selected
+  payment method. Consumers select the variant from that tag instead of
+  inferring it from the value's shape.
 ---
 
-A union should tell you which branch it contains. Otherwise a consumer must
-inspect fields, try branches in order, or hope two variants never grow into the
-same shape. None of those guesses belongs in a wire contract.
+Without an explicit tag, a consumer may have to inspect fields or try union
+branches in order. That becomes ambiguous when two variants share the same
+shape.
 
 JSON Structure's tagged [`choice`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#choice) uses a one-property JSON object. The property
-name is the tag; its value is the selected variant. Selection is explicit before
-a consumer reads the variant's fields.
+name selects the variant, and its value contains the variant data. A consumer
+reads the tag before validating the value.
 
 ## A payment method choice
 
@@ -96,7 +97,8 @@ The consumer dispatches on one key and validates one value.
 
 ## Tags survive schema evolution
 
-The tag separates branch selection from the incidental shape of each variant.
+Branch selection depends on the tag, not on the properties inside the selected
+value.
 
 Imagine that bank transfers later gain a `token` issued by a payment provider.
 A shape-inferred union can no longer distinguish the branches by the presence
@@ -108,7 +110,7 @@ edit. Generated enum cases, serializers, and stored JSON all observe it. Variant
 type names and choice keys may be similar, but they serve different roles: the
 reference names a reusable schema; the key selects it in an instance.
 
-## JSON Schema leaves the representation open
+## JSON Schema `oneOf` does not define a tag representation
 
 JSON Schema commonly represents unions with [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3). [`oneOf`](https://json-schema.org/draft/2020-12/json-schema-core.html#section-10.2.1.3) requires exactly
 one subschema to validate, but it does not prescribe a tag representation. A
@@ -151,6 +153,6 @@ contract calls for `{"method":"card", ...}` and the variants share a modeled
 base.
 
 The payment schema uses the tagged form because its alternatives need no common
-base and its variant value may be any primitive or compound schema. Before
-reading `network`, `iban`, or any future field, a consumer sees `card` or
-`bankTransfer`. No branch order, field inventory, or hopeful guess is involved.
+base, and each choice may refer to any primitive or compound schema. A consumer
+selects `card` or `bankTransfer` from the wrapper key before reading or
+validating the variant value.

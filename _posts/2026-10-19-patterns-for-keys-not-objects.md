@@ -105,11 +105,12 @@ schema, regardless of whether its value is a perfectly good string.
 the first pair, a schema can check the associated values and still accept a
 misspelled or unexpected key.
 
-The draft requires ECMAScript 2022 regular-expression syntax and notes the
-usual ReDoS risk. JSON Structure Core also constrains identifiers, so regexes
-do not grant names that core syntax otherwise forbids.
+The draft requires ECMAScript 2022 regular-expression syntax and warns about
+regular expression denial-of-service (ReDoS) attacks. JSON Structure Core also
+constrains identifiers, so regexes do not grant names that core syntax
+otherwise forbids.
 
-## Four missing declarations
+## The meta-schema omits four pattern keywords
 
 The validation draft names its opt-in [`JSONSchemaValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions); the extended
 meta-schema offers [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). As checked on 25 August 2026,

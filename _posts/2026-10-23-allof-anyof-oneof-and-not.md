@@ -7,8 +7,8 @@ author: Clemens Vasters
 specification_scope: Core with the Validation and Conditional Composition companion specifications.
 image: /social-cards/allof-anyof-oneof-and-not.png
 description: >-
-  Compare allOf, anyOf, oneOf, and not precisely through one complete access
-  request schema and the match counts each operator requires.
+  Compare allOf, anyOf, oneOf, and not using one complete access request schema
+  and the match count required by each operator.
 ---
 
 Composition evaluates one complete instance against each branch. It does not
@@ -105,8 +105,8 @@ A write request satisfying the policy is:
 
 ## Read the match counts
 
-[`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) requires every member to evaluate true. Here all three members, the subject exclusion, the
-strong-authentication rule, and the action rule must all pass. [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) does not
+[`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) requires every member to evaluate true. Here all three members must pass: the subject exclusion, the
+strong-authentication rule, and the action rule. [`allOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#allOf) does not
 merge the members before evaluation; contradictory members simply make the
 combined constraint impossible to satisfy.
 
@@ -115,8 +115,9 @@ combined constraint impossible to satisfy.
 
 [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf) requires exactly one match. The [`const`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#const-keyword) values make the read and write
 branches disjoint, so an action cannot satisfy both. The write branch also
-requires a usable explanation. If branches overlap accidentally, an instance
-matching two branches fails even when each branch looks acceptable alone.
+requires a `breakGlassReason` of at least ten characters. If branches overlap
+accidentally, an instance matching two branches fails even when each branch
+looks acceptable alone.
 
 [`not`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#not) inverts one subschema result. The request passes that constraint when the
 anonymous-subject schema fails. It contributes no replacement type or
@@ -134,7 +135,7 @@ The draft requires non-empty type-union arrays for [`allOf`](https://json-struct
 [`oneOf`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#oneOf); [`not`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#not) takes one schema, which may itself be a type union. Array order
 does not change the truth conditions.
 
-## What the repository can check today
+## Current meta-schema support
 
 The draft calls the feature [`JSONSchemaConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions), while the
 meta-schema offers [`JSONStructureConditionalComposition`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#enabling-the-extensions). The validation

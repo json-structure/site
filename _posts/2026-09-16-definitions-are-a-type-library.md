@@ -85,8 +85,8 @@ The [`$root`](https://json-structure.github.io/core/draft-vasters-json-structure
 ## Referring to a library type
 
 JSON Structure uses [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) for reusable types in the same schema document. The
-reference appears as the value of [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword), in an object containing the single
-[`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) property:
+value of [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword) is an object whose only property is
+[`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword):
 
 ```json
 {
@@ -106,7 +106,7 @@ This placement differs from JSON Schema habits. Writing [`$ref`](https://json-st
 [`properties`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#properties-keyword), or using it as the property schema without the surrounding
 [`type`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#type-keyword), is not JSON Structure syntax.
 
-## Case survives the trip
+## Names are case-sensitive
 
 Each declaration must have a unique, case-sensitive name within its namespace.
 The same name may appear in different namespaces, as the two `Address` types do.

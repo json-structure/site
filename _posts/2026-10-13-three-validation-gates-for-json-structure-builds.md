@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Validation Belongs in the Build"
+title: "Three Validation Gates for JSON Structure Builds"
 date: 2026-10-13
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Units and Validation companion specifications.
 uses_structurize: true
-image: /social-cards/validation-belongs-in-the-build.png
+image: /social-cards/three-validation-gates-for-json-structure-builds.png
 description: >-
   Make schema, input syntax, and instance validation separate build gates so
   malformed or invalid fulfillment data cannot pass unnoticed.
@@ -23,16 +23,8 @@ schema's types, required properties, choices, and constraints. A JSON Structure
 SDK validates the first. Structurize validates the second.
 
 The build therefore needs three gates: validate the schema, reject malformed or
-empty input, and then run instance validation. There is no projection here; the
-point is to stop invalid schemas and discarded input from masquerading as
-evidence of conformance.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
+empty input, and then run instance validation. These gates stop invalid schemas
+and discarded input from being mistaken for evidence of conformance.
 
 ## Use three gates, not one
 
@@ -89,7 +81,7 @@ It also contains a [JSON Lines](https://jsonlines.org/) file with examples:
 {"orderId":"953ce057-faba-4702-a303-ee2c4c7327d9","delivery":{"ship":{"street":"1 Main St","city":"Seattle","postalCode":"98101"}}}
 ```
 
-The build has three different questions to answer:
+The build must answer three questions:
 
 1. Is the schema file parseable JSON and a valid JSON Structure schema?
 2. Is every nonempty line in the input parseable JSON, and is there at least one
@@ -179,7 +171,7 @@ if failed or records == 0:
 ```
 
 Syntax preflight is required because the
-[`validate.py` implementation](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/validate.py)
+[`validate.py` implementation](https://github.com/clemensv/avrotize/blob/main/avrotize/validate.py)
 silently skips malformed JSON Lines. If all lines are malformed, no instance is
 checked and the command can still return zero.
 
@@ -187,7 +179,7 @@ checked and the command can still return zero.
 
 Once schema and input syntax have passed, validate the instances with the exact
 command shape registered in
-[`commands.json`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json):
+[`commands.json`](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json):
 
 ```bash
 structurize validate input [input ...] \
@@ -196,7 +188,7 @@ structurize validate input [input ...] \
   --quiet
 ```
 
-For the fulfillment repository, a fail-fast CI step can be concrete:
+For the fulfillment repository, the complete fail-fast CI step is:
 
 ```bash
 set -euo pipefail
@@ -210,11 +202,11 @@ structurize validate samples/fulfillment-orders.jsonl \
 ```
 
 `structurize validate` exits with status 1 if any parsed instance is invalid and
-status 0 otherwise. With `set -e`, either verdict stops or advances the build as
-expected. The preceding syntax gate ensures that “otherwise” cannot mean “the
-tool found nothing it could parse.”
+status 0 otherwise. With `set -e`, a nonzero exit stops the build and zero
+advances it. The preceding syntax gate ensures that “otherwise” cannot mean
+“the tool found nothing it could parse.”
 
-The behavior was exercised against Structurize 3.9.0. A file containing the two
+In the Structurize test, a file containing the two
 examples above returned 0. A parseable record with `orderId: "not-a-uuid"` and
 `packageWeight: -1` returned 1. A file containing only malformed lines returned
 0, and an empty file also returned 0. The `check_jsonl.py` script above returned
@@ -257,8 +249,7 @@ Validation summary: 0/0 instances valid
 
 In a matrix build, run the JSON Lines preflight and instance validation for each
 sample file. Do not concatenate exit codes or let a later success overwrite an
-earlier failure. CI systems are literal-minded; give them a sequence whose first
-bad fact ends the job.
+earlier failure. Run the gates in sequence and stop at the first failure.
 
 ## Keep the evidence distinct
 
@@ -267,13 +258,10 @@ a valid schema document. Syntax validation says the test inputs are actual JSON
 records. Instance validation says those records conform to the contract. None
 of the three implies either of the others.
 
-The distinction pays off when a build fails. A malformed line points to an
+Separate results identify the failing layer. A malformed line points to an
 input producer. A schema error points to the contract change. An invalid
-instance points to a disagreement between data and contract. One red light with
-three possible causes does not identify which contract failed. Report each gate
-separately.
+instance points to a disagreement between data and contract. A combined failure
+does not identify which contract failed. Report each gate separately.
 
-Validation belongs in the build because contracts become useful only when
-violations stop delivery. Validate the schema, reject malformed or empty input,
-and then validate every instance. The sequence is short. The boundary it
-protects is not.
+Run all three checks in every build: validate the schema, reject malformed or
+empty input, and validate every instance. Any failure should stop delivery.

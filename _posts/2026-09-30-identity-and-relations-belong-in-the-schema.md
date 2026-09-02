@@ -11,8 +11,8 @@ description: >-
   and scope instead of leaving foreign-key meaning in property names.
 ---
 
-A property named `customerId` tells a story, but the schema cannot verify the
-plot.
+A property named `customerId` suggests a relation but does not declare its
+target or resolution rules.
 
 The string might identify a customer, an account, or a CRM import row. It might
 be unique in this document, unique in a database, or not unique at all. The name
@@ -153,18 +153,11 @@ uses an array in that same order:
 That order is part of the contract. It is the relation equivalent of a composite
 primary key.
 
-## The declaration has limits
+## Resolution remains a processor task
 
-The declaration makes identity and reference intent machine-readable. It says
-which properties form identity, which type is targeted, how many targets exist,
-and where in-document resolution starts.
-
-It does not prescribe an external query protocol. Nor does a core-only
-validator necessarily enforce uniqueness across a collection or dereference an
-external service. A relations-aware processor has to perform those semantic
-checks.
-
-The relation is no longer inferred from the spelling of `customerId`; its
-declaration records the target, cardinality, and scope.
+`identity` and `relations` make reference intent machine-readable, but they do
+not prescribe an external query protocol. A core-only validator need not
+enforce uniqueness across a collection or dereference an external service. A
+relations-aware processor must perform those checks.
 
 [relations]: https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html

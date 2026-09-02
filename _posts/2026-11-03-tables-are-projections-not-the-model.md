@@ -8,34 +8,27 @@ specification_scope: Core only.
 uses_structurize: true
 image: /social-cards/tables-are-projections-not-the-model.png
 description: >-
-  Treat SQL, Kusto, Parquet, and Iceberg outputs as explicit projections of a
-  richer JSON Structure model, with losses recorded as policy.
+  Treat SQL, Kusto, Parquet, and Iceberg outputs as target-specific projections
+  of a JSON Structure model, with each preserved or lost source constraint
+  recorded.
 ---
 
 Review generated database definitions as projections, not as the source model.
-In the Structurize revision tested here, the SQL projection can turn every
-required property into part
-of a primary key. The linked
-[`structuretodb.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretodb.py)
+In the Structurize output tested here, the SQL projection can turn every
+required property into part of a primary key. The linked
+[`structuretodb.py`](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretodb.py)
 collects the required properties and emits them together in `PRIMARY KEY`; the
 corresponding
-[`test_structuretodb.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_structuretodb.py#L210-L257)
+[`test_structuretodb.py`](https://github.com/clemensv/avrotize/blob/main/test/test_structuretodb.py#L210-L257)
 expects inherited `id` and local `name` to appear there. In JSON Structure,
 `required` means that a property is present. It says nothing about relational
 identity, uniqueness, indexing, or keys. Generated Data Definition Language (DDL) therefore needs explicit review
 before it is applied to a database.
 
-That behavior illustrates the larger rule. A table has columns. A JSON
-Structure model has named types, arrays, sets, maps, tuples, and choices.
+A table has columns. A JSON Structure model has named types, arrays, sets,
+maps, tuples, and choices.
 Converting the latter into the former applies target policy; the projection does
 not make the source model relational.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
 
 ## One fulfillment model, several table shapes
 
@@ -88,7 +81,7 @@ partition column. Those belong to a target projection.
 
 Structurize's command registry exposes `s2sql` and accepts `postgres` as
 a dialect in
-[`commands.json`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+[`commands.json`](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json).
 A PostgreSQL projection is explicit:
 
 ```powershell
@@ -96,8 +89,8 @@ New-Item -ItemType Directory -Force generated/postgres | Out-Null
 structurize s2sql order.resolved.struct.json --dialect postgres --out generated/postgres/order.sql
 ```
 
-In this revision, the PostgreSQL type map in
-[`structuretodb.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretodb.py)
+The PostgreSQL type map in
+[`structuretodb.py`](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretodb.py)
 maps arrays, sets, maps, objects, choices, and tuples to `JSONB`; the PostgreSQL
 converter test checks that complex fields produce `JSONB` in the generated
 script. That column type stores the value, but it does not encode JSON
@@ -135,7 +128,7 @@ Presence and identity answer different questions. Conflating them can produce a
 composite key derived from required presence rather than declared relational
 identity.
 
-## Kusto, Parquet, and Iceberg make different compromises
+## How Structurize maps Kusto, Parquet, and Iceberg
 
 The registry exposes Kusto as a separate conversion:
 
@@ -174,9 +167,9 @@ Do not infer its shape from the SQL output. The generated Kusto table uses
 </details>
 
 For data-lake formats, the
-[`structuretoparquet.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoparquet.py)
+[`structuretoparquet.py`](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretoparquet.py)
 and
-[`structuretoiceberg.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoiceberg.py)
+[`structuretoiceberg.py`](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretoiceberg.py)
 map JSON Structure sets to Arrow lists and choices to Arrow structs with one
 nullable field per alternative. In those generated schemas, a list does not
 assert uniqueness, and the struct does not assert that exactly one alternative
@@ -258,7 +251,7 @@ structure:
 }
 ```
 
-## Review the projection as an artifact
+## Review generated files against the source model
 
 Review projection fidelity with these concrete questions:
 
@@ -277,12 +270,8 @@ represented with the appropriate JSON Structure facilities.
 
 Each target serves a different workload. SQL DDL prepares an operational or
 warehouse database. Kusto commands prepare an ingestion and query surface.
-Parquet and Iceberg describe columnar storage. Generating all four from one
-source does not make their outputs interchangeable; it makes their differences
-visible and reviewable.
+Parquet and Iceberg describe columnar storage. Generating all four exposes their
+different treatments of keys, nullability, collections, and choices.
 
-The [linked Structurize source](https://github.com/clemensv/avrotize/tree/8dbb19a3a48239679f0df097399c5ddc8cd48c76)
-makes these policies inspectable and repeatable. That is exactly what a
-converter should provide. JSON Structure defines the model; SQL, Kusto,
-Parquet, and Iceberg files are useful, target-shaped views of it. A projection
-can be useful without becoming authoritative.
+The [linked Structurize source](https://github.com/clemensv/avrotize)
+makes each target-specific mapping inspectable and repeatable.

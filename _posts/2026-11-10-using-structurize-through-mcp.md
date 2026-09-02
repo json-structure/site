@@ -14,31 +14,19 @@ description: >-
 
 Structurize exposes its conversion catalog through a local Model Context
 Protocol (MCP) server. An MCP client can discover a conversion, inspect its
-options, invoke it, and examine the generated files. The converter remains the
-single implementation of the mapping, which makes the result repeatable.
+options, invoke it, and examine the generated files. MCP and CLI invoke the
+same converter implementation.
 
-JSON Structure distinguishes required presence, set uniqueness, keyed maps,
-choices, and reusable named types. Imported definitions must already be
-resolved into a closed schema because the Structurize 3.9.0 converters tested here do
-not implement `$import` or `$importdefs`; import resolution turns those dependencies
-into references the converters can process.
+Resolve imports before conversion. The Structurize converters tested here
+follow local references but do not implement `$import` or `$importdefs`.
 
-Through MCP, the client discovers the exact Structurize command and options,
-invokes the converter, and inspects the files it produced. Structurize parses
-the closed schema, follows local references, applies its target policy, and
-writes the artifact.
+Structurize parses the closed schema, follows local references, applies its
+target policy, and writes the artifact.
 
-The client can then report what happened to the contract. A PostgreSQL projection
-may turn required properties into a composite primary key and store sets, maps,
-or choices as `JSONB`; a Parquet projection may turn a set into a list. Invoke
-the converter, inspect its output, and describe those transformations.
-
-> The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
-> Install the pinned release from PyPI:
->
-> ```powershell
-> python -m pip install structurize==3.9.0
-> ```
+After conversion, compare the generated artifact with the source constraints.
+A PostgreSQL projection may turn required properties into a composite primary
+key and store sets, maps, or choices as `JSONB`; a Parquet projection may turn
+a set into a list.
 
 ## Expose the conversion catalog
 
@@ -60,15 +48,15 @@ avrotize-mcp
 ```
 
 The evidence is in Avrotize's
-[`pyproject.toml`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/pyproject.toml),
+[`pyproject.toml`](https://github.com/clemensv/avrotize/blob/main/pyproject.toml),
 Structurize's
-[`pyproject.toml`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/structurize/pyproject.toml),
+[`pyproject.toml`](https://github.com/clemensv/avrotize/blob/main/structurize/pyproject.toml),
 and the shared
-[`commands.json`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/commands.json).
+[`commands.json`](https://github.com/clemensv/avrotize/blob/main/avrotize/commands.json).
 
 The server supports `stdio` only and identifies itself as `avrotize`, regardless
-of which entry point launched it. With the Structurize installation shown
-above, a client configuration can therefore be as small as:
+of which entry point launched it. A client configuration can therefore be as
+small as:
 
 ```json
 {
@@ -92,19 +80,19 @@ The server exposes four tools:
 
 These names, the `avrotize` server identity, and the `stdio`-only check come
 directly from
-[`mcp_server.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/mcp_server.py).
+[`mcp_server.py`](https://github.com/clemensv/avrotize/blob/main/avrotize/mcp_server.py).
 Together with the command registry, they form a discoverable contract. The
 agent does not need to guess
 that PostgreSQL is spelled `postgres` or that schema inspection uses
 `--format schema`; it can ask.
 
-In the tested end-to-end `stdio` session with Structurize 3.9.0, the server
+In my end-to-end `stdio` test with Structurize, the server
 reported protocol version `2025-03-26`, server name `avrotize`, and exactly those four tools.
 `describe_capabilities` and `list_conversions` reported 105 conversion
 commands, including `s2sql` and `s2pq`. `get_conversion` exposed `--dialect`
 for `s2sql` and `--format` for `s2pq`; those are the options used below.
 
-## Discovery precedes execution
+## Discover a conversion before running it
 
 Suppose the fulfillment team wants PostgreSQL DDL and a reviewable Parquet
 schema from `order.resolved.struct.json`. The client follows the tool flow
@@ -116,7 +104,7 @@ advertised by the server:
 4. Call `run_conversion` with explicit input and output paths.
 5. Open and inspect the generated artifacts.
 
-This sequence was also executed, rather than inferred from the unit tests.
+I also ran this sequence through MCP.
 Both `run_conversion` calls returned `success: true`, created the requested
 files, and produced files byte-for-byte identical to the equivalent CLI
 outputs. The server reports the installed Structurize package version, which
@@ -204,15 +192,15 @@ file plus the project metadata and supporting assets relevant to the review. A
 successful tool response is evidence that the function returned. It is not a
 review of every generated artifact.
 
-## Respect the boundary of current evidence
+## What the current tests cover
 
 The MCP tests exercise protocol initialization, all four tools, argument
 plumbing, the `stdio` loop, and a real end-to-end single-file `cddl2s`
 conversion. The Copilot CLI integration tests also exercise single-file schema
 conversions with inline content and explicit file paths. See
-[`test_mcp_server.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_mcp_server.py)
+[`test_mcp_server.py`](https://github.com/clemensv/avrotize/blob/main/test/test_mcp_server.py)
 and
-[`test_mcp_copilot_cli.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/test/test_mcp_copilot_cli.py).
+[`test_mcp_copilot_cli.py`](https://github.com/clemensv/avrotize/blob/main/test/test_mcp_copilot_cli.py).
 
 Those tests do not establish end-to-end MCP coverage for directory-producing
 code generation. That does not make directory generation unusable. It means the
@@ -220,7 +208,7 @@ agent must avoid claiming evidence that the tests do not provide. Use an
 explicit output directory, inspect the generated tree, and run the target
 language's formatter, compiler, and tests where available.
 
-The same evidence boundary applies to imports. The Structurize 3.9.0 converters tested here do not
+The same evidence boundary applies to imports. The Structurize converters tested here do not
 process JSON Structure `$import` or `$importdefs`; they resolve local references
 only. An agent must first invoke a conforming import resolver and produce a
 closed schema, then call `s2...` on that artifact. It must not silently fetch a
@@ -231,19 +219,19 @@ their own rules.
 
 ## Report policy and loss
 
-Generation is not the end of the agent's task. For each conversion, report
-every source construct weakened by the generated artifact. The evidence must be
-the output you inspected or the converter code that produced it. A
-generic inventory copied from another target is not evidence.
+After generation, compare each artifact with the source constraints and report
+every constraint the target weakens. The evidence must be the output you
+inspected or the converter code that produced it. A generic inventory copied
+from another target is not evidence.
 
 For example, if generated PostgreSQL DDL contains `JSONB`, cite that DDL and
 identify the source set or map contract it no longer expresses as relational
 constraints. If the DDL contains a composite `PRIMARY KEY`, cite it and the
-[`structuretodb.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretodb.py)
+[`structuretodb.py`](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretodb.py)
 policy that collects required properties into the key. If a generated Parquet
 schema represents a source set as an Arrow list, cite the inspected schema or
 the
-[`structuretoparquet.py`](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structuretoparquet.py)
+[`structuretoparquet.py`](https://github.com/clemensv/avrotize/blob/main/avrotize/structuretoparquet.py)
 mapping. Make the claim as narrow as its evidence.
 
 My recommendation is that the agent report four things:
@@ -257,6 +245,4 @@ My recommendation is that the agent report four things:
 It must not synthesize a replacement schema from memory. Re-run with corrected
 options, apply an explicit
 target-specific overlay, or file a converter defect.
-
-Keep the deterministic artifact and the explanation connected.
 

@@ -13,7 +13,7 @@ description: >-
 ---
 
 How do you require an array of sensor records to include at least one alarm?
-Typing the array elements is only half of that rule.
+Typing the elements does not require an alarm to be present.
 
 In JSON Structure, [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) describes every element. The validation companion's
 [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains), [`minContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minContains), and [`maxContains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#maxContains) inspect the collection and count
@@ -23,7 +23,7 @@ array contents or the alarm count underspecified.
 ## [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) applies to every element
 
 Consider a sensor batch containing ordinary readings and alarm records. Every
-entry shares an envelope: a timestamp, a kind, and a numeric value. A choice
+entry has a timestamp, a kind, and a numeric value. A choice
 type uses `kind` to select the concrete record shape, and [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword) requires every
 array element to be one of those records.
 
@@ -102,18 +102,18 @@ A batch with two alarms satisfies the one-to-three alarm rule:
 [
   {
     "kind": "reading",
-    "timestamp": "2026-10-28T09:00:00Z",
+    "timestamp": "2026-10-14T09:00:00Z",
     "value": 71.2
   },
   {
     "kind": "alarm",
-    "timestamp": "2026-10-28T09:00:05Z",
+    "timestamp": "2026-10-14T09:00:05Z",
     "value": 92.8,
     "code": "HIGH_TEMP"
   },
   {
     "kind": "alarm",
-    "timestamp": "2026-10-28T09:00:07Z",
+    "timestamp": "2026-10-14T09:00:07Z",
     "value": 18.1,
     "code": "LOW_PRESSURE"
   }
@@ -132,11 +132,11 @@ alarms. Four alarms violate [`maxContains`](https://json-structure.github.io/val
 [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) requirement and [`minContains: 1`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#minContains).
 
 Order is irrelevant to the count. The matching records may appear anywhere,
-and one element either contributes one match or none. [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) does not carve
-out a second item channel and does not exempt matching elements from [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword).
-Every alarm still has to be a valid `BatchRecord`.
+and one element either contributes one match or none. [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) does not define a
+second item type. Matching elements must still satisfy [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword), so every alarm
+must be a valid `BatchRecord`.
 
-## What happens when one keyword is missing
+## What each keyword constrains
 
 Without [`items`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#items-keyword), [`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) says nothing about nonmatching elements. A string,
 an unrelated object, or [`null`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#null) could coexist with a matching alarm unless some

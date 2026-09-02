@@ -1,19 +1,19 @@
 ---
 layout: post
-title: "When Properties Travel Together"
+title: "Conditional Property Requirements"
 date: 2026-10-16
 published: false
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
-image: /social-cards/when-properties-travel-together.png
+image: /social-cards/conditional-property-requirements.png
 description: >-
   Use dependentRequired when one property's presence requires companion fields,
   and core required when fields are mandatory for every object.
 ---
 
-Some properties are optional alone but mandatory in company. An order can omit
-invoice details entirely. Once `invoiceRequested` appears, however, the billing
-address must travel with it.
+Some properties are optional on their own but required when another property
+appears. An order can omit invoice details entirely. If `invoiceRequested`
+appears, the billing address becomes required.
 
 Core [`required`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#required-keyword) names properties that every instance must contain. The
 validation extension's [`dependentRequired`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#dependentRequired) handles the companion rule: one
@@ -108,7 +108,7 @@ Readers coming from JSON Schema will recognize the keyword and its basic
 presence semantics. JSON Structure puts ordinary requiredness in core because
 it defines object shape; cross-property dependency remains validation policy.
 
-## The draft is ahead of the meta-schema
+## Current validation meta-schema support
 
 The validation draft calls its feature [`JSONSchemaValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions), while the
 repository offers [`JSONStructureValidation`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#enabling-the-extensions). The dedicated validation
@@ -118,5 +118,4 @@ that meta-schema directly.
 The current `meta/extended/v0/index.json` validation add-in also omits
 [`dependentRequired`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#dependentRequired). A processor implementing the draft can evaluate the
 schema, but the checked-in meta-schema may reject the keyword before instance
-validation begins. The presence rule itself is unambiguous; the repository
-artifact needs to catch up.
+validation begins.

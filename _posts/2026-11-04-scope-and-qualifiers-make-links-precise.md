@@ -7,17 +7,15 @@ author: Clemens Vasters
 specification_scope: Core with the Relations companion specification.
 image: /social-cards/scope-and-qualifiers-make-links-precise.png
 description: >-
-  Resolve relations against explicit in-document collections and attach
-  version, locale, channel, and validity facts to the link where they belong.
+  Use `scope` to identify in-document target collections and `qualifiertype` to
+  define data about each relation, such as its channel and effective dates.
 ---
 
-Use [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) to say where a relation resolves, and use
-[`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) to describe the link. A product identity alone does not tell a
-resolver which catalog collection to
-search, nor does it record the dates or sales channel for a storefront listing.
-The relations extension uses [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) to bound resolution and [`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) to
-describe the listing itself. Those qualifier values do not become properties
-of the storefront or the catalog entry.
+[`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) identifies the in-document collection where a relation resolves;
+[`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) defines typed properties of the relation itself. A product identity alone does
+not tell a resolver which catalog collection to search, nor does it record the
+dates or sales channel for a storefront listing. Those qualifier values do not
+become properties of the storefront or the catalog entry.
 
 ## A localized, versioned catalog link
 
@@ -156,7 +154,7 @@ collections. `"#"` identifies the document root only when the root itself is a
 compatible collection. Omitting [`scope`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#scope-keyword) means external resolution; it does not
 mean “search the entire document.”
 
-## Qualifiers describe the edge
+## Qualifiers describe the relation
 
 [`qualifiertype`](https://json-structure.github.io/relations/draft-vasters-json-structure-relations.html#qualifiertype-keyword) must be a [`$ref`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#ref-keyword) to a reusable type. Its instance appears under
 `qualifier` inside each relation object. The `channel` and effective dates

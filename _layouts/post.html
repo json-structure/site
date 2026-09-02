@@ -117,7 +117,11 @@
               <a href="https://www.reddit.com/submit?url={{ share_url }}&amp;title={{ share_title }}" aria-label="Share on Reddit" title="Reddit" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-reddit-alien" aria-hidden="true"></i></a>
               <a href="https://news.ycombinator.com/submitlink?u={{ share_url }}&amp;t={{ share_title }}" aria-label="Share on Hacker News" title="Hacker News" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-hacker-news" aria-hidden="true"></i></a>
               <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url }}" aria-label="Share on Facebook" title="Facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+              <a href="https://www.threads.com/intent/post?text={{ share_text }}%20{{ share_url }}" aria-label="Share on Threads" title="Threads" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-threads" aria-hidden="true"></i></a>
               <a href="https://x.com/intent/post?text={{ share_text }}&amp;url={{ share_url }}" aria-label="Share on X" title="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+              <a href="https://t.me/share/url?url={{ share_url }}&amp;text={{ share_text }}" aria-label="Share on Telegram" title="Telegram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram" aria-hidden="true"></i></a>
+              <a href="https://wa.me/?text={{ share_text }}%20{{ share_url }}" aria-label="Share on WhatsApp" title="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+              <a href="https://service.weibo.com/share/share.php?url={{ share_url }}&amp;title={{ share_text }}" aria-label="Share on Weibo" title="Weibo" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
             </nav>
           </header>
 
@@ -128,7 +132,7 @@
             </blockquote>
             {% endif %}
             {% if page.uses_structurize %}
-            <p class="tool-introduction"><strong>Tool:</strong> <a href="https://pypi.org/project/structurize/3.9.0/">Structurize</a> is the JSON Structure-focused command-line interface and conversion toolkit from the <a href="https://github.com/clemensv/avrotize">Avrotize project</a>.</p>
+            <p class="tool-introduction"><strong>Tool:</strong> <a href="https://pypi.org/project/structurize/">Structurize</a> is the JSON Structure-focused command-line interface and conversion toolkit from the <a href="https://github.com/clemensv/avrotize">Avrotize project</a>.</p>
             {% endif %}
             {{ content }}
           </div>

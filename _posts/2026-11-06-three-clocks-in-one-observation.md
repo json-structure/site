@@ -18,7 +18,7 @@ when the result became available, and [`ingestionTime`](https://json-structure.g
 receiving system accepted the record. The values may be close or even equal,
 but a generic `timestamp` leaves consumers guessing which event it records.
 
-## A complete observation keeps all three
+## A weather observation with three timestamps
 
 This station samples air temperature, computes a quality-controlled result, and
 then sends the record through a telemetry gateway:
@@ -90,7 +90,7 @@ The corresponding record makes the timing visible:
 In this example, the temperature applies at 06:15:00. Sensor processing and quality checks
 make the result available 4 seconds later, at 06:15:04. Network transit and gateway work add 15 seconds before acceptance at 06:15:19.
 
-## Phenomenon time is the analytical axis
+## Use phenomenon time for event-time analysis
 
 [`phenomenonTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#phenomenon-time) is the time during which the result applies to the observed
 property. For an instantaneous reading, it annotates a temporal position. It
@@ -102,7 +102,7 @@ the wrong weather interval. Joining temperature with wind by result production
 time would align processing schedules, not atmospheric conditions. Event-time
 analytics therefore needs the phenomenon clock.
 
-## Result time measures production latency
+## Compare result and phenomenon time for production delay
 
 [`resultTime`](https://json-structure.github.io/semantic-annotations/draft-vasters-json-structure-sem-ann.html#result-time) is the temporal position at which the result became available.
 The difference between result and phenomenon time describes observation
@@ -111,8 +111,8 @@ analysis, model execution, quality control, or publication.
 
 The role does not say that result time must follow phenomenon time in every
 domain. Forecasts are observations whose result time precedes their phenomenon
-time. The distinction remains useful precisely because ordering is not baked
-into the names.
+time. The roles remain useful because they do not require result time to follow
+phenomenon time.
 
 ## Ingestion time depends on a receiving system
 
