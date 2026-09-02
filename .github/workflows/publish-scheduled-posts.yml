@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 15 * * *"
       timezone: "Europe/Berlin"
+    - cron: "20 15 * * *"
+      timezone: "Europe/Berlin"
   workflow_dispatch:
 
 permissions:
