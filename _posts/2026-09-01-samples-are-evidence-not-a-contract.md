@@ -8,26 +8,26 @@ specification_scope: Core only.
 uses_structurize: true
 image: /social-cards/samples-are-evidence-not-a-contract.png
 description: >-
-  Structurize can infer a useful JSON Structure draft from observed records,
-  but people must decide the intended types, presence rules, and value domains.
+  Structurize turns observed records into a useful JSON Structure draft. Domain
+  knowledge then refines the inferred types, presence rules, and value domains.
 ---
 
-A week of shipment records contains `carrierService` in every row and only
-three status values. That is evidence of what the exporter produced during
-that week. It is not a contract that makes the field mandatory or limits the
-lifecycle to those three states.
+The earlier post, [Structurize Turns Sample JSON into Typed Schemas]({% post_url 2026-02-04-structurize-json2s-command %}),
+shows how the `json2s` command turns JSON and JSONL samples into a useful JSON
+Structure draft. This article starts with that result and examines the next
+step: refining an inferred schema into a durable contract.
 
-Structurize's [`json2s` command](https://github.com/clemensv/avrotize/blob/8dbb19a3a48239679f0df097399c5ddc8cd48c76/avrotize/structurefromjson.py)
-turns those observations into a draft JSON Structure schema. Raw records cannot
-decide whether a string is a UUID, whether an absent field is optional, or
-whether observed values form a closed enum. Those decisions require producer
-guarantees and a compatibility policy.
+The draft describes the evidence in the sample set. A week of shipment records,
+for example, may contain `carrierService` in every row and only three status
+values. Structurize can faithfully capture both observations. The next step is
+to add what the records cannot contain: whether the producer guarantees the
+field, whether the three states are the complete lifecycle, and which future
+changes consumers must accept.
 
-Reviewers express the decisions with JSON Structure types, `required`, enums,
-and choices. Structurize can then project the reviewed schema into documentation
-and code. Valid observations remain covered; accidental requiredness,
-incomplete enums, and unjustified type guesses are corrected or discarded
-before they escape into generated artifacts.
+That refinement turns an inferred schema into an owned contract. Reviewers add
+domain types, presence rules, complete value domains, and compatibility policy;
+Structurize can then project the result into documentation and code. Sampling
+provides the productive starting point, and domain knowledge completes it.
 
 > The examples use [Structurize 3.9.0](https://pypi.org/project/structurize/3.9.0/).
 > Install the pinned release from PyPI:
@@ -107,11 +107,8 @@ For these three records, Structurize 3.9.0 emits this schema:
 </details>
 
 No enum is inferred from only three records, `dispatchAt` is optional because
-it is absent once, and UUID- and email-shaped values remain strings.
-
-The earlier [introduction to `json2s`]({% post_url 2026-02-04-structurize-json2s-command %})
-covers merging, choices, clustering, and basic limitations. The next problem is
-more important: deciding what the observations mean.
+it is absent once, and UUID- and email-shaped values remain strings. The draft
+is ready for the domain decisions that the observations alone cannot supply.
 
 ## Presence is not obligation
 
