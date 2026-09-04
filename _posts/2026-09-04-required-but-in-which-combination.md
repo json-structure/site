@@ -2,7 +2,7 @@
 layout: post
 title: "Required, but in Which Combination?"
 date: 2026-09-04
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/required-but-in-which-combination.png
