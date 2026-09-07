@@ -2,7 +2,7 @@
 layout: post
 title: "Closed Objects and Open Maps"
 date: 2026-09-07
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/closed-objects-and-open-maps.png
