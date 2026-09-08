@@ -2,7 +2,7 @@
 layout: post
 title: "A Set Should Not Become a List by Accident"
 date: 2026-09-08
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 uses_structurize: true
