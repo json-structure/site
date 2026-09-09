@@ -2,7 +2,7 @@
 layout: post
 title: "Tagged Unions Without Guesswork"
 date: 2026-09-09
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/tagged-unions-without-guesswork.png
