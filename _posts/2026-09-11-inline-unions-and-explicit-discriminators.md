@@ -2,7 +2,7 @@
 layout: post
 title: "Inline Unions Need Explicit Discriminators"
 date: 2026-09-11
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/inline-unions-and-explicit-discriminators.png
