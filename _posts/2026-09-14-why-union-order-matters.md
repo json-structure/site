@@ -2,7 +2,7 @@
 layout: post
 title: "Why Union Order Matters"
 date: 2026-09-14
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/why-union-order-matters.png
