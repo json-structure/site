@@ -2,7 +2,7 @@
 layout: post
 title: "Choices Must Survive Code Generation"
 date: 2026-09-15
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 uses_structurize: true
