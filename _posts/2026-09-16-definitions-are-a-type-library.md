@@ -2,7 +2,7 @@
 layout: post
 title: "Definitions Are a Type Library"
 date: 2026-09-16
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/definitions-are-a-type-library.png
