@@ -2,7 +2,7 @@
 layout: post
 title: "Imported Types Become Local Types"
 date: 2026-09-18
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Import companion specification.
 image: /social-cards/imported-types-become-local-types.png
