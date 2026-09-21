@@ -2,7 +2,7 @@
 layout: post
 title: "Optional Add-ins in One Schema"
 date: 2026-09-21
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 image: /social-cards/optional-add-ins-in-one-schema.png
