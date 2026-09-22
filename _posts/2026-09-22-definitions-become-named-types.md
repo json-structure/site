@@ -2,7 +2,7 @@
 layout: post
 title: "Compound Definitions Can Become Named Types"
 date: 2026-09-22
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
 uses_structurize: true
