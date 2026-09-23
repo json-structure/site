@@ -2,7 +2,7 @@
 layout: post
 title: "One Property, Several Names"
 date: 2026-09-23
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Alternate Names companion specification.
 image: /social-cards/one-property-several-names.png
