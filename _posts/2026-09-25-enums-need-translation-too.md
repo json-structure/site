@@ -2,7 +2,7 @@
 layout: post
 title: "Enums Need Translation Too"
 date: 2026-09-25
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Alternate Names and Units companion specifications.
 image: /social-cards/enums-need-translation-too.png
