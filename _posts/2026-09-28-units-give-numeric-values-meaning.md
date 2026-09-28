@@ -2,7 +2,7 @@
 layout: post
 title: "Units Give Numeric Values Meaning"
 date: 2026-09-28
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Units companion specification.
 image: /social-cards/units-give-numeric-values-meaning.png
