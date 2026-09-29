@@ -2,7 +2,7 @@
 layout: post
 title: "Wire Names Are Not Code Names"
 date: 2026-09-29
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Alternate Names companion specification.
 uses_structurize: true
