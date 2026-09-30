@@ -2,7 +2,7 @@
 layout: post
 title: "Identity and Relations Belong in the Schema"
 date: 2026-09-30
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Relations companion specification.
 image: /social-cards/identity-and-relations-belong-in-the-schema.png
