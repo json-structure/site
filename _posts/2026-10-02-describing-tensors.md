@@ -2,7 +2,7 @@
 layout: post
 title: "Tensor Shape Does Not Define Tensor Meaning"
 date: 2026-10-02
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Units, Validation, and Semantic Annotations companion specifications.
 image: /social-cards/describing-tensors.png
