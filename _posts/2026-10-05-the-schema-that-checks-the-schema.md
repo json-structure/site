@@ -2,7 +2,7 @@
 layout: post
 title: "The Schema That Checks the Schema"
 date: 2026-10-05
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
 image: /social-cards/the-schema-that-checks-the-schema.png
