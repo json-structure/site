@@ -2,7 +2,7 @@
 layout: post
 title: "Generate Reference Documentation from JSON Structure"
 date: 2026-10-06
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Alternate Names, Units, and Validation companion specifications.
 uses_structurize: true
