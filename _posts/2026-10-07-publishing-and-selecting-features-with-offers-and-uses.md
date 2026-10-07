@@ -3,7 +3,7 @@ layout: post
 title: "Publishing and Selecting Features with $offers and $uses"
 display_title: "Publishing and Selecting Features with [`$offers`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#offers-keyword) and [`$uses`](https://json-structure.github.io/core/draft-vasters-json-structure-core.html#uses-keyword)"
 date: 2026-10-07
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Units and Validation companion specifications.
 image: /social-cards/publishing-and-selecting-features-with-offers-and-uses.png
