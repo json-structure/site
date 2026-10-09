@@ -2,7 +2,7 @@
 layout: post
 title: "Build a Schema Dialect Without Forking One"
 date: 2026-10-09
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Import, Units, and Validation companion specifications.
 image: /social-cards/build-a-schema-dialect-without-forking-one.png
