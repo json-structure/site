@@ -2,7 +2,7 @@
 layout: post
 title: "Separate Structure from Validation Policy"
 date: 2026-10-12
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
 image: /social-cards/separate-structure-from-validation-policy.png
