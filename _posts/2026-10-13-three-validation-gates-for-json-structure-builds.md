@@ -2,7 +2,7 @@
 layout: post
 title: "Three Validation Gates for JSON Structure Builds"
 date: 2026-10-13
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Units and Validation companion specifications.
 uses_structurize: true
