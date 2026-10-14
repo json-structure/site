@@ -3,7 +3,7 @@ layout: post
 title: "contains Is Not an Item Type"
 display_title: "[`contains`](https://json-structure.github.io/validation/draft-vasters-json-structure-validation.html#contains) Is Not an Item Type"
 date: 2026-10-14
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
 image: /social-cards/contains-is-not-an-item-type.png
