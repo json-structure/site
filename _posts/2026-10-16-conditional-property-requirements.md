@@ -2,7 +2,7 @@
 layout: post
 title: "Conditional Property Requirements"
 date: 2026-10-16
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
 image: /social-cards/conditional-property-requirements.png
