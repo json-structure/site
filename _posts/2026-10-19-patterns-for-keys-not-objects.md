@@ -2,7 +2,7 @@
 layout: post
 title: "Object Properties and Map Keys Need Different Pattern Rules"
 date: 2026-10-19
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation companion specification.
 image: /social-cards/patterns-for-keys-not-objects.png
