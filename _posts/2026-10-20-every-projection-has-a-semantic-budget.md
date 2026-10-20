@@ -2,7 +2,7 @@
 layout: post
 title: "Every Projection Has a Semantic Budget"
 date: 2026-10-20
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Units and Validation companion specifications.
 uses_structurize: true
