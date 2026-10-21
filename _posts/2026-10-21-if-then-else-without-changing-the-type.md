@@ -3,7 +3,7 @@ layout: post
 title: "if/then/else Without Changing the Type"
 display_title: "[`if`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else)/[`then`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else)/[`else`](https://json-structure.github.io/conditional-composition/draft-vasters-json-structure-cond-composition.html#if-then-else) Without Changing the Type"
 date: 2026-10-21
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation and Conditional Composition companion specifications.
 image: /social-cards/if-then-else-without-changing-the-type.png
