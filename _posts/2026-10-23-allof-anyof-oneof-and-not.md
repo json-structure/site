@@ -2,7 +2,7 @@
 layout: post
 title: "Composition Combines Evaluation Results, Not Property Maps"
 date: 2026-10-23
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Validation and Conditional Composition companion specifications.
 image: /social-cards/allof-anyof-oneof-and-not.png
