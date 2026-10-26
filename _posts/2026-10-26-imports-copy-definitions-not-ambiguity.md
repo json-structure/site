@@ -2,7 +2,7 @@
 layout: post
 title: "Imports Copy Definitions, Not Ambiguity"
 date: 2026-10-26
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Import companion specification.
 image: /social-cards/imports-copy-definitions-not-ambiguity.png
