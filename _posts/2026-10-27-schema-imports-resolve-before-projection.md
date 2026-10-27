@@ -2,7 +2,7 @@
 layout: post
 title: "Schema Imports Resolve Before Projection"
 date: 2026-10-27
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Import companion specification.
 uses_structurize: true
