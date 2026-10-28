@@ -2,7 +2,7 @@
 layout: post
 title: "Names Have Purposes"
 date: 2026-10-28
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Alternate Names and Units companion specifications.
 image: /social-cards/names-have-purposes.png
