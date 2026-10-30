@@ -3,7 +3,7 @@ layout: post
 title: "Using the unit and ucumUnit Keywords Together"
 display_title: "Using the [`unit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#unit-keyword) and [`ucumUnit`](https://json-structure.github.io/units/draft-vasters-json-structure-units.html#ucum-unit-keyword) Keywords Together"
 date: 2026-10-30
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Units companion specification.
 image: /social-cards/using-unit-and-ucumunit-together.png
