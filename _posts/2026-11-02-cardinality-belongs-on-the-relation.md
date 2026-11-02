@@ -2,7 +2,7 @@
 layout: post
 title: "Cardinality Belongs on the Relation"
 date: 2026-11-02
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Relations companion specification.
 image: /social-cards/cardinality-belongs-on-the-relation.png
