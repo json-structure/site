@@ -2,7 +2,7 @@
 layout: post
 title: "Tables Are Projections, Not the Model"
 date: 2026-11-03
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core only.
 uses_structurize: true
