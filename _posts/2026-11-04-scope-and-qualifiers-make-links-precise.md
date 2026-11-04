@@ -2,7 +2,7 @@
 layout: post
 title: "Scope and Qualifiers Make Links Precise"
 date: 2026-11-04
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Relations companion specification.
 image: /social-cards/scope-and-qualifiers-make-links-precise.png
