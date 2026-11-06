@@ -2,7 +2,7 @@
 layout: post
 title: "Three Clocks in One Observation"
 date: 2026-11-06
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Units and Semantic Annotations companion specifications.
 image: /social-cards/three-clocks-in-one-observation.png
