@@ -2,7 +2,7 @@
 layout: post
 title: "Using Structurize Through MCP"
 date: 2026-11-10
-published: false
+published: true
 author: Clemens Vasters
 specification_scope: Core with the Import companion specification.
 uses_structurize: true
